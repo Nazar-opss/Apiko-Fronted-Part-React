@@ -16,8 +16,6 @@ const  docsLink = 'https://uk.legacy.reactjs.org/',
       firstNameJonh = 'Jonh', 
       lastNameDoe = 'Doe'
 
-
-
 function TextH1() {
   return ( <h1 style={{color: 'green'}}>{h1}</h1> );
 }
