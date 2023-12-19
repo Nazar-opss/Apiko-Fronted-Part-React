@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import RateSwitch from "./RateSwitch.js";
+import Pagination from "./Pagination.js";
 
 export default class Movies extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            array: [],
+            listOfMovies: [],
+            totalPages: 1,
+            page: 1
         };
     }
 
     componentDidMount() {
         fetch(
-            "https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=1&sort_by=created_at.asc",
+            `https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${this.state.page}&sort_by=created_at.asc`,
             {
                 headers: {
                     accept: "application/json",
@@ -21,14 +24,15 @@ export default class Movies extends Component {
             }
         )
             .then((response) => response.json())
-            .then((json) => this.setState({ array: json.results }));
+            .then((json) => this.setState({ listOfMovies: json.results, totalPages: json.total_pages, page: json.page }));
     }
     render() {
-        const { array } = this.state;
-        console.log(array);
+        const { listOfMovies, totalPages, page } = this.state;
+        console.log(listOfMovies)
+        
         const imagePath = "https://image.tmdb.org/t/p/w300";
 
-        const films = array.map((item) => {
+        const films = listOfMovies.map((item) => {
             const { title, overview, poster_path, popularity } = item;
             return (
                 <div className="films" key={item.id}>
@@ -45,6 +49,10 @@ export default class Movies extends Component {
             <>
                 <h1>Favourite Movies</h1>
                 {films}
+                <Pagination
+                page={page}
+                totalPages={totalPages}
+                />
             </>
         );
     }
