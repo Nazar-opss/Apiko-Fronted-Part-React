@@ -6,25 +6,13 @@ export default class Pagination extends Component {
 
         this.state = {
         }
-        this.previousPage = this.previousPage.bind(this)
-        this.nextPage = this.nextPage.bind(this)
-
-    }
-    previousPage = () =>{
-        this.props.page = this.props.page - 1
-    }
-    nextPage = () =>{
-        this.props.page = this.props.page + 1
     }
     render() {
-        let nextPage = () =>{
-            this.props.page = this.props.page + 1
-        }
         return (
             <div>
                 <div>Current page: {this.props.page}</div>
-                <button onClick={()=>{ this.props.page = this.props.page - 1 }} disabled={this.props.page === 1}>Previous page </button>
-                <button onClick={nextPage} disabled={this.props.page === this.props.totalPages}>Next Page</button>
+                <button onClick={() => this.props.changePage(this.props.page - 1)} disabled={this.props.page === 1}>Previous page </button>
+                <button onClick={() => this.props.changePage(this.props.page + 1)} disabled={this.props.page === this.props.totalPages}>Next Page</button>
             </div>
         )
     }

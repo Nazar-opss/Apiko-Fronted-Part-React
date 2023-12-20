@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import RateSwitch from "./RateSwitch.js";
 import Pagination from "./Pagination.js";
+import API from "./Api.js";
 
 export default class Movies extends Component {
     constructor(props) {
@@ -10,28 +11,37 @@ export default class Movies extends Component {
             totalPages: 1,
             page: 1
         };
+        this.fetchFilmsForPage = this.fetchFilmsForPage.bind(this)
     }
 
-    componentDidMount() {
-        fetch(
-            `https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${this.state.page}&sort_by=created_at.asc`,
-            {
-                headers: {
-                    accept: "application/json",
-                    Authorization:
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjU0NDAzOWUyZjcyNzE2MDQ1MjI0MTYyNTUzMjVhZiIsInN1YiI6IjY1MmQ1NTg4MDI0ZWM4MDEzYzU4ZWE2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hWvRwpk_xlSh71byPoa1qFKZCmbgDyEUOxl3jrZ7puY",
-                },
-            }
-        )
-            .then((response) => response.json())
-            .then((json) => this.setState({ listOfMovies: json.results, totalPages: json.total_pages, page: json.page }));
+    async componentDidMount() {
+        let fetchD = await API.fetchMovies(this.state.page)
+        this.setState({listOfMovies: fetchD.results, totalPages: fetchD.total_pages, page: fetchD.page})
+        console.log(this.state.listOfMovies)
+        // fetch(
+        //     `https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${this.state.page}&sort_by=created_at.asc`,
+        //     {
+        //         headers: {
+        //             accept: "application/json",
+        //             Authorization:
+        //                 "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjU0NDAzOWUyZjcyNzE2MDQ1MjI0MTYyNTUzMjVhZiIsInN1YiI6IjY1MmQ1NTg4MDI0ZWM4MDEzYzU4ZWE2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hWvRwpk_xlSh71byPoa1qFKZCmbgDyEUOxl3jrZ7puY",
+        //         },
+        //     }
+        // )
+        //     .then((response) => response.json())
+        //     .then((json) => this.setState({ listOfMovies: json.results, totalPages: json.total_pages, page: json.page }));
     }
+    async fetchFilmsForPage(page){
+        let fetchD = await API.fetchMovies(page)
+        this.setState({listOfMovies: fetchD.results, totalPages: fetchD.total_pages, page: fetchD.page})
+    }
+    
     render() {
         const { listOfMovies, totalPages, page } = this.state;
         console.log(listOfMovies)
         
         const imagePath = "https://image.tmdb.org/t/p/w300";
-
+        
         const films = listOfMovies.map((item) => {
             const { title, overview, poster_path, popularity } = item;
             return (
@@ -48,11 +58,12 @@ export default class Movies extends Component {
         return (
             <>
                 <h1>Favourite Movies</h1>
-                {films}
                 <Pagination
                 page={page}
                 totalPages={totalPages}
+                changePage={this.fetchFilmsForPage}
                 />
+                {films}
             </>
         );
     }
