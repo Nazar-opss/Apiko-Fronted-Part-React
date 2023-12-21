@@ -15,30 +15,18 @@ export default class Movies extends Component {
     }
 
     async componentDidMount() {
-        let fetchD = await API.fetchMovies(this.state.page)
-        this.setState({listOfMovies: fetchD.results, totalPages: fetchD.total_pages, page: fetchD.page})
-        console.log(this.state.listOfMovies)
-        // fetch(
-        //     `https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${this.state.page}&sort_by=created_at.asc`,
-        //     {
-        //         headers: {
-        //             accept: "application/json",
-        //             Authorization:
-        //                 "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjU0NDAzOWUyZjcyNzE2MDQ1MjI0MTYyNTUzMjVhZiIsInN1YiI6IjY1MmQ1NTg4MDI0ZWM4MDEzYzU4ZWE2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.hWvRwpk_xlSh71byPoa1qFKZCmbgDyEUOxl3jrZ7puY",
-        //         },
-        //     }
-        // )
-        //     .then((response) => response.json())
-        //     .then((json) => this.setState({ listOfMovies: json.results, totalPages: json.total_pages, page: json.page }));
+        let fetchFilms = await API.fetchMovies(this.state.page)
+        this.setState({listOfMovies: fetchFilms.results, totalPages: fetchFilms.total_pages, page: fetchFilms.page})
     }
+
     async fetchFilmsForPage(page){
-        let fetchD = await API.fetchMovies(page)
-        this.setState({listOfMovies: fetchD.results, totalPages: fetchD.total_pages, page: fetchD.page})
+        let fetchFilmsForPage = await API.fetchMovies(page)
+        this.setState({listOfMovies: fetchFilmsForPage.results, totalPages: fetchFilmsForPage.total_pages, page: fetchFilmsForPage.page})
     }
     
     render() {
         const { listOfMovies, totalPages, page } = this.state;
-        console.log(listOfMovies)
+        // console.log(listOfMovies)
         
         const imagePath = "https://image.tmdb.org/t/p/w300";
         
@@ -56,7 +44,7 @@ export default class Movies extends Component {
         });
 
         return (
-            <>
+            <div className="header">
                 <h1>Favourite Movies</h1>
                 <Pagination
                 page={page}
@@ -64,7 +52,7 @@ export default class Movies extends Component {
                 changePage={this.fetchFilmsForPage}
                 />
                 {films}
-            </>
+            </div>
         );
     }
 }

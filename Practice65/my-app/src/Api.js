@@ -11,8 +11,9 @@ class API {
             }
         )
         const films = await data.json();
-        console.log(films)
+        // console.log(films)
         return films;
     }
 }
-export default new API;
+// eslint-disable-next-line import/no-anonymous-default-export
+export default new API();

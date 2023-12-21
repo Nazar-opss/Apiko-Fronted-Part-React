@@ -5,7 +5,6 @@ export default class RateSwitch extends Component {
         super(props)
         this.state = {
             show: true
-
         };
         this.toggleSwitch = this.toggleSwitch.bind(this)
     }

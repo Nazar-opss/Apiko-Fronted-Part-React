@@ -9,10 +9,12 @@ export default class Pagination extends Component {
     }
     render() {
         return (
-            <div>
+            <div className='Pagination'>
                 <div>Current page: {this.props.page}</div>
-                <button onClick={() => this.props.changePage(this.props.page - 1)} disabled={this.props.page === 1}>Previous page </button>
-                <button onClick={() => this.props.changePage(this.props.page + 1)} disabled={this.props.page === this.props.totalPages}>Next Page</button>
+                <div className='Buttons'>
+                    <button onClick={() => this.props.changePage(this.props.page - 1)} disabled={this.props.page === 1}>Previous page </button>
+                    <button onClick={() => this.props.changePage(this.props.page + 1)} disabled={this.props.page === this.props.totalPages}>Next Page</button>
+                </div>
             </div>
         )
     }
