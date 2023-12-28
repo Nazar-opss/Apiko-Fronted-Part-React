@@ -16,12 +16,12 @@ export default class RateSwitch extends Component {
     render() {
         return (
             <div className='rateSwithcherBlock'>
-                <div className='rateSwitch' style={{padding: '5px 5px'}} onClick={this.toggleSwitch}>
+                <div className='rateSwitch' style={{padding: '5px 5px', color: `${this.props.color}`}} onClick={this.toggleSwitch}>
                     {this.state.show ? 'Show Rate' : this.props.popularity}
                 </div>
                 {
                     !this.state.show && (
-                        <div style={{paddingLeft: "10px", cursor: "pointer"}} onClick={this.toggleSwitch}>Hide rate</div>
+                        <div style={{paddingLeft: "10px", cursor: "pointer", color: `${this.props.color}`}} onClick={this.toggleSwitch}>Hide rate</div>
                     )
                 }
             </div>

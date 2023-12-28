@@ -16,6 +16,7 @@ code {
 
 h1 {
   text-align: center;
+  margin-top: 0px;
 }
 .films > img{
   border-radius: 8%;

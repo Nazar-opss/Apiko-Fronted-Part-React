@@ -3,14 +3,16 @@ import RateSwitch from "./RateSwitch.js";
 import Pagination from "./Pagination.js";
 import ThemedButton from "./ThemedButton.js";
 import API from "./Api.js";
+import { ThemeContext } from "./ThemedButton.js";
+import { themes } from "./const.js";
 
-export default class Movies extends Component {
+class FilmList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             listOfMovies: [],
             totalPages: 1,
-            page: 1
+            page: 1,
         };
         this.fetchFilmsForPage = this.fetchFilmsForPage.bind(this)
     }
@@ -28,33 +30,115 @@ export default class Movies extends Component {
     render() {
         const { listOfMovies, totalPages, page } = this.state;
         // console.log(listOfMovies)
-        
+
         const imagePath = "https://image.tmdb.org/t/p/w300";
-        
+
         const films = listOfMovies.map((item) => {
             const { title, overview, poster_path, popularity } = item;
             return (
                 <div className="films" key={item.id}>
-                    <h2>{title}</h2>
+                    <h2 style={{ color: `${this.props.color}` }}>{title}</h2>
                     <img src={imagePath + poster_path} alt=""></img>
-                    <p>{overview}</p>
-                    <RateSwitch popularity={popularity}/>
+                    <p style={{ color: `${this.props.color}` }}>{overview}</p>
+                    <RateSwitch popularity={popularity} color={this.props.color} />
                     <hr className="solid"></hr>
                 </div>
             )
         });
-
         return (
-            <div className="header">
-                <ThemedButton/>
-                <h1>Favourite Movies</h1>
+            <>
                 <Pagination
-                page={page}
-                totalPages={totalPages}
-                changePage={this.fetchFilmsForPage}
+                    page={page}
+                    totalPages={totalPages}
+                    changePage={this.fetchFilmsForPage}
+                    color={this.props.color}
                 />
                 {films}
-            </div>
+            </>
+        )
+    }
+}
+
+export default class Movies extends Component {
+    constructor(props) {
+        super(props);
+        this.toggleTheme = () => {
+            this.setState(state => ({
+                theme:
+                    state.theme === themes.dark ? themes.light : themes.dark,
+            }))
+        }
+        this.state = {
+            theme: themes.dark,
+            toggleTheme: this.toggleTheme,
+        };
+    }
+
+    // async componentDidMount() {
+    //     let fetchFilms = await API.fetchMovies(this.state.page)
+    //     this.setState({listOfMovies: fetchFilms.results, totalPages: fetchFilms.total_pages, page: fetchFilms.page})
+    // }
+
+    // async fetchFilmsForPage(page){
+    //     let fetchFilmsForPage = await API.fetchMovies(page)
+    //     this.setState({listOfMovies: fetchFilmsForPage.results, totalPages: fetchFilmsForPage.total_pages, page: fetchFilmsForPage.page})
+    // }
+    
+    render() {
+        // const { listOfMovies, totalPages, page } = this.state;
+        // // console.log(listOfMovies)
+        
+        // const imagePath = "https://image.tmdb.org/t/p/w300";
+        
+        // const films = listOfMovies.map((item) => {
+        //     const { title, overview, poster_path, popularity } = item;
+        //     return (
+        //         <div className="films" key={item.id}>
+        //             <h2>{title}</h2>
+        //             <img src={imagePath + poster_path} alt=""></img>
+        //             <p>{overview}</p>
+        //             <RateSwitch popularity={popularity}/>
+        //             <hr className="solid"></hr>
+        //         </div>
+        //     )
+        // });
+        
+        
+        class Content extends Component {
+            render() {
+                return (
+                    <ThemeContext.Consumer>
+                        {({ theme, toggleTheme }) => (
+                            <div className="header" style={{backgroundColor: `${theme.background}`}}>
+                                <ThemedButton onClick={toggleTheme}/>
+                                <h1 onClick={toggleTheme} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.foreground}`  }}>Favourite Movies</h1>
+                                {/* зробити ворк через кнопку */}
+                                <FilmList
+                                    color={theme.foreground}
+                                />
+                                {/* {films} */}
+                                
+                            </div>
+                        )}
+                    </ThemeContext.Consumer>
+                )
+            }
+        }
+        
+        return (
+            // <div className="header">
+            //     <h1 style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Favourite Movies <ThemedButton/></h1>
+            //     <Pagination
+            //     page={page}
+            //     totalPages={totalPages}
+            //     changePage={this.fetchFilmsForPage}
+            //     />
+            //     {films}
+            // </div>
+            <ThemeContext.Provider value={this.state}>
+                <Content/>
+            </ThemeContext.Provider>
         );
     }
 }
+

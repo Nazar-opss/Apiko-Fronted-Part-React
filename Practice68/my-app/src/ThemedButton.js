@@ -1,23 +1,7 @@
 import React, { Component } from 'react'
-import sun from './sun.svg'
-import moon from './moonwhite.svg'
+import { themes } from './const'
 
-const themes = {
-    light: {
-        icon: sun,
-        foreground: '#000000',
-        background: '#eeeeee',
-    },
-    dark: {
-        icon: moon,
-        foreground: '#ffffff',
-        background: '#222222',
-    },
-}
-
-
-
-const ThemeContext = React.createContext({
+export const ThemeContext = React.createContext({
     theme: themes.dark,
     toggleTheme: () => {}
 })
@@ -28,11 +12,9 @@ class ThemedToggleButton extends Component {
             <ThemeContext.Consumer>
                 {({ theme, toggleTheme }) => (
                     <button
-                        onClick={toggleTheme}
+                        onClick={this.props.onClick}
                         style={{ backgroundColor: theme.background, backgroundImage: 'url(' + theme.icon + ')', width: '80px', height: '80px', backgroundRepeat: 'no-repeat', backgroundSize: 'contain'}}
-                    >
-                        {/* <img src={sun} alt='sun' width={30} height={30}></img> */}
-                        
+                    >        
                     </button>
                 )}
             </ThemeContext.Consumer>

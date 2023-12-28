@@ -10,7 +10,7 @@ export default class Pagination extends Component {
     render() {
         return (
             <div className='Pagination'>
-                <div>Current page: {this.props.page}</div>
+                <div style={{color: `${this.props.color}`}}>Current page: {this.props.page}</div>
                 <div className='Buttons'>
                     <button onClick={() => this.props.changePage(this.props.page - 1)} disabled={this.props.page === 1}>Previous page </button>
                     <button onClick={() => this.props.changePage(this.props.page + 1)} disabled={this.props.page === this.props.totalPages}>Next Page</button>
