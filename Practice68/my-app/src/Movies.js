@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import RateSwitch from "./RateSwitch.js";
 import Pagination from "./Pagination.js";
-import ThemedButton from "./ThemedButton.js";
+import { ThemedToggleButton } from "./ThemedButton.js";
 import API from "./Api.js";
 import { ThemeContext } from "./ThemedButton.js";
 import { themes } from "./const.js";
+import GridLoader from "react-spinners/GridLoader"
+
 
 class FilmList extends Component {
     constructor(props) {
@@ -13,18 +15,23 @@ class FilmList extends Component {
             listOfMovies: [],
             totalPages: 1,
             page: 1,
+            loading: true
         };
         this.fetchFilmsForPage = this.fetchFilmsForPage.bind(this)
     }
+    
 
     async componentDidMount() {
         let fetchFilms = await API.fetchMovies(this.state.page)
         this.setState({listOfMovies: fetchFilms.results, totalPages: fetchFilms.total_pages, page: fetchFilms.page})
+        this.setState({loading: false})
     }
 
     async fetchFilmsForPage(page){
+        this.setState({loading: true})
         let fetchFilmsForPage = await API.fetchMovies(page)
         this.setState({listOfMovies: fetchFilmsForPage.results, totalPages: fetchFilmsForPage.total_pages, page: fetchFilmsForPage.page})
+        this.setState({loading: false})
     }
     
     render() {
@@ -52,6 +59,15 @@ class FilmList extends Component {
                     totalPages={totalPages}
                     changePage={this.fetchFilmsForPage}
                     color={this.props.color}
+                />
+                <GridLoader
+                    className="loader"
+                    size={100}
+                    color={this.props.color}
+                    loading={this.state.loading}
+                    speedMultiplier={1.5}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
                 />
                 {films}
             </>
@@ -110,14 +126,13 @@ export default class Movies extends Component {
                     <ThemeContext.Consumer>
                         {({ theme, toggleTheme }) => (
                             <div className="header" style={{backgroundColor: `${theme.background}`}}>
-                                <ThemedButton onClick={toggleTheme}/>
+                                <ThemedToggleButton onClick={toggleTheme}/>
                                 <h1 onClick={toggleTheme} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.foreground}`  }}>Favourite Movies</h1>
                                 {/* зробити ворк через кнопку */}
                                 <FilmList
                                     color={theme.foreground}
                                 />
                                 {/* {films} */}
-                                
                             </div>
                         )}
                     </ThemeContext.Consumer>

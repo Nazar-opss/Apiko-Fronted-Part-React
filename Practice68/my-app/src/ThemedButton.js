@@ -6,7 +6,7 @@ export const ThemeContext = React.createContext({
     toggleTheme: () => {}
 })
 
-class ThemedToggleButton extends Component {
+export class ThemedToggleButton extends Component {
     render() {
         return (
             <ThemeContext.Consumer>
