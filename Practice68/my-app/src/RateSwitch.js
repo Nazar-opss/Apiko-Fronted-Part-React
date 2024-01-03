@@ -21,7 +21,7 @@ export default class RateSwitch extends Component {
                 </div>
                 {
                     !this.state.show && (
-                        <div style={{paddingLeft: "10px", cursor: "pointer", color: `${this.props.color}`}} onClick={this.toggleSwitch}>Hide rate</div>
+                        <div style={{paddingLeft: "10px", cursor: "pointer", color: `${this.props.color}`, textDecoration: 'underline'}} onClick={this.toggleSwitch}>Hide rate</div>
                     )
                 }
             </div>

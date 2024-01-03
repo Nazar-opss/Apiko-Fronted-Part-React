@@ -26,7 +26,7 @@ p {
   text-align: center;
   font-weight: bold;
 }
-.films {
+.Film {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,7 +61,21 @@ hr.solid {
   border-radius: 7%;
 }
 .loader{
-  display: relative;
+  display: block;
   margin: 0 auto;
   border-color: red;
+  padding-top: 150px;
+}
+.popUp{
+  position: fixed;
+  width: 300px;
+  height: 100px;
+  background-color: #fff;
+  border-color: black;
+  border: solid;
+  border-radius: 3%;
+  left: 10px;
+  top: 20px;
+  float: left;
+  margin-right: 0px;
 }
