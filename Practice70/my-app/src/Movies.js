@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import RateSwitch from "./components/RateSwitch.js";
 import { Pagination } from "./components/Pagination.js";
 import { ThemedToggleButton } from "./components/ThemedButton.js";
@@ -37,43 +37,56 @@ export const FilmList1 = (props) => {
     const [page, setPage] = useState(1)
     const [selectedFilm, setSelectedFilm] = useState(null)
     const [total_pages, setTotalPages] = useState(0)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch()
-    })
+        fetch(page)
+    }, [page])
     
-    async function fetch() {
+    async function fetch(page) {
+        setLoading(true) //TO DO: fix strange loading
+        setFilms([])
         let fetchFilms1 = await API.fetchMovies(page)
+        setLoading(false)
         setFilms(fetchFilms1.results)
         setPage(fetchFilms1.page)
         setTotalPages(fetchFilms1.total_pages)
-        // console.log(fetchFilms1.results)
-        // console.log(films)
     }
 
     function handleFilm(selectedFilm) {
         setSelectedFilm(selectedFilm)
     }
     console.log(total_pages)
+    console.log(page)
     console.log(films)
     return(
         <div>
             <Pagination
                 page={page}
                 totalPages={total_pages}
-                changePage={total_pages} /// CHANGE PAGE
+                changePage={fetch}
                 color={props.color}
             />
+            <GridLoader
+                    className="loader"
+                    size={100}
+                    color={props.color}
+                    loading={loading}
+                    speedMultiplier={1.5}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                />
             {
                 films.map(film => (
                     <Film key={film.id} {...film} openLink={handleFilm} color={props.color} />
                 ))
             }
+            {selectedFilm && (
+                    <PopUp filmLink={selectedFilm} closePopUp={() => handleFilm(null)}/>
+                )}
         </div>
     )
 }
-
-
 
 class FilmList extends Component {
     constructor(props) {
@@ -135,6 +148,27 @@ class FilmList extends Component {
     }
 }
 
+const Content = (props) => {
+    const theme = useContext(ThemeContext)
+    return (
+        <div className="header">
+            <ThemedToggleButton onClick={theme.toggleTheme} />
+            <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.theme.foreground}` }}>Favourite Movies</h1>
+            <FilmList1
+                color={theme.theme.foreground}
+            />
+        </div>
+    )
+}
+
+const Movies1 = (props) => { // TODO
+    const [theme, setTheme] = useState()
+
+    function toggleTheme() {
+
+    }
+}
+
 export default class Movies extends Component {
     constructor(props) {
         super(props);
@@ -144,10 +178,11 @@ export default class Movies extends Component {
                     state.theme === themes.dark ? themes.light : themes.dark,
             }))
         }
+
         this.state = {
             theme: themes.dark,
             toggleTheme: this.toggleTheme,
-        };
+        }
     }    
     render() {
 
@@ -173,8 +208,8 @@ export default class Movies extends Component {
         
         return (
             <ThemeContext.Provider value={this.state}>
-                <Content/>
-                <FilmList1/>
+                {/* <Content/> */}
+                <FilmList1 color={themes.dark.foreground}/>
             </ThemeContext.Provider>
         );
     }
