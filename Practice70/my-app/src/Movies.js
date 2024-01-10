@@ -1,5 +1,5 @@
-import React, { Component, useContext } from "react";
-import RateSwitch from "./components/RateSwitch.js";
+import React, { useContext } from "react";
+import { RateSwitch } from "./components/RateSwitch.js";
 import { Pagination } from "./components/Pagination.js";
 import { ThemedToggleButton } from "./components/ThemedButton.js";
 import API from "./utils/Api.js";
@@ -41,24 +41,28 @@ export const FilmList1 = (props) => {
 
     useEffect(() => {
         fetch(page)
-    }, [page])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     
     async function fetch(page) {
-        setLoading(true) //TO DO: fix strange loading
-        setFilms([])
-        let fetchFilms1 = await API.fetchMovies(page)
-        setLoading(false)
-        setFilms(fetchFilms1.results)
-        setPage(fetchFilms1.page)
-        setTotalPages(fetchFilms1.total_pages)
+        try {
+            setLoading(true)
+            setFilms([])
+            let fetchFilms1 = await API.fetchMovies(page)
+            setFilms(fetchFilms1.results)
+            setPage(fetchFilms1.page)
+            setTotalPages(fetchFilms1.total_pages)
+        } catch (error) {
+            console.log("Error")
+        } finally {
+            setLoading(false)
+        }
     }
 
     function handleFilm(selectedFilm) {
         setSelectedFilm(selectedFilm)
     }
-    console.log(total_pages)
-    console.log(page)
-    console.log(films)
+
     return(
         <div>
             <Pagination
@@ -88,71 +92,71 @@ export const FilmList1 = (props) => {
     )
 }
 
-class FilmList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            listOfFilms: [],
-            totalPages: 1,
-            page: 1,
-            loading: true,
-            selectedFilm: null,
-        };
-        this.fetchFilmsForPage = this.fetchFilmsForPage.bind(this)
-        this.handleFilm = this.handleFilm.bind(this)
-    }
+// class FilmList extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             listOfFilms: [],
+//             totalPages: 1,
+//             page: 1,
+//             loading: true,
+//             selectedFilm: null,
+//         };
+//         this.fetchFilmsForPage = this.fetchFilmsForPage.bind(this)
+//         this.handleFilm = this.handleFilm.bind(this)
+//     }
     
-    async componentDidMount() {
-        let fetchFilms = await API.fetchMovies(this.state.page)
-        this.setState({listOfFilms: fetchFilms.results, totalPages: fetchFilms.total_pages, page: fetchFilms.page, loading: false})
-    }
+//     async componentDidMount() {
+//         let fetchFilms = await API.fetchMovies(this.state.page)
+//         this.setState({listOfFilms: fetchFilms.results, totalPages: fetchFilms.total_pages, page: fetchFilms.page, loading: false})
+//     }
 
-    async fetchFilmsForPage(page){
-        this.setState({listOfFilms: [], loading: true})
-        let fetchFilmsForPage = await API.fetchMovies(page)
-        this.setState({listOfFilms: fetchFilmsForPage.results, totalPages: fetchFilmsForPage.total_pages, page: fetchFilmsForPage.page, loading: false})
-    }
+//     async fetchFilmsForPage(page){
+//         this.setState({listOfFilms: [], loading: true})
+//         let fetchFilmsForPage = await API.fetchMovies(page)
+//         this.setState({listOfFilms: fetchFilmsForPage.results, totalPages: fetchFilmsForPage.total_pages, page: fetchFilmsForPage.page, loading: false})
+//     }
 
-    handleFilm(selectedFilm) {
-        this.setState({selectedFilm})
-    }
-    render() {
-        const { listOfFilms, totalPages, page, selectedFilm } = this.state;
-        return (
-            <>
-                <Pagination
-                    page={page}
-                    totalPages={totalPages}
-                    changePage={this.fetchFilmsForPage}
-                    color={this.props.color}
-                />
-                <GridLoader
-                    className="loader"
-                    size={100}
-                    color={this.props.color}
-                    loading={this.state.loading}
-                    speedMultiplier={1.5}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                />
-                {
-                    listOfFilms.map(film =>(
-                        <Film key={film.id} {...film} openLink={this.handleFilm} color={this.props.color}/>
-                    ))
-                }
-                {selectedFilm && (
-                    <PopUp filmLink={selectedFilm} closePopUp={() => this.handleFilm(null)}/>
-                )}
-            </>
-        )
-    }
-}
+//     handleFilm(selectedFilm) {
+//         this.setState({selectedFilm})
+//     }
+//     render() {
+//         const { listOfFilms, totalPages, page, selectedFilm } = this.state;
+//         return (
+//             <>
+//                 <Pagination
+//                     page={page}
+//                     totalPages={totalPages}
+//                     changePage={this.fetchFilmsForPage}
+//                     color={this.props.color}
+//                 />
+//                 <GridLoader
+//                     className="loader"
+//                     size={100}
+//                     color={this.props.color}
+//                     loading={this.state.loading}
+//                     speedMultiplier={1.5}
+//                     aria-label="Loading Spinner"
+//                     data-testid="loader"
+//                 />
+//                 {
+//                     listOfFilms.map(film =>(
+//                         <Film key={film.id} {...film} openLink={this.handleFilm} color={this.props.color}/>
+//                     ))
+//                 }
+//                 {selectedFilm && (
+//                     <PopUp filmLink={selectedFilm} closePopUp={() => this.handleFilm(null)}/>
+//                 )}
+//             </>
+//         )
+//     }
+// }
 
 const Content = (props) => {
     const theme = useContext(ThemeContext)
     return (
         <div className="header">
-            <ThemedToggleButton onClick={theme.toggleTheme} />
+            <ThemedToggleButton onClick={props.toggleTheme} />
             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.theme.foreground}` }}>Favourite Movies</h1>
             <FilmList1
                 color={theme.theme.foreground}
@@ -161,56 +165,64 @@ const Content = (props) => {
     )
 }
 
-const Movies1 = (props) => { // TODO
-    const [theme, setTheme] = useState()
+export const Movies = () => {
+    const [currentTheme, setTheme] = useState(themes.dark)
+    document.body.style.backgroundColor = currentTheme.background
 
-    function toggleTheme() {
-
-    }
+    const toggleTheme = () => {
+        setTheme((prevTheme) => (
+            prevTheme === themes.dark ? themes.light : themes.dark
+        ));
+    };
+    return(
+        <ThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
+            <Content toggleTheme={toggleTheme}/>
+        </ThemeContext.Provider>
+    )
 }
 
-export default class Movies extends Component {
-    constructor(props) {
-        super(props);
-        this.toggleTheme = () => {
-            this.setState(state => ({
-                theme:
-                    state.theme === themes.dark ? themes.light : themes.dark,
-            }))
-        }
 
-        this.state = {
-            theme: themes.dark,
-            toggleTheme: this.toggleTheme,
-        }
-    }    
-    render() {
+// export default class Movies extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.toggleTheme = () => {
+//             this.setState(state => ({
+//                 theme:
+//                     state.theme === themes.dark ? themes.light : themes.dark,
+//             }))
+//         }
 
-        document.body.style.backgroundColor = this.state.theme.background
+//         this.state = {
+//             theme: themes.dark,
+//             toggleTheme: this.toggleTheme,
+//         }
+//     }    
+//     render() {
 
-        class Content extends Component {
-            render() {
-                return (
-                    <ThemeContext.Consumer>
-                        {({ theme, toggleTheme }) => (
-                            <div className="header">
-                                <ThemedToggleButton onClick={toggleTheme}/>
-                                <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.foreground}` }}>Favourite Movies</h1>
-                                <FilmList
-                                    color={theme.foreground}
-                                />
-                            </div>
-                        )}
-                    </ThemeContext.Consumer>
-                )
-            }
-        }
+//         document.body.style.backgroundColor = this.state.theme.background
+
+//         class Content extends Component {
+//             render() {
+//                 return (
+//                     <ThemeContext.Consumer>
+//                         {({ theme, toggleTheme }) => (
+//                             <div className="header">
+//                                 <ThemedToggleButton onClick={toggleTheme}/>
+//                                 <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.foreground}` }}>Favourite Movies</h1>
+//                                 <FilmList
+//                                     color={theme.foreground}
+//                                 />
+//                             </div>
+//                         )}
+//                     </ThemeContext.Consumer>
+//                 )
+//             }
+//         }
         
-        return (
-            <ThemeContext.Provider value={this.state}>
-                {/* <Content/> */}
-                <FilmList1 color={themes.dark.foreground}/>
-            </ThemeContext.Provider>
-        );
-    }
-}
+//         return (
+//             <ThemeContext.Provider value={this.state}>
+//                 <Content/>
+//             </ThemeContext.Provider>
+//         );
+//     }
+// }

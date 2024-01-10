@@ -11,7 +11,7 @@ export const ThemedToggleButton = (props) =>{
     const theme = useContext(ThemeContext)
     return (
         <button
-            onClick={props.onClick}
+            onClick={ props.onClick }
             style={{ backgroundColor: `${theme.theme.background}`, backgroundImage: `url(${theme.theme.icon})`, width: '80px', height: '80px', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}
             className='themetoggle'
         >

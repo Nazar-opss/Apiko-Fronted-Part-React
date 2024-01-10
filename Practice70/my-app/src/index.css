@@ -64,7 +64,7 @@ hr.solid {
   display: block;
   margin: 0 auto;
   border-color: red;
-  padding-top: 150px;
+  padding-top: 100px;
 }
 .popUp{
   position: fixed;
