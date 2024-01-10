@@ -32,7 +32,7 @@ const Film = ({ title, overview, poster_path, popularity, openLink, release_date
     )
 }
 
-export const FilmList1 = (props) => {
+const FilmList = (props) => {
     const [films, setFilms] = useState([]);
     const [page, setPage] = useState(1)
     const [selectedFilm, setSelectedFilm] = useState(null)
@@ -158,7 +158,7 @@ const Content = (props) => {
         <div className="header">
             <ThemedToggleButton onClick={props.toggleTheme} />
             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.theme.foreground}` }}>Favourite Movies</h1>
-            <FilmList1
+            <FilmList
                 color={theme.theme.foreground}
             />
         </div>
