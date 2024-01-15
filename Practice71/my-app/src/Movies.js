@@ -10,19 +10,18 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const useFetchMovies = (url) => {
-    const [films1, setFilms] = useState([]);
-    const [page1, setPage] = useState(1)
-    const [selectedFilm, setSelectedFilm] = useState(null)
-    const [total_pages1, setTotalPages] = useState(0)
+    const [films, setFilms] = useState([]);
+    const [page, setPage] = useState(1)
+    const [total_pages, setTotalPages] = useState(0)
     const [loading, setLoading] = useState(true)
-    console.log(url)
+    const [urlLink, setUrl] = useState(url)
+    
     useEffect(() => {
-        // fetch(page)
         async function fetch() {
             try {
                 setLoading(true)
                 setFilms([])
-                let fetchFilms1 = await API.fetchMovies(url)
+                let fetchFilms1 = await API.fetchMovies(urlLink)
                 setFilms(fetchFilms1.results)
                 setPage(fetchFilms1.page)
                 setTotalPages(fetchFilms1.total_pages)
@@ -32,25 +31,10 @@ const useFetchMovies = (url) => {
                 setLoading(false)
             }
         }
-        fetch(page1)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        fetch()
+    }, [urlLink])
     
-    // async function fetch(page) {
-    //     try {
-    //         setLoading(true)
-    //         setFilms([])
-    //         let fetchFilms1 = await API.fetchMovies(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
-    //         setFilms(fetchFilms1.results)
-    //         setPage(fetchFilms1.page)
-    //         setTotalPages(fetchFilms1.total_pages)
-    //     } catch (error) {
-    //         console.log("Error")
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // }
-    return {data: films1, total: total_pages1, page1: page1}
+    return [{data: films, total: total_pages, page: page, loading: loading}, setUrl]
 }
 
 const PopUp = ({ filmLink, closePopUp }) => {
@@ -77,35 +61,41 @@ const Film = ({ title, overview, poster_path, popularity, openLink, release_date
 }
 
 const FilmList = (props) => {
-    const [films, setFilms] = useState([]);
-    const [page, setPage] = useState(1)
     const [selectedFilm, setSelectedFilm] = useState(null)
-    const [total_pages, setTotalPages] = useState(0)
-    const [loading, setLoading] = useState(true)
-    const [url, setUrl] = useState(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
-    console.log(url)
-    const {data, total, page1} = useFetchMovies(url)
-    console.log(data)
-    console.log(total)
-    console.log(page1) // working 
-    useEffect(() => {
-        fetch(page)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    const [fetchLink, setFetchLink] = useState('')
     
-    async function fetch(page) {
-        try {
-            setLoading(true)
-            setFilms([])
-            let fetchFilms1 = await API.fetchMovies(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
-            setFilms(fetchFilms1.results)
-            setPage(fetchFilms1.page)
-            setTotalPages(fetchFilms1.total_pages)
-        } catch (error) {
-            console.log("Error")
-        } finally {
-            setLoading(false)
-        }
+    const [{data, total, page, loading}, setUrl] = useFetchMovies('https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=1&sort_by=created_at.asc')
+
+    // const [{data, total, page, loading}, setUrl] = useFetchMovies('https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=1&sort_by=created_at.asc')
+
+    // useEffect(() => {
+    //     fetch(page)
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
+    
+    // async function fetch(page) {
+    //     try {
+    //         setLoading(true)
+    //         setFilms([])
+    //         let fetchFilms1 = await API.fetchMovies(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
+    //         setFilms(fetchFilms1.results)
+    //         setPage(fetchFilms1.page)
+    //         setTotalPages(fetchFilms1.total_pages)
+    //     } catch (error) {
+    //         console.log("Error")
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
+    
+
+    function setPageFetch(page){
+        setUrl(fetchLink)
+        // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
+        // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
+    }
+    function setGetRated(){
+        setFetchLink(`https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
     }
 
     function handleFilm(selectedFilm) {
@@ -114,10 +104,11 @@ const FilmList = (props) => {
 
     return(
         <div>
+            <button onClick={setGetRated}>Get rated movies</button>
             <Pagination
                 page={page}
-                totalPages={total_pages}
-                changePage={fetch}
+                totalPages={total}
+                changePage={setPageFetch}
                 color={props.color}
             />
             <GridLoader
@@ -130,7 +121,7 @@ const FilmList = (props) => {
                     data-testid="loader"
                 />
             {
-                films.map(film => (
+                data.map(film => (
                     <Film key={film.id} {...film} openLink={handleFilm} color={props.color} />
                 ))
             }
