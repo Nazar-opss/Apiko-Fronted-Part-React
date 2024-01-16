@@ -62,7 +62,6 @@ const Film = ({ title, overview, poster_path, popularity, openLink, release_date
 
 const FilmList = (props) => {
     const [selectedFilm, setSelectedFilm] = useState(null)
-    const [fetchLink, setFetchLink] = useState('')
     
     const [{data, total, page, loading}, setUrl] = useFetchMovies('https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=1&sort_by=created_at.asc')
 
@@ -88,14 +87,9 @@ const FilmList = (props) => {
     //     }
     // }
     
-
     function setPageFetch(page){
-        setUrl(fetchLink)
-        // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
+        setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
         // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
-    }
-    function setGetRated(){
-        setFetchLink(`https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
     }
 
     function handleFilm(selectedFilm) {
@@ -104,7 +98,6 @@ const FilmList = (props) => {
 
     return(
         <div>
-            <button onClick={setGetRated}>Get rated movies</button>
             <Pagination
                 page={page}
                 totalPages={total}
