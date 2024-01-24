@@ -1,15 +1,45 @@
 import React, { useState } from 'react'
-import home_work from './home_work.svg'
+import home_owner from './home_work.svg'
 import business_center from './business_center.svg'
 import arrow_right from './arrow_right.svg'
+
+const Role = (props) =>{
+    return(
+        <>
+            <input type='radio' id={props.role_name} name='role' className='role_radio'></input>
+            <label htmlFor={props.role_name} className='role_choice'>
+                <img src={props.icon} alt='icon' className='role_icon'></img>
+                <div className='role_text' style={{ padding: '14px 0px', width: '100%' }}>
+                    <p style={props.titleStyle}>{props.title}</p>
+                    <p style={props.descStyle}>{props.desc}</p>
+                </div>
+            </label>
+        </>
+    )
+}
 
 function RolePicker() {
     const [active, setActive] = useState("");
     const handleClick = (event) => {
         setActive(event.target.id);
     }
+
+    function onSubmit(event) {
+        console.log("OK")
+        event.preventDefault();
+    }
     const role_choice_title = {fontWeight: '500', letterSpacing: '0.15px', lineHeight: '28px'}
     const role_choice_desc = {fontSize: '13px', lineHeight: '15px'}
+    const roleText = {
+        homeowner: {
+            title: 'Homeowner',
+            desc: 'I am a homeowner or interesed in home design.'
+        },
+        professional: {
+            title: 'Professional',
+            desc: 'I offer home improvement services or sell home products.'
+        }
+    }
     return (
         <div className='form'>
             <div className='container'>
@@ -17,23 +47,23 @@ function RolePicker() {
                 <div className='role_selector'>
                     <form>
                     {/* Переробити це в компоненти і передавати текст і стилін пропсою */}
-                        <input type='radio' id='homework' name='role' className='role_radio'></input>
-                        <label htmlFor='homework' className='role_choice'>
-                            <img src={home_work} alt='icon' className='role_icon'></img>
-                            <div className='role_text' style={{padding: '14px 0px', width:'100%'}}>
-                                <p style={role_choice_title}>Homeowner</p>
-                                <p style={role_choice_desc}>I am a homeowner or interesed in home design.</p>
-                            </div>
-                        </label>
-                        <input type='radio' id='professional' name='role' className='role_radio'></input>
-                        <label htmlFor='professional' className='role_choice'>
-                            <img src={business_center} alt='icon' className='role_icon'></img>
-                            <div className='role_text' style={{padding: '14px 0px'}}>
-                                <p style={role_choice_title}>Professional</p>
-                                <p style={role_choice_desc}>I offer home improvement services or sell home products.</p>
-                            </div>
-                        </label>
-                        <input type="submit" value='Next' className='role_submit'></input>
+                        <Role
+                            role_name={'homeowner'}
+                            icon={home_owner}
+                            titleStyle={role_choice_title}
+                            descStyle={role_choice_desc}
+                            title={roleText.homeowner.title}
+                            desc={roleText.homeowner.desc}
+                        />
+                        <Role
+                            role_name={'professional'}
+                            icon={business_center}
+                            titleStyle={role_choice_title}
+                            descStyle={role_choice_desc}
+                            title={roleText.professional.title}
+                            desc={roleText.professional.desc}
+                        />
+                        <input type="submit" value='Next >' className='role_submit' onClick={onSubmit}></input>
                     </form>
                 </div>
             </div>

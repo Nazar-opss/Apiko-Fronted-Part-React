@@ -1,9 +1,13 @@
 import React from 'react'
 import RolePicker from './RolePicker'
+import About from './About'
 
 function App() {
   return (
-      <RolePicker/>
+    <div className='form'>
+      {/* <RolePicker/> */}
+      <About/>
+    </div>
   )
 }
 
