@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import arrow_left from './arrow_left.svg'
+import StepperCom from './Stepper'
 
 function Phone() {
     return (
@@ -21,7 +22,6 @@ function Phone() {
     )
 }
 
-
 function Radio(props) {
     return (
         <>
@@ -39,7 +39,6 @@ function Radio(props) {
     )
 }
 
-
 function About() {
     const [firstName, setfirstName] = useState('')
     const [lastName, setlastName] = useState('')
@@ -56,6 +55,7 @@ function About() {
     return (
         <div>
             <h5 className='basic'>Basic information about you</h5>
+            <StepperCom/>
             <form className='form' onSubmit={handleSubmit}>
                 <div className='form_inputs'>
                     <label htmlFor='firstName'>
