@@ -1,30 +1,14 @@
 import React from 'react'
-import ellipse from './ellipse.svg'
-import white from './white.svg'
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+
 
 const steps = ['', ' '];
 
 function StepperCom() {
-  
-    // <div>
-    //     <div className='ellipse'>
-    //         <img src={ellipse} alt='status_ellipse'></img>
-    //         <div className='number'>1</div>
-    //     </div>
-    //     <hr></hr>
-    //     <div className='ellipse'>
-    //         <img src={white} alt='status_ellipse' className='white_ellipse'></img>
-    //         <div className='number'>2</div>
-    //     </div>
-    // </div>
-    
-
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
   
@@ -47,34 +31,34 @@ function StepperCom() {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
   
-    const handleReset = () => {
-      setActiveStep(0);
-    };
-  
     return (
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '75%' }}>
         <Stepper activeStep={activeStep}>
           {steps.map((label) => {
             const stepProps = {};
             const labelProps = {};
             return (
-              <Step key={label} {...stepProps}>
+              <Step key={label} {...stepProps}
+              sx={{
+                  '& .MuiStepLabel-root .Mui-completed': {
+                    color: 'common.blue', // circle color (COMPLETED)
+                  },
+                  '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
+                  {
+                    color: 'grey.500', // Just text label (COMPLETED)
+                  },
+                  '& .MuiStepLabel-root .Mui-active': {
+                    color: 'secondary.main', // circle color (ACTIVE)
+                  },
+                  '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                    fill: 'white', // circle's number (ACTIVE)
+                  },
+              }}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
               </Step>
             );
           })}
         </Stepper>
-        {activeStep === steps.length ? (
-          <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </React.Fragment>
-        ) : (
           <React.Fragment>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
@@ -92,7 +76,6 @@ function StepperCom() {
               </Button>
             </Box>
           </React.Fragment>
-        )}
       </Box>
     );
 }
