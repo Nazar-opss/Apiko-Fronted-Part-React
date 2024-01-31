@@ -2,6 +2,17 @@ import React, { useState } from 'react'
 import arrow_left from './arrow_left.svg'
 import StepperCom from './Stepper'
 
+
+const formInfoHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', letterSpacing:'0.15px', marginBottom: '25.5px'}
+
+function AboutP2() {
+    return (
+        <>
+            <p style={formInfoHeader}>Categories you work with</p>
+        </>
+    )
+}
+
 function Phone() {
     return (
         <div className='form_phone'>
@@ -51,7 +62,7 @@ function About() {
         })
     }
 
-    const genderHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', letterSpacing:'0.15px', marginBottom: '25.5px'}
+    
     return (
         <div>
             <h5 className='basic'>Basic information about you</h5>
@@ -79,7 +90,7 @@ function About() {
                             style={{marginBottom: '30.5px'}}
                         ></input>
                     </label>
-                    <p style={genderHeader}>Gender</p>
+                    <p style={formInfoHeader}>Gender</p>
                 </div>
             </form>
             <form className='form_gender'>

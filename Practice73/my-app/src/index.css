@@ -208,16 +208,19 @@ p {
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root{
   width: 1.38em !important;
   height: 1.38em !important;
-}
+} 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root:not(.Mui-active:not(.MuiStepIcon-text)){
   color: white !important;
-  /* stroke: #376FDB !important;
-  stroke-width: 1px !important; */
+  stroke: #376FDB !important;
+  stroke-width: 1px !important;
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
-  color: #1976d2 !important;
+  color: #376FDB !important;
 }
 .css-1hbj5v0{
   margin: 0 auto;
+}
+.css-11rrt15-MuiStep-root .MuiStepLabel-root .Mui-active .MuiStepIcon-text {
+  font-size: 0.8rem;
 }

@@ -40,6 +40,10 @@ function StepperCom() {
             return (
               <Step key={label} {...stepProps}
               sx={{
+                  ".MuiSvgIcon-root": {
+                    borderRadius: "50%",
+                    border: "1px solid #1976d2",
+                  },
                   '& .MuiStepLabel-root .Mui-completed': {
                     color: 'common.blue', // circle color (COMPLETED)
                   },
