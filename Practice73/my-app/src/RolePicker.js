@@ -46,7 +46,6 @@ function RolePicker() {
                 <h5 style={{marginBottom:'45px', marginTop: '0px'}}>Which describes you best?</h5>
                 <div className='role_selector'>
                     <form>
-                    {/* Переробити це в компоненти і передавати текст і стилін пропсою */}
                         <Role
                             role_name={'homeowner'}
                             icon={home_owner}

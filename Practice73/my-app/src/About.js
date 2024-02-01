@@ -6,9 +6,67 @@ import StepperCom from './Stepper'
 const formInfoHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', letterSpacing:'0.15px', marginBottom: '25.5px'}
 
 function AboutP2() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     return (
         <>
             <p style={formInfoHeader}>Categories you work with</p>
+            <form className='form_work'>
+                <Radio
+                    type='checkbox'
+                    id='economy'
+                    name='economy'
+                    value='Economy'
+                />
+                <br />
+                <Radio
+                    type='checkbox'
+                    id='business'
+                    name='business'
+                    value='Business'
+                />
+                <br />
+                <Radio
+                    type='checkbox'
+                    id='trading'
+                    name='trading'
+                    value='Trading'
+                />
+                <br />
+                <Radio
+                    type='checkbox'
+                    id='communications'
+                    name='communications'
+                    value='Сommunications'
+                >
+                </Radio>
+            </form>
+            <div className='form_inputs'>
+                <label htmlFor='email'>
+                    <input
+                        type='email'
+                        name='email'
+                        placeholder='Email'
+                        className='form_email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    ></input>
+                </label>
+                <label htmlFor='password'>
+                    <input
+                        type='password'
+                        name='password'
+                        placeholder='Password'
+                        className='form_password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ marginBottom: '30.5px' }}
+                    ></input>
+                    <p className='password_validation'>
+                        The password has to be at least 8 characters long and contain at least one upper case letter.
+                    </p>
+                </label>
+            </div>
         </>
     )
 }
@@ -37,9 +95,9 @@ function Radio(props) {
     return (
         <>
             <input 
-                type="radio" 
-                id={props.gender} 
-                name="gender"
+                type={props.type} 
+                id={props.id} 
+                name={props.name}
                 value={props.value}>
             </input>
             <label 
@@ -67,7 +125,8 @@ function About() {
         <div>
             <h5 className='basic'>Basic information about you</h5>
             <StepperCom/>
-            <form className='form' onSubmit={handleSubmit}>
+            <AboutP2/>
+            {/* <form className='form' onSubmit={handleSubmit}>
                 <div className='form_inputs'>
                     <label htmlFor='firstName'>
                         <input 
@@ -95,23 +154,31 @@ function About() {
             </form>
             <form className='form_gender'>
                 <Radio
-                    gender='male'
+                    type='radio'
+                    id='male'
+                    name='gender'
                     value='Male'
                 />
                 <br />
                 <Radio
-                    gender='female'
+                    type='radio'
+                    id='female'
+                    name='gender'
                     value='Female'
                 />
                 <br />
                 <Radio
-                    gender='ipnts'
+                    type='radio'
+                    id='ipnts'
+                    name='gender'
                     value='I prefer not to say'
                 />
                 <br />
                 <Radio
-                    gender='other'
+                    type='radio'
+                    id='other'
                     value='Other'
+                    name='gender'
                     children={<input type='text'></input>}
                 >
                 </Radio>
@@ -125,7 +192,7 @@ function About() {
                 <button className='form_continue'>
                     Continue
                 </button>
-            </div>
+            </div> */}
         </div>
     )
 }

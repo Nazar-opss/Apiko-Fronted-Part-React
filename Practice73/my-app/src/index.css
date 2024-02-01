@@ -104,11 +104,10 @@ p {
   max-width: 362px;
 }
 
-.form_name{
+.form_name, .form_email, .form_password{
   padding: 10.5px 168px 10.5px 12px;
   border-radius: 4px;
   border: 1px solid var(--grey-grey-300, #E0E0E0);
-  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);  
   margin-bottom: 20px;
   color: #757575;
   font-size: 16px;
@@ -121,9 +120,12 @@ p {
   max-width: 224px !important; 
 }
 
-
 .form_gender > input {
   margin: 0px 16px 18px 0px;
+}
+.form_work > input {
+  margin: 0px 13px 18px 0px;
+  border-width: 4px !important;
 }
 
 .form_gender > input:last-of-type {
@@ -212,15 +214,35 @@ p {
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root:not(.Mui-active:not(.MuiStepIcon-text)){
   color: white !important;
   stroke: #376FDB !important;
-  stroke-width: 1px !important;
+  stroke-width: 0.5px !important;
 }
 
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
   color: #376FDB !important;
 }
+
 .css-1hbj5v0{
   margin: 0 auto;
 }
+
 .css-11rrt15-MuiStep-root .MuiStepLabel-root .Mui-active .MuiStepIcon-text {
   font-size: 0.8rem;
+}
+
+.form_work{
+  margin-bottom: 33px;
+  margin-left: 10px;
+}
+
+.form_password{
+  margin-bottom: 0px;
+}
+
+.password_validation{
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.4000000059604645px;
+  text-align: left;
+  color: #0000008A;
 }
