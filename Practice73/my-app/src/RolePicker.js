@@ -6,7 +6,7 @@ import arrow_right from './arrow_right.svg'
 const Role = (props) =>{
     return(
         <>
-            <input type='radio' id={props.role_name} name='role' className='role_radio'></input>
+            <input type='radio' id={props.role_name} name='role' className='role_radio' onClick={props.handleClick}></input>
             <label htmlFor={props.role_name} className='role_choice'>
                 <img src={props.icon} alt='icon' className='role_icon'></img>
                 <div className='role_text' style={{ padding: '14px 0px', width: '100%' }}>
@@ -18,16 +18,17 @@ const Role = (props) =>{
     )
 }
 
-function RolePicker() {
+function RolePicker(props) {
     const [active, setActive] = useState("");
     const handleClick = (event) => {
         setActive(event.target.id);
     }
 
     function onSubmit(event) {
-        console.log("OK")
+        console.log(active)
         event.preventDefault();
     }
+
     const role_choice_title = {fontWeight: '500', letterSpacing: '0.15px', lineHeight: '28px'}
     const role_choice_desc = {fontSize: '13px', lineHeight: '15px'}
     const roleText = {
@@ -53,6 +54,7 @@ function RolePicker() {
                             descStyle={role_choice_desc}
                             title={roleText.homeowner.title}
                             desc={roleText.homeowner.desc}
+                            handleClick={handleClick}
                         />
                         <Role
                             role_name={'professional'}
@@ -61,8 +63,9 @@ function RolePicker() {
                             descStyle={role_choice_desc}
                             title={roleText.professional.title}
                             desc={roleText.professional.desc}
+                            handleClick={handleClick}
                         />
-                        <input type="submit" value='Next >' className='role_submit' onClick={onSubmit}></input>
+                        <input type="submit" value='Next >' className='role_submit' onClick={props.handle}></input>
                     </form>
                 </div>
             </div>

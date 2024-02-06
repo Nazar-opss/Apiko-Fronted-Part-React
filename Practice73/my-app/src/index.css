@@ -75,6 +75,7 @@ p {
   color: #ffffff;
   margin-top: 29px;
   margin-left: 80%;
+  cursor: pointer;
 }
 
 .basic{
@@ -114,6 +115,7 @@ p {
   line-height: 19px;
   letter-spacing: 0.15px;
   box-sizing: border-box;
+  width: 100%;
 }
 
 .form_gender{
@@ -153,6 +155,7 @@ p {
   flex-direction: row;
   height: 40px;
   margin-top: 48px;
+  margin-bottom: 46px;
 }
 
 #pnohe_prefix{
@@ -178,7 +181,6 @@ p {
   display: flex;
   justify-content: space-between;
   height: 36px;
-  margin-top: 46px;
 }
 
 .form_previous{
@@ -215,8 +217,17 @@ p {
   color: white !important;
   stroke: #376FDB !important;
   stroke-width: 0.5px !important;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-
+.css-z7uhs0-MuiStepConnector-line{
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.css-117w1su-MuiStepIcon-text{
+fill: #376FDB !important ;
+}
+.Mui-active >.css-117w1su-MuiStepIcon-text{
+  fill: white !important;
+}
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
   color: #376FDB !important;
 }
@@ -235,7 +246,7 @@ p {
 }
 
 .form_password{
-  margin-bottom: 0px;
+  margin-bottom: 0px !important;
 }
 
 .password_validation{

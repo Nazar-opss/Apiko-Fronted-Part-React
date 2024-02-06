@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 
 const steps = ['', ' '];
 
-function StepperCom() {
+function StepperCom(props) {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
   
@@ -43,20 +43,8 @@ function StepperCom() {
                   ".MuiSvgIcon-root": {
                     borderRadius: "50%",
                     border: "1px solid #1976d2",
-                  },
-                  '& .MuiStepLabel-root .Mui-completed': {
-                    color: 'common.blue', // circle color (COMPLETED)
-                  },
-                  '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
-                  {
-                    color: 'grey.500', // Just text label (COMPLETED)
-                  },
-                  '& .MuiStepLabel-root .Mui-active': {
-                    color: 'secondary.main', // circle color (ACTIVE)
-                  },
-                  '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
-                    fill: 'white', // circle's number (ACTIVE)
-                  },
+                    boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)"
+                  }
               }}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
               </Step>
