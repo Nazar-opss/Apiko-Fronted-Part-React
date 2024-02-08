@@ -3,20 +3,21 @@ import RolePicker from './RolePicker'
 import About from './About'
 
 function App() {
-  const [showComponent, setShowComponent] = useState(false);
+  const [active, setActive] = useState('rolePicker');
 
   const handleClick = (event) => {
     event.preventDefault()
-    setShowComponent(true);
+    setActive('about');
+  };
+  const handlePrevClick = (event) => {
+    event.preventDefault()
+    setActive('rolePicker');
   };
 
   return (
     <div className='form'>
-      <RolePicker 
-        handle={handleClick}
-      />
-      {showComponent && <About />}
-      {/* <About/> */}
+      {active === 'rolePicker' && <RolePicker handle={handleClick}/> } 
+      {active === 'about' && <About prevHandle={handlePrevClick}/> } 
     </div>
   )
 }

@@ -8,11 +8,11 @@ const formInfoHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', le
 const PrevSubButton = (props) => {
     return (
         <div className='form_buttons'>
-            <button className='form_previous'>
+            <button className='form_previous' onClick={props.prevHandle}>
                 <img src={arrow_left} alt='arrow'></img>
                 Previous
             </button>
-            <button className='form_continue'>
+            <button className='form_continue' onClick={props.nextHandle}>
                 Continue
             </button>
         </div>
@@ -196,14 +196,27 @@ function Radio(props) {
     )
 }
 
-function About() {
+function About(props) {
+    const [active, setActive] = useState('aboutp1');
+
+    const handleClick = (event) => {
+        event.preventDefault()
+        setActive('aboutp2');
+    };
+    const handlePrevClick = (event) => {
+        event.preventDefault()
+        setActive('aboutp1');
+    };
     return (
         <div>
             <h5 className='basic'>Basic information about you</h5>
             <StepperCom/>
-            <AboutP1/>
-            {/* <AboutP2/> */}
-            <PrevSubButton/>
+            {active === 'aboutp1' && <AboutP1 /> } 
+            {active === 'aboutp2' && <AboutP2 /> } 
+            <PrevSubButton 
+                prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
+                nextHandle={handleClick}
+            />
         </div>
     )
 }
