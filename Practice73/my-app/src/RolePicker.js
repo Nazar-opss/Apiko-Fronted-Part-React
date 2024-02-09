@@ -65,7 +65,10 @@ function RolePicker(props) {
                             desc={roleText.professional.desc}
                             handleClick={handleClick}
                         />
-                        <input type="submit" value='Next >' className='role_submit' onClick={props.handle}></input>
+                        <button type="submit" className='role_submit form_continue' onClick={props.handle}>
+                            Next 
+                            <img src={arrow_right} alt='Next' style={{marginLeft: '5px'}}></img>
+                        </button>
                     </form>
                 </div>
             </div>

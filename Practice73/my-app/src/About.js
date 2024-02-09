@@ -13,7 +13,7 @@ const PrevSubButton = (props) => {
                 Previous
             </button>
             <button className='form_continue' onClick={props.nextHandle}>
-                Continue
+                {props.continue}
             </button>
         </div>
     )
@@ -198,24 +198,30 @@ function Radio(props) {
 
 function About(props) {
     const [active, setActive] = useState('aboutp1');
+    const [activeStep, setActiveStep] = React.useState(0);
 
-    const handleClick = (event) => {
+    const handleNextClick = (event) => {
         event.preventDefault()
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setActive('aboutp2');
     };
     const handlePrevClick = (event) => {
         event.preventDefault()
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
         setActive('aboutp1');
     };
     return (
         <div>
             <h5 className='basic'>Basic information about you</h5>
-            <StepperCom/>
+            <StepperCom 
+                activeStep={activeStep}
+            />
             {active === 'aboutp1' && <AboutP1 /> } 
             {active === 'aboutp2' && <AboutP2 /> } 
             <PrevSubButton 
                 prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
-                nextHandle={handleClick}
+                nextHandle={handleNextClick}
+                continue={active === 'aboutp2' ? 'Submit' : 'Continue'}
             />
         </div>
     )
