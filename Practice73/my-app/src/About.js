@@ -32,14 +32,14 @@ const PrevSubButton = (props) => {
     )
 }
 
-function AboutP1() {
+function AboutP1(props) {
     const [ radio, setRadioButton ] = useState('')
     const { fields, changeFieldsValue } = useFormFields({
         firstName: '',
         lastName: '',
-        radio: radio,
+        radio: '',
     })
-    // зібрати всьо в один хук
+    // зібрати всьо в один хук, трай віз context 
     const handleChange = (event) => {
         console.log(event.target.id)
         setRadioButton(event.target.id);
@@ -50,7 +50,7 @@ function AboutP1() {
         console.log({
             firstName: fields.firstName,
             lastName: fields.lastName,
-            radio: fields.radio,
+            radio: radio,
         })
     }
 
@@ -118,7 +118,7 @@ function AboutP1() {
                 </Radio>
             </form>
             <Phone/>
-            <button onClick={handleSubmit}>CLICK</button>
+            <button onClick={props.datasubmit}>CLICK</button>
         </>
     )
 }
@@ -201,6 +201,7 @@ function AboutP2() {
                         The password has to be at least 8 characters long and contain at least one upper case letter.
                     </p>
                 </label>
+                <button onClick={handleSubmit}>CLICK</button>
             </div>
         </>
     )
@@ -285,15 +286,15 @@ function About(props) {
     };
     return (
         <div>
-            <h5 className='basic'>Basic information about you</h5>
+            <h5 className='basic' onClick={handleSubmit}>Basic information about you</h5>
             <StepperCom 
                 activeStep={activeStep}
             />
-            {active === 'aboutp1' && <AboutP1 /> } 
+            {active === 'aboutp1' && <AboutP1 datasubmit={handleSubmit}/> } 
             {active === 'aboutp2' && <AboutP2 /> } 
             <PrevSubButton 
                 prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
-                nextHandle={handleNextClick}
+                nextHandle={active === 'aboutp1' ? handleNextClick || handleSubmit : ''}
                 continue={active === 'aboutp2' ? 'Submit' : 'Continue'}
             />
         </div>
