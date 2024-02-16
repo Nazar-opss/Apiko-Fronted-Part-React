@@ -218,15 +218,26 @@ function AboutP2() {
 }
 
 function Phone() {
+    const getInitialState = () => {
+        const prefix = "+1";
+        return prefix;
+    };
+
     const user = useContext(UserContext);
+    const [prefix, setPrefix] = useState(getInitialState)
+
+    const handleChange = (e) => {
+        setPrefix(e.target.value);
+    };
+
     return (
         <div className='form_phone'>
-            <select id='pnohe_prefix' name='prefix'>
-                <option value={+1}>+1</option>
-                <option value={+2}>+2</option>
-                <option value={+3}>+3</option>
-                <option value={+4}>+4</option>
-                <option value={+5}>+5</option>
+            <select id='pnohe_prefix' name='prefix' value={prefix} onChange={handleChange}>
+                <option value={'+1'}>+1</option>
+                <option value={'+2'}>+2</option>
+                <option value={'+3'}>+3</option>
+                <option value={'+4'}>+4</option>
+                <option value={'+5'}>+5</option>
             </select>
             {/* Дістати префікс телефона і додати до інпута */}
             <input 
@@ -236,6 +247,8 @@ function Phone() {
                 className='phone_input'
                 value={user.phone}
                 onChange={e => user.setPhone(e.target.value)}
+                minLength="9"
+                maxLength="11"
             ></input>
         </div>
     )

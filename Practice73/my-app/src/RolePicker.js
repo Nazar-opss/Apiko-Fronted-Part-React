@@ -19,24 +19,28 @@ const Role = (props) =>{
 }
 
 function RolePicker(props) {
-    const [active, setActive] = useState("");
+    const [active, setActive] = useState(null);
     const handleClick = (event) => {
+        console.log(event.target.id)
         setActive(event.target.id);
     }
 
-    function onSubmit(event) {
-        console.log(active)
-        event.preventDefault();
+    function validRole(active) {
+        const validValues = ['homeowner', 'professional'];
+        // console.log(validValues.includes(active))
+        return !validValues.includes(active);
     }
-
+    
     const role_choice_title = {fontWeight: '500', letterSpacing: '0.15px', lineHeight: '28px'}
     const role_choice_desc = {fontSize: '13px', lineHeight: '15px'}
     const roleText = {
         homeowner: {
+            id: 'homeowner',
             title: 'Homeowner',
             desc: 'I am a homeowner or interesed in home design.'
         },
         professional: {
+            id: 'professional',
             title: 'Professional',
             desc: 'I offer home improvement services or sell home products.'
         }
@@ -48,7 +52,7 @@ function RolePicker(props) {
                 <div className='role_selector'>
                     <form>
                         <Role
-                            role_name={'homeowner'}
+                            role_name={roleText.homeowner.id}
                             icon={home_owner}
                             titleStyle={role_choice_title}
                             descStyle={role_choice_desc}
@@ -57,7 +61,7 @@ function RolePicker(props) {
                             handleClick={handleClick}
                         />
                         <Role
-                            role_name={'professional'}
+                            role_name={roleText.professional.id}
                             icon={business_center}
                             titleStyle={role_choice_title}
                             descStyle={role_choice_desc}
@@ -65,9 +69,18 @@ function RolePicker(props) {
                             desc={roleText.professional.desc}
                             handleClick={handleClick}
                         />
-                        <button type="submit" className='role_submit form_continue' onClick={props.handle}>
+                        <button 
+                            type="submit" 
+                            className='role_submit form_continue' 
+                            onClick={props.handle}
+                            disabled={validRole(active)}
+                        >
                             Next 
-                            <img src={arrow_right} alt='Next' style={{marginLeft: '5px'}}></img>
+                            <img 
+                                src={arrow_right} 
+                                alt='Next' 
+                                style={{marginLeft: '5px'}}>
+                            </img>
                         </button>
                     </form>
                 </div>

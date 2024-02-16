@@ -78,6 +78,10 @@ p {
   margin-left: 76%;
   cursor: pointer;
 }
+.role_submit:disabled{
+  background: #606266;
+  cursor: not-allowed;
+}
 
 .basic{
   -webkit-text-stroke: 1px black;
