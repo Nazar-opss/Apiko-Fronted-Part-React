@@ -1,24 +1,11 @@
 import React, { useState, useContext } from 'react'
 import arrow_left from './arrow_left.svg'
 import StepperCom from './Stepper'
+import validator from 'validator'
 
 const UserContext = React.createContext();
 
 const formInfoHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', letterSpacing:'0.15px', marginBottom: '25.5px'}
-
-const useFormFields = (initialValues) =>{
-    const [fields, setFormFields] = useState(initialValues);
-
-    const changeFieldsValue = (e) => {
-        const {name, value} = e.target;
-        setFormFields(prev =>({
-            ...prev,
-            [name]: value,
-        }));
-    }
-    // console.log(fields)
-    return {fields, changeFieldsValue};
-}
 
 const PrevSubButton = (props) => {
     return (
@@ -27,7 +14,7 @@ const PrevSubButton = (props) => {
                 <img src={arrow_left} alt='arrow'></img>
                 Previous
             </button>
-            <button className='form_continue' onClick={props.nextHandle}>
+            <button className='form_continue' onClick={props.nextHandle} disabled={props.disabled}>
                 {props.continue}
             </button>
         </div>
@@ -43,11 +30,19 @@ function AboutP1(props) {
     //     lastName: '',
     //     radio: '',
     // })
-    const handleChange = (event) => {
-        console.log(event.target.id)
-        setRadioButton(event.target.id);
-        console.log(radio)
+
+    const handleGenderChange = (e) => {
+        user.setGender(e.target.value);
+        setRadioButton(e.target.id);
     };
+
+    // const handleChange = () => {
+    //     if (user.gender === radio) {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // };
     // const handleSubmit = (e) => {
     //     e.preventDefault();
     //     console.log({
@@ -93,7 +88,8 @@ function AboutP1(props) {
                     id='male'
                     name='gender'
                     value='Male'
-                    select={handleChange}
+                    handleSelect={handleGenderChange}
+                    // checked={handleChange}
                 />
                 <br />
                 <Radio
@@ -101,7 +97,8 @@ function AboutP1(props) {
                     id='female'
                     name='gender'
                     value='Female'
-                    select={handleChange}
+                    handleSelect={handleGenderChange}
+                    // checked={handleChange}
                 />
                 <br />
                 <Radio
@@ -109,7 +106,8 @@ function AboutP1(props) {
                     id='ipnts'
                     name='gender'
                     value='I prefer not to say'
-                    select={handleChange}
+                    handleSelect={handleGenderChange}
+                    // checked={handleChange}
                 />
                 <br />
                 <Radio
@@ -118,7 +116,8 @@ function AboutP1(props) {
                     name='gender'
                     value='Other'
                     children={<input type='text'></input>}
-                    select={handleChange}
+                    handleSelect={handleGenderChange}
+                    // checked={handleChange}
                 >
                 </Radio>
             </form>
@@ -130,6 +129,19 @@ function AboutP1(props) {
 
 function AboutP2() {
     const user = useContext(UserContext);
+    const [checked, setChecked] = useState([]);
+
+    const handleWork = (e) => {
+        let updatedList = [...checked];
+        if (e.target.checked) {
+            updatedList = [...checked, e.target.value];
+        } else {
+            updatedList.splice(checked.indexOf(e.target.value), 1)
+        }
+        setChecked(updatedList);
+        user.setWork(updatedList);
+    }
+
     // const { fields, changeFieldsValue} = useFormFields({
     //     email: '',
     //     password: '',
@@ -144,11 +156,30 @@ function AboutP2() {
     //     })
     // }
 
-    const checkPassword = (value) => {
-        let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        let password = value;
-        let result = regex.test(password);
-        console.log(result)
+    // const checkPassword = (value) => {
+    //     let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    //     let password = value;
+    //     let result = regex.test(password);
+    //     console.log(result)
+    // }
+
+    const [errorStyle, setErrorStyle] = useState('') 
+  
+    const validate = (value) => { 
+  
+        if (validator.isStrongPassword(value, { 
+            minLength: 8, minLowercase: 1, 
+            minUppercase: 1, minNumbers: 1
+        })) { 
+            setErrorStyle('#0000008A') 
+        } else { 
+            setErrorStyle('red') 
+        } 
+    } 
+
+    const handlePassword = (e) => {
+        user.setPassword(e.target.value)
+        validate(e.target.value);
     }
     return (
         <>
@@ -159,6 +190,8 @@ function AboutP2() {
                     id='economy'
                     name='economy'
                     value='Economy'
+                    handleSelect={handleWork}
+                    // checked={checked}
                 />
                 <br />
                 <Radio
@@ -166,6 +199,8 @@ function AboutP2() {
                     id='business'
                     name='business'
                     value='Business'
+                    handleSelect={handleWork}
+                    // checked={checked}
                 />
                 <br />
                 <Radio
@@ -173,6 +208,8 @@ function AboutP2() {
                     id='trading'
                     name='trading'
                     value='Trading'
+                    handleSelect={handleWork}
+                    // checked={checked}
                 />
                 <br />
                 <Radio
@@ -180,8 +217,9 @@ function AboutP2() {
                     id='communications'
                     name='communications'
                     value='Сommunications'
-                >
-                </Radio>
+                    handleSelect={handleWork}
+                    // checked={checked}
+                />
             </form>
             <div className='form_inputs' style={{marginBottom:'21px'}}>
                 <label htmlFor='email'>
@@ -195,18 +233,18 @@ function AboutP2() {
                         onChange={e => user.setEmail(e.target.value)}
                     ></input>
                 </label>
-                <label htmlFor='password'>
+                <label htmlFor='password' className='password_wrong'>
                     <input
                         type='password'
                         name='password'
                         placeholder='Password'
                         className='form_password'
                         value={user.password}
-                        // onChange={changeFieldsValue}
-                        onChange={e => user.setPassword(e.target.value)}
+                        onChange={handlePassword}
+                        // onChange={e => user.setPassword(e.target.value)}
                         // onMouseLeave={checkPassword(password)}
                     ></input>
-                    <p className='password_validation'>
+                    <p className='password_validation' style={{color: errorStyle}}>
                         The password has to be at least 8 characters long and contain at least one upper case letter.
                     </p>
                 </label>
@@ -229,6 +267,9 @@ function Phone() {
     const handleChange = (e) => {
         setPrefix(e.target.value);
     };
+    const handlePhoneChange = (e) => {
+        user.setPhone(prefix + e.target.value);
+    };
 
     return (
         <div className='form_phone'>
@@ -239,14 +280,13 @@ function Phone() {
                 <option value={'+4'}>+4</option>
                 <option value={'+5'}>+5</option>
             </select>
-            {/* Дістати префікс телефона і додати до інпута */}
             <input 
                 type='text' 
                 name='phone' 
                 placeholder='Business phone number'
                 className='phone_input'
-                value={user.phone}
-                onChange={e => user.setPhone(e.target.value)}
+                value={user.phone.replace(prefix, '')}
+                onChange={handlePhoneChange}
                 minLength="9"
                 maxLength="11"
             ></input>
@@ -255,10 +295,6 @@ function Phone() {
 }
 
 function Radio(props) {
-    function radioChange(event) {
-        console.log(event.target.value)
-    }
-
     return (
         <>
             <input 
@@ -266,8 +302,8 @@ function Radio(props) {
                 id={props.id} 
                 name={props.name}
                 value={props.value}
-                // onChange={(e) => radioChange(e)}
-                onChange={props.select}
+                onChange={props.handleSelect}
+                checked={props.checked}
             >
             </input>
             <label 
@@ -284,11 +320,13 @@ function About(props) {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [phone, setPhone] = useState('')
+    const [phone, setPhone] = useState('');
+    const [gender, setGender] = useState('');
+    const [work, setWork] = useState('');
 
     const [active, setActive] = useState('aboutp1');
     const [activeStep, setActiveStep] = React.useState(0);
-
+    
     // const { fields, changeFieldsValue} = useFormFields({
     //     firstName: '',
     //     lastName: '',
@@ -296,6 +334,17 @@ function About(props) {
     //     email: '',
     //     password: ''
     // })
+    const validate = (value) => { 
+  
+        if (validator.isStrongPassword(value, { 
+            minLength: 8, minLowercase: 1, 
+            minUppercase: 1, minNumbers: 1
+        })) { 
+            return true;
+        } else { 
+            return false;
+        } 
+    } 
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -312,6 +361,8 @@ function About(props) {
             email: email,
             phone: phone,
             password: password,
+            gender: gender,
+            work: work,
         })
     }
 
@@ -326,7 +377,7 @@ function About(props) {
         setActive('aboutp1');
     };
     return (
-        <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone }}>
+        <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone, gender, setGender, work, setWork }}>
             <div>
                 <h5 className='basic' onClick={handleSubmit}>Basic information about you</h5>
                 <StepperCom 
@@ -338,6 +389,7 @@ function About(props) {
                     prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
                     nextHandle={active === 'aboutp1' ? handleNextClick : handleSubmit}
                     continue={active === 'aboutp2' ? 'Submit' : 'Continue'}
+                    // disabled={} //make disabled button when password dont validate
                 />
             </div>
         </UserContext.Provider>
