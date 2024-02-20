@@ -122,12 +122,13 @@ function AboutP1(props) {
                 </Radio>
             </form>
             <Phone/>
-            {/* <PrevSubButton continue='Continue'/> */}
+            <PrevSubButton continue='Continue' nextHandle={props.handleNextClick} prevHandle={props.handlePrevClick}/>
         </>
     )
 }
 
-function AboutP2() {
+function AboutP2(props) {
+    // make return to rolepicker and fix password validate(validate only when have symbol and one number)
     const user = useContext(UserContext);
     const [checked, setChecked] = useState([]);
 
@@ -164,14 +165,15 @@ function AboutP2() {
     // }
 
     const [errorStyle, setErrorStyle] = useState('') 
+    const [disabled, setDisabled] = useState(true)
   
     const validate = (value) => { 
   
         if (validator.isStrongPassword(value, { 
-            minLength: 8, minLowercase: 1, 
-            minUppercase: 1, minNumbers: 1
+            minLength: 8, minUppercase: 1,
         })) { 
             setErrorStyle('#0000008A') 
+            setDisabled(false)
         } else { 
             setErrorStyle('red') 
         } 
@@ -248,8 +250,7 @@ function AboutP2() {
                         The password has to be at least 8 characters long and contain at least one upper case letter.
                     </p>
                 </label>
-                {/* <PrevSubButton continue='Submit'/> */}
-                {/* <button onClick={''}>CLICK</button> */}
+                <PrevSubButton continue='Submit' nextHandle={props.handleNextClick} prevHandle={props.handlePrevClick} disabled={disabled}/>
             </div>
         </>
     )
@@ -349,7 +350,6 @@ function About(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setActive('aboutp2');
         console.log({
             // firstName: fields.firstName,
             // lastName: fields.lastName,
@@ -366,16 +366,15 @@ function About(props) {
         })
     }
 
-    const handleNextClick = (event) => {
-        event.preventDefault();
+    const handleNextClick = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setActive('aboutp2');
     };
-    const handlePrevClick = (event) => {
-        event.preventDefault();
+    const handlePrevClick = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
         setActive('aboutp1');
     };
+
     return (
         <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone, gender, setGender, work, setWork }}>
             <div>
@@ -383,14 +382,14 @@ function About(props) {
                 <StepperCom 
                     activeStep={activeStep}
                 />
-                {active === 'aboutp1' && <AboutP1 datasubmit={handleSubmit}/> } 
-                {active === 'aboutp2' && <AboutP2 /> } 
-                <PrevSubButton 
+                {active === 'aboutp1' && <AboutP1 handleNextClick={handleNextClick} handlePrevClick={props.prevHandle}/> } 
+                {active === 'aboutp2' && <AboutP2 handleNextClick={handleSubmit} handlePrevClick={handlePrevClick}/> } 
+                {/* <PrevSubButton 
                     prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
                     nextHandle={active === 'aboutp1' ? handleNextClick : handleSubmit}
                     continue={active === 'aboutp2' ? 'Submit' : 'Continue'}
-                    // disabled={} //make disabled button when password dont validate
-                />
+                    // disabled={}
+                /> */}
             </div>
         </UserContext.Provider>
     )

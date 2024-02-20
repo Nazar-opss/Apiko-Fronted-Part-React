@@ -216,6 +216,12 @@ p {
   letter-spacing: 0.4px;
   cursor: pointer;
 }
+
+.form_continue:disabled{
+  background: #606266;
+  cursor: not-allowed;
+}
+
 .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root{
   width: 1.38em !important;
   height: 1.38em !important;
@@ -269,4 +275,5 @@ fill: #376FDB !important ;
   letter-spacing: 0.4000000059604645px;
   text-align: left;
   color: #0000008A;
+  margin-bottom: 21px;
 }
