@@ -128,7 +128,6 @@ function AboutP1(props) {
 }
 
 function AboutP2(props) {
-    // make return to rolepicker and fix password validate(validate only when have symbol and one number)
     const user = useContext(UserContext);
     const [checked, setChecked] = useState([]);
 
@@ -166,16 +165,19 @@ function AboutP2(props) {
 
     const [errorStyle, setErrorStyle] = useState('') 
     const [disabled, setDisabled] = useState(true)
-  
+
     const validate = (value) => { 
-  
-        if (validator.isStrongPassword(value, { 
-            minLength: 8, minUppercase: 1,
+        if (validator.isStrongPassword(value, {
+            minLength: 8,
+            minUppercase: 1,
+            minNumbers: 0,
+            minSymbols: 0,
         })) { 
             setErrorStyle('#0000008A') 
             setDisabled(false)
         } else { 
             setErrorStyle('red') 
+            setDisabled(true)
         } 
     } 
 
@@ -316,7 +318,7 @@ function Radio(props) {
 }
 
 
-function About(props) {
+function About({prevHandle, switchToRolePicker }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -335,18 +337,6 @@ function About(props) {
     //     email: '',
     //     password: ''
     // })
-    const validate = (value) => { 
-  
-        if (validator.isStrongPassword(value, { 
-            minLength: 8, minLowercase: 1, 
-            minUppercase: 1, minNumbers: 1
-        })) { 
-            return true;
-        } else { 
-            return false;
-        } 
-    } 
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -364,13 +354,14 @@ function About(props) {
             gender: gender,
             work: work,
         })
+        switchToRolePicker();
     }
 
     const handleNextClick = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setActive('aboutp2');
     };
-    const handlePrevClick = () => {
+    const handlePrevClick1 = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
         setActive('aboutp1');
     };
@@ -382,8 +373,8 @@ function About(props) {
                 <StepperCom 
                     activeStep={activeStep}
                 />
-                {active === 'aboutp1' && <AboutP1 handleNextClick={handleNextClick} handlePrevClick={props.prevHandle}/> } 
-                {active === 'aboutp2' && <AboutP2 handleNextClick={handleSubmit} handlePrevClick={handlePrevClick}/> } 
+                {active === 'aboutp1' && <AboutP1 handleNextClick={handleNextClick} handlePrevClick={prevHandle}/> } 
+                {active === 'aboutp2' && <AboutP2 handleNextClick={handleSubmit} handlePrevClick={handlePrevClick1}/> } 
                 {/* <PrevSubButton 
                     prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
                     nextHandle={active === 'aboutp1' ? handleNextClick : handleSubmit}

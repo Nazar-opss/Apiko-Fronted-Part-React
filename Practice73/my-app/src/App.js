@@ -13,11 +13,14 @@ function App() {
     event.preventDefault()
     setActive('rolePicker');
   };
+  const switchToRolePicker = () => {
+    setActive('rolePicker');
+};
 
   return (
     <div className='form'>
       {active === 'rolePicker' && <RolePicker handle={handleClick}/> } 
-      {active === 'about' && <About prevHandle={handlePrevClick}/> } 
+      {active === 'about' && <About prevHandle={handlePrevClick} switchToRolePicker={switchToRolePicker}/> } 
     </div>
   )
 }
