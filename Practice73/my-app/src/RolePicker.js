@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import home_owner from './home_work.svg'
 import business_center from './business_center.svg'
 import arrow_right from './arrow_right.svg'
+import { UserContext } from './App'
 
 const Role = (props) =>{
     return(
@@ -19,15 +20,17 @@ const Role = (props) =>{
 }
 
 function RolePicker(props) {
+    const user = useContext(UserContext);
     const [active, setActive] = useState(null);
+
     const handleClick = (event) => {
-        console.log(event.target.id)
+        console.log(event.target.id);
         setActive(event.target.id);
+        user.setProfession(event.target.id);
     }
 
     function validRole(active) {
         const validValues = ['homeowner', 'professional'];
-        // console.log(validValues.includes(active))
         return !validValues.includes(active);
     }
     

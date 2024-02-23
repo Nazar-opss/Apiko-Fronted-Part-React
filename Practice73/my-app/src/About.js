@@ -2,8 +2,9 @@ import React, { useState, useContext } from 'react'
 import arrow_left from './arrow_left.svg'
 import StepperCom from './Stepper'
 import validator from 'validator'
+import { UserContext } from './App' 
 
-const UserContext = React.createContext();
+// export const UserContext = React.createContext();
 
 const formInfoHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', letterSpacing:'0.15px', marginBottom: '25.5px'}
 
@@ -25,11 +26,6 @@ function AboutP1(props) {
     const user = useContext(UserContext);
 
     const [ radio, setRadioButton ] = useState('')
-    // const { fields, changeFieldsValue } = useFormFields({
-    //     firstName: '',
-    //     lastName: '',
-    //     radio: '',
-    // })
 
     const handleGenderChange = (e) => {
         user.setGender(e.target.value);
@@ -318,17 +314,20 @@ function Radio(props) {
 }
 
 
-function About({prevHandle, switchToRolePicker }) {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
-    const [work, setWork] = useState('');
+function About({ prevHandle, switchToRolePicker }) {
+    const user = useContext(UserContext);
+    
+    // const [profession, setProfession] = useState('')
+    // const [firstName, setFirstName] = useState('');
+    // const [lastName, setLastName] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');
+    // const [phone, setPhone] = useState('');
+    // const [gender, setGender] = useState('');
+    // const [work, setWork] = useState('');
 
     const [active, setActive] = useState('aboutp1');
-    const [activeStep, setActiveStep] = React.useState(0);
+    // const [activeStep, setActiveStep] = React.useState(0);
     
     // const { fields, changeFieldsValue} = useFormFields({
     //     firstName: '',
@@ -337,44 +336,45 @@ function About({prevHandle, switchToRolePicker }) {
     //     email: '',
     //     password: ''
     // })
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        console.log({
-            // firstName: fields.firstName,
-            // lastName: fields.lastName,
-            // radio: fields.radio,
-            // email: fields.email,
-            // password: fields.password,
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone,
-            password: password,
-            gender: gender,
-            work: work,
-        })
-        switchToRolePicker();
-    }
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    //     console.log({
+    //         // firstName: fields.firstName,
+    //         // lastName: fields.lastName,
+    //         // radio: fields.radio,
+    //         // email: fields.email,
+    //         // password: fields.password,
+    //         profession: profession,
+    //         firstName: firstName,
+    //         lastName: lastName,
+    //         email: email,
+    //         phone: phone,
+    //         password: password,
+    //         gender: gender,
+    //         work: work,
+    //     })
+    //     switchToRolePicker();
+    // }
 
     const handleNextClick = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        user.setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setActive('aboutp2');
     };
     const handlePrevClick1 = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        user.setActiveStep((prevActiveStep) => prevActiveStep - 1);
         setActive('aboutp1');
     };
 
     return (
-        <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone, gender, setGender, work, setWork }}>
+        // <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone, gender, setGender, work, setWork, profession, setProfession, }}>
             <div>
-                <h5 className='basic' onClick={handleSubmit}>Basic information about you</h5>
+                <h5 className='basic' onClick={user.handleSubmit}>Basic information about you</h5>
                 <StepperCom 
-                    activeStep={activeStep}
+                    activeStep={user.activeStep}
                 />
                 {active === 'aboutp1' && <AboutP1 handleNextClick={handleNextClick} handlePrevClick={prevHandle}/> } 
-                {active === 'aboutp2' && <AboutP2 handleNextClick={handleSubmit} handlePrevClick={handlePrevClick1}/> } 
+                {active === 'aboutp2' && <AboutP2 handleNextClick={user.handleSubmit} handlePrevClick={handlePrevClick1}/> } 
                 {/* <PrevSubButton 
                     prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
                     nextHandle={active === 'aboutp1' ? handleNextClick : handleSubmit}
@@ -382,7 +382,7 @@ function About({prevHandle, switchToRolePicker }) {
                     // disabled={}
                 /> */}
             </div>
-        </UserContext.Provider>
+        // // {/* </UserContext.Provider> */}
     )
 }
 

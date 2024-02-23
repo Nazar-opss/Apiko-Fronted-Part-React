@@ -264,6 +264,10 @@ fill: #376FDB !important ;
   margin-left: 10px;
 }
 
+.form_work > label{
+  color: #363636DE;
+}
+
 .form_password{
   margin-bottom: 0px !important;
 }
