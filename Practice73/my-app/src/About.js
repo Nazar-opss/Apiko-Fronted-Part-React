@@ -1,52 +1,19 @@
 import React, { useState, useContext } from 'react'
-import arrow_left from './arrow_left.svg'
 import StepperCom from './Stepper'
 import validator from 'validator'
 import { UserContext } from './App' 
-
-// export const UserContext = React.createContext();
+import Radio from './Radio'
+import Phone from './Phone'
+import PrevSubButton from './PrevSubButton'
 
 const formInfoHeader = {fontSize: '18px', fontWeight:'500',lineHeight:'19px', letterSpacing:'0.15px', marginBottom: '25.5px'}
-
-const PrevSubButton = (props) => {
-    return (
-        <div className='form_buttons'>
-            <button className='form_previous' onClick={props.prevHandle}>
-                <img src={arrow_left} alt='arrow'></img>
-                Previous
-            </button>
-            <button className='form_continue' onClick={props.nextHandle} disabled={props.disabled}>
-                {props.continue}
-            </button>
-        </div>
-    )
-}
 
 function AboutP1(props) {
     const user = useContext(UserContext);
 
-    const [ radio, setRadioButton ] = useState('')
-
     const handleGenderChange = (e) => {
         user.setGender(e.target.value);
-        setRadioButton(e.target.id);
     };
-
-    // const handleChange = () => {
-    //     if (user.gender === radio) {
-    //         return true
-    //     } else {
-    //         return false
-    //     }
-    // };
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log({
-    //         firstName: fields.firstName,
-    //         lastName: fields.lastName,
-    //         radio: radio,
-    //     })
-    // }
 
     return(
         <>
@@ -59,7 +26,6 @@ function AboutP1(props) {
                             placeholder='First name' 
                             className='form_name'
                             value={user.firstName}
-                            // onChange={changeFieldsValue}
                             onChange={e => user.setFirstName(e.target.value)}
                         ></input>
                     </label>
@@ -70,7 +36,6 @@ function AboutP1(props) {
                             placeholder='Last name' 
                             className='form_name'
                             value={user.lastName} 
-                            // onChange={changeFieldsValue}
                             onChange={e => user.setLastName(e.target.value)}
                             style={{marginBottom: '30.5px'}}
                         ></input>
@@ -85,7 +50,6 @@ function AboutP1(props) {
                     name='gender'
                     value='Male'
                     handleSelect={handleGenderChange}
-                    // checked={handleChange}
                 />
                 <br />
                 <Radio
@@ -94,7 +58,6 @@ function AboutP1(props) {
                     name='gender'
                     value='Female'
                     handleSelect={handleGenderChange}
-                    // checked={handleChange}
                 />
                 <br />
                 <Radio
@@ -103,7 +66,6 @@ function AboutP1(props) {
                     name='gender'
                     value='I prefer not to say'
                     handleSelect={handleGenderChange}
-                    // checked={handleChange}
                 />
                 <br />
                 <Radio
@@ -111,9 +73,8 @@ function AboutP1(props) {
                     id='other'
                     name='gender'
                     value='Other'
-                    children={<input type='text'></input>}
+                    children={<input type='text' onChange={e => user.setGender(e.target.value)}></input>}
                     handleSelect={handleGenderChange}
-                    // checked={handleChange}
                 >
                 </Radio>
             </form>
@@ -138,27 +99,6 @@ function AboutP2(props) {
         user.setWork(updatedList);
     }
 
-    // const { fields, changeFieldsValue} = useFormFields({
-    //     email: '',
-    //     password: '',
-    // })
-
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log({
-    //         lastName: fields.lastName,
-    //         email: fields.email,
-    //         password: fields.password,
-    //     })
-    // }
-
-    // const checkPassword = (value) => {
-    //     let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    //     let password = value;
-    //     let result = regex.test(password);
-    //     console.log(result)
-    // }
-
     const [errorStyle, setErrorStyle] = useState('') 
     const [disabled, setDisabled] = useState(true)
 
@@ -181,6 +121,7 @@ function AboutP2(props) {
         user.setPassword(e.target.value)
         validate(e.target.value);
     }
+
     return (
         <>
             <p style={formInfoHeader}>Categories you work with</p>
@@ -191,7 +132,6 @@ function AboutP2(props) {
                     name='economy'
                     value='Economy'
                     handleSelect={handleWork}
-                    // checked={checked}
                 />
                 <br />
                 <Radio
@@ -200,7 +140,6 @@ function AboutP2(props) {
                     name='business'
                     value='Business'
                     handleSelect={handleWork}
-                    // checked={checked}
                 />
                 <br />
                 <Radio
@@ -209,7 +148,6 @@ function AboutP2(props) {
                     name='trading'
                     value='Trading'
                     handleSelect={handleWork}
-                    // checked={checked}
                 />
                 <br />
                 <Radio
@@ -218,7 +156,6 @@ function AboutP2(props) {
                     name='communications'
                     value='Сommunications'
                     handleSelect={handleWork}
-                    // checked={checked}
                 />
             </form>
             <div className='form_inputs' style={{marginBottom:'21px'}}>
@@ -229,7 +166,6 @@ function AboutP2(props) {
                         placeholder='Email'
                         className='form_email'
                         value={user.email}
-                        // onChange={changeFieldsValue}
                         onChange={e => user.setEmail(e.target.value)}
                     ></input>
                 </label>
@@ -241,8 +177,6 @@ function AboutP2(props) {
                         className='form_password'
                         value={user.password}
                         onChange={handlePassword}
-                        // onChange={e => user.setPassword(e.target.value)}
-                        // onMouseLeave={checkPassword(password)}
                     ></input>
                     <p className='password_validation' style={{color: errorStyle}}>
                         The password has to be at least 8 characters long and contain at least one upper case letter.
@@ -254,108 +188,10 @@ function AboutP2(props) {
     )
 }
 
-function Phone() {
-    const getInitialState = () => {
-        const prefix = "+1";
-        return prefix;
-    };
-
-    const user = useContext(UserContext);
-    const [prefix, setPrefix] = useState(getInitialState)
-
-    const handleChange = (e) => {
-        setPrefix(e.target.value);
-    };
-    const handlePhoneChange = (e) => {
-        user.setPhone(prefix + e.target.value);
-    };
-
-    return (
-        <div className='form_phone'>
-            <select id='pnohe_prefix' name='prefix' value={prefix} onChange={handleChange}>
-                <option value={'+1'}>+1</option>
-                <option value={'+2'}>+2</option>
-                <option value={'+3'}>+3</option>
-                <option value={'+4'}>+4</option>
-                <option value={'+5'}>+5</option>
-            </select>
-            <input 
-                type='text' 
-                name='phone' 
-                placeholder='Business phone number'
-                className='phone_input'
-                value={user.phone.replace(prefix, '')}
-                onChange={handlePhoneChange}
-                minLength="9"
-                maxLength="11"
-            ></input>
-        </div>
-    )
-}
-
-function Radio(props) {
-    return (
-        <>
-            <input 
-                type={props.type} 
-                id={props.id} 
-                name={props.name}
-                value={props.value}
-                onChange={props.handleSelect}
-                checked={props.checked}
-            >
-            </input>
-            <label 
-                htmlFor={props.gender}>{props.value}
-                {props.children}
-            </label>
-        </>
-    )
-}
-
-
 function About({ prevHandle, switchToRolePicker }) {
     const user = useContext(UserContext);
     
-    // const [profession, setProfession] = useState('')
-    // const [firstName, setFirstName] = useState('');
-    // const [lastName, setLastName] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-    // const [phone, setPhone] = useState('');
-    // const [gender, setGender] = useState('');
-    // const [work, setWork] = useState('');
-
     const [active, setActive] = useState('aboutp1');
-    // const [activeStep, setActiveStep] = React.useState(0);
-    
-    // const { fields, changeFieldsValue} = useFormFields({
-    //     firstName: '',
-    //     lastName: '',
-    //     radio: '',
-    //     email: '',
-    //     password: ''
-    // })
-    // const handleSubmit = (e) => {
-    //     e.preventDefault();
-    //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    //     console.log({
-    //         // firstName: fields.firstName,
-    //         // lastName: fields.lastName,
-    //         // radio: fields.radio,
-    //         // email: fields.email,
-    //         // password: fields.password,
-    //         profession: profession,
-    //         firstName: firstName,
-    //         lastName: lastName,
-    //         email: email,
-    //         phone: phone,
-    //         password: password,
-    //         gender: gender,
-    //         work: work,
-    //     })
-    //     switchToRolePicker();
-    // }
 
     const handleNextClick = () => {
         user.setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -367,7 +203,6 @@ function About({ prevHandle, switchToRolePicker }) {
     };
 
     return (
-        // <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone, gender, setGender, work, setWork, profession, setProfession, }}>
             <div>
                 <h5 className='basic' onClick={user.handleSubmit}>Basic information about you</h5>
                 <StepperCom 
@@ -375,14 +210,7 @@ function About({ prevHandle, switchToRolePicker }) {
                 />
                 {active === 'aboutp1' && <AboutP1 handleNextClick={handleNextClick} handlePrevClick={prevHandle}/> } 
                 {active === 'aboutp2' && <AboutP2 handleNextClick={user.handleSubmit} handlePrevClick={handlePrevClick1}/> } 
-                {/* <PrevSubButton 
-                    prevHandle={active === 'aboutp2' ? handlePrevClick : props.prevHandle}
-                    nextHandle={active === 'aboutp1' ? handleNextClick : handleSubmit}
-                    continue={active === 'aboutp2' ? 'Submit' : 'Continue'}
-                    // disabled={}
-                /> */}
             </div>
-        // // {/* </UserContext.Provider> */}
     )
 }
 

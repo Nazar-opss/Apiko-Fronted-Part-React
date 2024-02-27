@@ -5,15 +5,16 @@ import About from './About'
 export const UserContext = React.createContext();
 
 function App() {
-  const [profession, setProfession] = useState('')
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [phone, setPhone] = useState('');
-    const [gender, setGender] = useState('');
-    const [work, setWork] = useState('');
-    const [activeStep, setActiveStep] = React.useState(0);
+  const [profession, setProfession] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
+  const [work, setWork] = useState('');
+
+  const [activeStep, setActiveStep] = React.useState(0);
 
   const [active, setActive] = useState('rolePicker');
 
@@ -21,11 +22,6 @@ function App() {
     e.preventDefault();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     console.log({
-        // firstName: fields.firstName,
-        // lastName: fields.lastName,
-        // radio: fields.radio,
-        // email: fields.email,
-        // password: fields.password,
         profession: profession,
         firstName: firstName,
         lastName: lastName,
