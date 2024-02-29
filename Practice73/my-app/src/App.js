@@ -1,18 +1,34 @@
 import React, { useState } from 'react'
-import RolePicker from './RolePicker'
-import About from './About'
+import RolePicker from './components/RolePicker'
+import About from './components/About'
 
 export const UserContext = React.createContext();
 
+const useFormFields = (initialValues) => {
+  const [ fields, setFormFields ] = useState(initialValues);
+  const changeFieldValue = (e) => {
+    const { name, value } = e.target;
+    setFormFields(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  return { fields, changeFieldValue };
+}
+
 function App() {
+  const { fields, changeFieldValue } = useFormFields({
+    firstName: '', 
+    lastName: '', 
+    email: '', 
+    password:  '',
+  }); 
+
+
   const [profession, setProfession] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
-  const [gender, setGender] = useState('');
   const [work, setWork] = useState('');
+  const [gender, setGender] = useState('');
 
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -22,23 +38,23 @@ function App() {
     e.preventDefault();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     console.log({
-        profession: profession,
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
+        firstName: fields.firstName,
+        lastName: fields.lastName,
+        email: fields.email,
+        password: fields.password,
+        profession: profession,        
         phone: phone,
-        password: password,
         gender: gender,
         work: work,
     })
     setActiveStep(0);
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
     setPhone('');
-    setGender('');
     setWork('');
+    setGender('');
+    fields.firstName = '';
+    fields.lastName = '';
+    fields.email = '';
+    fields.password = '';
     switchToRolePicker();
 }
 
@@ -55,7 +71,7 @@ function App() {
 };
 
   return (
-    <UserContext.Provider value={{ firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, phone, setPhone, gender, setGender, work, setWork, profession, setProfession, activeStep, setActiveStep, handleSubmit }}>
+    <UserContext.Provider value={{ fields, changeFieldValue, activeStep, setActiveStep, handleSubmit, profession, setProfession, phone, setPhone, work, setWork, gender, setGender }}>
       <div className='form'>
         {active === 'rolePicker' && <RolePicker handle={handleClick}/> } 
         {active === 'about' && <About prevHandle={handlePrevClick} switchToRolePicker={switchToRolePicker}/> } 

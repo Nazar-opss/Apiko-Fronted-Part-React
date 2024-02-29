@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import StepperCom from './Stepper'
 import validator from 'validator'
-import { UserContext } from './App' 
+import { UserContext } from '../App' 
 import Radio from './Radio'
 import Phone from './Phone'
 import PrevSubButton from './PrevSubButton'
@@ -25,8 +25,9 @@ function AboutP1(props) {
                             name='firstName' 
                             placeholder='First name' 
                             className='form_name'
-                            value={user.firstName}
-                            onChange={e => user.setFirstName(e.target.value)}
+                            value={user.fields.firstName}
+                            // onChange={e => user.setFirstName(e.target.value)}
+                            onChange={e => user.changeFieldValue(e)}
                         ></input>
                     </label>
                     <label htmlFor='lastName'>
@@ -35,8 +36,9 @@ function AboutP1(props) {
                             name='lastName' 
                             placeholder='Last name' 
                             className='form_name'
-                            value={user.lastName} 
-                            onChange={e => user.setLastName(e.target.value)}
+                            value={user.fields.lastName} 
+                            // onChange={e => user.setLastName(e.target.value)}
+                            onChange={e => user.changeFieldValue(e)}
                             style={{marginBottom: '30.5px'}}
                         ></input>
                     </label>
@@ -73,7 +75,9 @@ function AboutP1(props) {
                     id='other'
                     name='gender'
                     value='Other'
-                    children={<input type='text' onChange={e => user.setGender(e.target.value)}></input>}
+                    children={<input type='text' onChange={
+                        e => user.setGender(e.target.value)
+                    }></input>}
                     handleSelect={handleGenderChange}
                 >
                 </Radio>
@@ -118,7 +122,8 @@ function AboutP2(props) {
     } 
 
     const handlePassword = (e) => {
-        user.setPassword(e.target.value)
+        // user.setPassword(e.target.value)
+        user.changeFieldValue(e);
         validate(e.target.value);
     }
 
@@ -165,8 +170,9 @@ function AboutP2(props) {
                         name='email'
                         placeholder='Email'
                         className='form_email'
-                        value={user.email}
-                        onChange={e => user.setEmail(e.target.value)}
+                        value={user.fields.email}
+                        // onChange={e => user.setEmail(e.target.value)}
+                        onChange={e => user.changeFieldValue(e)}
                     ></input>
                 </label>
                 <label htmlFor='password' className='password_wrong'>
@@ -175,7 +181,7 @@ function AboutP2(props) {
                         name='password'
                         placeholder='Password'
                         className='form_password'
-                        value={user.password}
+                        value={user.fields.password}
                         onChange={handlePassword}
                     ></input>
                     <p className='password_validation' style={{color: errorStyle}}>

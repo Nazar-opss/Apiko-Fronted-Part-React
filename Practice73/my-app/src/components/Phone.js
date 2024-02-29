@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useContext } from 'react';
-import { UserContext } from './App';
+import { UserContext } from '../App';
 
 function Phone() {
     const getInitialState = () => {

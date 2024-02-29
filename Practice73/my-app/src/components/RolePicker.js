@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react'
-import home_owner from './home_work.svg'
-import business_center from './business_center.svg'
-import arrow_right from './arrow_right.svg'
-import { UserContext } from './App'
+import home_owner from '../icons/home_owner.svg'
+import business_center from '../icons/business_center.svg'
+import arrow_right from '../icons/arrow_right.svg'
+import { UserContext } from '../App'
 
 const Role = (props) =>{
     return(

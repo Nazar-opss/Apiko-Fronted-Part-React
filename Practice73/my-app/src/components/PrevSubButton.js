@@ -1,5 +1,5 @@
 import React from 'react'
-import arrow_left from './arrow_left.svg'
+import arrow_left from '../icons/arrow_left.svg'
 
 const PrevSubButton = (props) => {
     return (
