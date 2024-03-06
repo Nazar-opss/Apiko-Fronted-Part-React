@@ -34,6 +34,7 @@ p {
 hr.solid {
   border-top: 3px solid #bbb;
   width: 99%;
+  margin-bottom: 0px;
 }
 .rateSwitch{
   font-weight: bolder;
@@ -78,4 +79,16 @@ hr.solid {
   top: 20px;
   float: left;
   margin-right: 0px;
+}
+
+.router {
+  margin: 0 auto;
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.router ol {
+  padding: 0;
+  list-style-type: none;
 }

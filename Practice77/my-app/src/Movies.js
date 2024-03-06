@@ -7,7 +7,7 @@ import { themes } from "./utils/const.js";
 import GridLoader from "react-spinners/GridLoader"
 import { PopUp } from "./components/PopUp.js";
 import { Film } from "./components/Film.js";
-import { Route } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 
 const useFetchMovies = (url) => {
     const [films, setFilms] = useState([]);
@@ -40,13 +40,18 @@ const useFetchMovies = (url) => {
 const FilmList = (props) => {
     const [selectedFilm, setSelectedFilm] = useState(null)
     
-    const [{data, total, page, loading}, setUrl] = useFetchMovies('https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=1&sort_by=created_at.asc')
+    const url = props.url;
+
+    const [{data, total, page, loading}, setUrl] = useFetchMovies(url)
 
     // const [{data, total, page, loading}, setUrl] = useFetchMovies('https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=1&sort_by=created_at.asc')
 
+
+    
     function setPageFetch(page){
-        setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
-        // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
+        setUrl(`${url}&page=${page}`);
+        // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
+        // // setUrl(`https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&page=${page}&sort_by=created_at.asc`)
     }
 
     function handleFilm(selectedFilm) {
@@ -84,21 +89,46 @@ const FilmList = (props) => {
 
 const Content = (props) => {
     const theme = useContext(ThemeContext)
+    const blankWIP = () => {
+        {alert('This Page is under construction')}
+        <Link to={'/'}></Link>
+    }
     return (
         <div className="header">
+            <nav className="router">
+                <Link to={'/'}>Home</Link>
+                <Link to={'/top_rated'}>Top Rated Movies</Link>
+                <Link to={'/tv_shows'}>TV Shows</Link>
+            </nav>
+
             <ThemedToggleButton onClick={props.toggleTheme} />
-            <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.theme.foreground}` }}>Favourite Movies</h1>
-            <FilmList
-                color={theme.theme.foreground}
-            />
+            <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${theme.theme.foreground}` }}>Favorite Movies</h1>
+        
+            <Routes>
+                <Route key='Favorite Movies' exact path="/" 
+                    Component={() =>
+                        <FilmList
+                            url={`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`}
+                            color={theme.theme.foreground}
+                        />
+                    }
+                />
+                <Route key='Top Rated Movies' path="/top_rated"
+                    Component={() =>
+                        <FilmList
+                            url={'https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc'}
+                            color={theme.theme.foreground}
+                        />
+                    }
+                />
+                <Route key='TV Shows' path="/tv_shows" 
+                    element={() => blankWIP}
+                    //TODO: redirect to main page 
+                />
+            </Routes>
         </div>
     )
 }
-
-// Try this
-// <Route>
-//     <FilmList props with link here/>
-// </Route>
 
 export const Movies = () => {
     const [currentTheme, setTheme] = useState(themes.dark)
