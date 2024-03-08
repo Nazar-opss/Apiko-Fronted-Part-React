@@ -86,9 +86,22 @@ hr.solid {
   width: 50%;
   display: flex;
   justify-content: space-between;
+  align-items:center;
 }
 
-.router ol {
-  padding: 0;
-  list-style-type: none;
+@media (width <= 450px) {
+  .router {
+    width: auto;
+  }
+}
+
+@media (width <= 1080px) {
+  .Buttons > button {
+    width: auto;
+  }
+}
+
+.router > a{
+  max-width: 90px;
+  min-width: 70px;
 }
