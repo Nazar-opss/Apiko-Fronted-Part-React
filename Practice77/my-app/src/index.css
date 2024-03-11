@@ -87,6 +87,7 @@ hr.solid {
   display: flex;
   justify-content: space-between;
   align-items:center;
+  padding: 10px 0px;
 }
 
 @media (width <= 450px) {
@@ -104,4 +105,5 @@ hr.solid {
 .router > a{
   max-width: 90px;
   min-width: 70px;
+  font-weight: 600;
 }
