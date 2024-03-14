@@ -1,31 +1,32 @@
 import React from "react";
 import ReactDOM from 'react-dom'
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function App() {
   const [isOpen, setOpen] = useState(false)
-  const [textarea, setTextArea] = useState('')
+
+  const inputRef = useRef('');
+
+  const text = inputRef.current.value
 
   const submitModalWindow = (e) => {
-    console.log(textarea)
+    setOpen(false)
+    console.log(inputRef.current.value)
   }
-
-  const changeTextArea = (e) => {
-    e.preventDefault()
-    setTextArea(e.target.value)
+  // TODO: fix show after submit first time
+  const TextArea = () => {
+    return(
+        <textarea name="textArea" ref={inputRef} />
+    )
   }
 
   const Modal = ({ Title, isOpen, closeModalWindow, submitModalWindow, Content }) => {
-    // const [textarea, setTextArea] = useState('')
-    
     if (!isOpen) return null
     return ReactDOM.createPortal(
       <>
-      <div className="background"></div>
         <div className="modal">
           <span className="title">{Title}</span>
           {Content}
-          {/* <textarea value={textarea} onChange={(e) => setTextArea(e.target.value)}/> */}
           <button onClick={closeModalWindow}>Close</button>
           <button onClick={submitModalWindow}>Submit</button>
         </div>
@@ -34,16 +35,16 @@ function App() {
     )
   }
   
-  // TODO: fix re-render in textarea onchange
 
   return (
     <div className={isOpen ? 'App_blur' : 'App'}>
       <button onClick={() => setOpen(true)}>Show Modal</button>
+      {text}
       <Modal 
         isOpen={isOpen}
         Title='Universal Modal Window'
         closeModalWindow={() => setOpen(false)}
-        Content={<textarea defaultChecked='' value={textarea} onChange={(e) => setTextArea(e.target.value)}/>}
+        Content={<TextArea />}
         submitModalWindow={submitModalWindow}
       />
     </div>
