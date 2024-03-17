@@ -4,19 +4,26 @@ import { useState, useRef } from "react";
 
 function App() {
   const [isOpen, setOpen] = useState(false)
+  const [inputValue, setInputValue] = useState("");
 
   const inputRef = useRef('');
 
-  const text = inputRef.current.value
-
   const submitModalWindow = (e) => {
+    const text = inputRef.current.value;
+    inputRef.current = 0
+    setInputValue(text)
     setOpen(false)
-    console.log(inputRef.current.value)
   }
-  // TODO: fix show after submit first time
+
   const TextArea = () => {
     return(
-        <textarea name="textArea" ref={inputRef} />
+        <textarea 
+          name="textArea" 
+          className="textArea" 
+          ref={inputRef} 
+          rows={4}
+          cols={20}
+        />
     )
   }
 
@@ -38,8 +45,10 @@ function App() {
 
   return (
     <div className={isOpen ? 'App_blur' : 'App'}>
-      <button onClick={() => setOpen(true)}>Show Modal</button>
-      {text}
+      <button className="App_show" onClick={() => setOpen(true)}>Show Modal</button>
+      <h2 className="wrap">
+        {inputValue}
+      </h2>
       <Modal 
         isOpen={isOpen}
         Title='Universal Modal Window'
