@@ -22,3 +22,33 @@ code {
   width: 100px;
   height: 100px;
 }
+
+.cart {
+}
+.cart:hover{
+  
+}
+.cart::after{
+  height: 2px;
+  background: red;
+  content: "";
+  width: 0px;
+  position: absolute;
+  transform: translateX(-50%);
+  transition: width 0.4s cubic-bezier(1, -0.65, 0, 2.31) 0s;
+  left: 50%;
+  margin-top: 2rem;
+}
+
+.cart_counter{
+    background: red;
+    color: white;
+    border-radius: 99px;
+    position: absolute;
+    top: 15px;
+    right: -5px;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
