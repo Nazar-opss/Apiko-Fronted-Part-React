@@ -5,6 +5,9 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useState } from "react";
+import Main from "./pages/Main.js";
+import Catalog from "./pages/Catalog.js";
+import Cocktail from "./pages/Cocktail.js"
 
 
 function App() {
@@ -27,8 +30,25 @@ function App() {
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           <span className="cart_counter">{number}</span>
         </Box>
- 
       </header>
+      <main>
+        <div className="main_container">
+          <Routes>
+            <Route key='Main' exact path="/" 
+              Component={() => <Main />}
+            />
+            <Route key='Catalog' path="/Catalog" 
+              Component={() => <Catalog />}
+            />
+            <Route key='Cocktail' path="/Cocktail" 
+              Component={() => <Cocktail />}
+            />
+          </Routes>
+        </div>
+      </main>
+      <footer>
+
+      </footer>
     </div>
   );
 }
