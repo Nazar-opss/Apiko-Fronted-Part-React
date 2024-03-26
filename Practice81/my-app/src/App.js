@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import React, { useState } from "react";
-import Main from "./pages/Main.js"
+import MainPage from "./pages/MainPage.js"
 import Catalog from "./pages/Catalog.js"
 import Cocktail from "./pages/Cocktail.js"
 
@@ -15,10 +15,11 @@ function App() {
   const [number, setNumber] = useState(0)
 
   function handleClick() {
-    setNumber(number + 1)
+    setNumber(number => number + 1)
   }
+ 
   return (
-  <CocktailContext.Provider value={{handleClick}} >
+  <CocktailContext.Provider value={{handleClick, number}} >
     <div className="App">
       <header className="header">
         <img src={logo} alt="logo" className="logo" onClick={()=> console.log('Dumb')}></img>
@@ -37,7 +38,7 @@ function App() {
         <div className="main_container">
           <Routes>
             <Route key='Main' exact path="/" 
-              Component={() => <Main />}
+              Component={() => <MainPage />}
             />
             <Route key='Catalog' path="/Catalog" 
               Component={() => <Catalog />}
