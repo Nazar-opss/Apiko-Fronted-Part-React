@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, memo } from 'react'
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -32,7 +32,7 @@ const Order = (props) => {
   )
 }
 
-// fix re render
+// fix re render need to try useMemo
 
 const useFetchCocktails = () => {
     const [cocktail, setCocktail] = useState('')
@@ -47,16 +47,17 @@ const useFetchCocktails = () => {
           const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php');
           const jsonData = await response.json();
           setCocktail(jsonData.drinks[0]);
+          
         } catch (error) {
           console.log("Error", error)
         }
       }
       fetchData()
-  }, [context.number])
+  }, [])
     return { cocktail }
   }
 
-function MainPage() {
+function MainPage () { 
   const context = useContext(CocktailContext)
   
   const { cocktail } = useFetchCocktails()
@@ -80,7 +81,7 @@ const { strDrinkThumb, strDrink } = cocktail
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
         <h2>Персональна рекомендація</h2>
-        <RandomCocktail img={strDrinkThumb} drinkName={strDrink} order={<Order handleClick={context.handleClick} />}/>    
+        <RandomCocktail img={strDrinkThumb} drinkName={strDrink} order={<Order handleClick={()=> console.log('Out')} />}/>    
       </div>
     </div>
   )
