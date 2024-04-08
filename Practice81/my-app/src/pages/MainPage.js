@@ -1,4 +1,4 @@
-import React, { useContext, useState, memo } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -62,6 +62,10 @@ function MainPage () {
   
   const { cocktail } = useFetchCocktails()
 
+  const handleClick = useCallback(() => {
+    context.handleClick();
+  }, [context]);
+
   // useEffect(() => {
   //   // const fetch = async () => {
   //   //   const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php');
@@ -81,7 +85,9 @@ const { strDrinkThumb, strDrink } = cocktail
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
         <h2>Персональна рекомендація</h2>
-        <RandomCocktail img={strDrinkThumb} drinkName={strDrink} order={<Order handleClick={()=> console.log('Out')} />}/>    
+        <RandomCocktail img={strDrinkThumb} drinkName={strDrink} 
+        // order={<Order handleClick={()=> console.log('Out')} />}/>    
+        order={<Order handleClick={handleClick} />}/>    
       </div>
     </div>
   )
