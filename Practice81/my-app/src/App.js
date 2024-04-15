@@ -8,28 +8,9 @@ import React, { useState, useCallback, memo, useReducer } from "react";
 import MainPage from "./pages/MainPage.js"
 import Catalog from "./pages/Catalog.js"
 import Cocktail from "./pages/Cocktail.js"
+import Footer from "./components/Footer.js";
 
 export const CocktailContext = React.createContext()
-
-const Footer = () => {
-  const alphabet = [...'abcdefghijklmnopqrstuvwxyz'];
-
-  return (
-    <div className="footer">
-      {
-        alphabet.map(symbol => (
-          <>
-            <Link key={symbol} to={`/Catalog/${symbol}`} href="#">{symbol}
-            /
-            </Link>
-          </>
-            
-          )
-        )
-      }
-    </div>
-  )
-}
 
 function App() {
   const [numberCart, setNumber] = useState(0)

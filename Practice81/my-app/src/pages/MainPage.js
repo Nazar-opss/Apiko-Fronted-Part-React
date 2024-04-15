@@ -8,7 +8,7 @@ const RandomCocktail = memo((props) => {
   return ( 
     <div className='random_cocktail'>
       <img src={props.img} alt={props.drinkName} className='random_cocktail_img'></img>
-      <div style={{display: 'flex', justifyContent: 'space-evenly', marginTop:'10px'}}>
+      <div className='random_cocktail_nb'>
         <h3>{props.drinkName}</h3>
         {props.order}
       </div>

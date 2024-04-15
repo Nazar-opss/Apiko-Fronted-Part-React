@@ -73,22 +73,32 @@ code {
 .random{
   text-align: start;
 }
-.random > .random_cocktail:hover {
-  color:#ed6c02
-}
+
 .random_cocktail{
   display: flex;
   justify-content: center;
   width: 30%;
   text-align: center;
   flex-direction: column;
+  transition: color 300ms;
 }
 
-.random_cocktail> div > button {
+.random_cocktail> div > button, h3 {
   word-break: break-word;
+  cursor: pointer;
 }
 .random_cocktail_img{
   border-radius: 5%;
+}
+
+.random_cocktail_nb {
+  display: flex;
+  justify-content: space-evenly; 
+  margin-top: 10px;
+  transition: color 300ms;
+}
+.random_cocktail_nb:hover {
+  color:#ed6c02 !important
 }
 
 .footer{
@@ -96,4 +106,18 @@ code {
   flex-direction: row;
   justify-content: center;
   text-align: center;
+  margin-top: 20px;
+  border-top: black 2px solid;
+}
+.footer > a, .slash {
+  font-weight: bold;
+  font-size: 24px;
+  text-decoration: none;
+  color: black;
+  text-transform: uppercase;
+  transition: color 300ms;
+  word-wrap: break-word;
+}
+.footer > a:hover {
+  color: #ed6c02;
 }
