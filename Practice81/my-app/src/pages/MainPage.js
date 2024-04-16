@@ -62,26 +62,24 @@ function MainPage () {
   const [numberCart, setNumber] = useState(0)
   const { cocktail } = useFetchCocktails()
   
-
-  function handleClick() {
-      setNumber(numberCart => numberCart + 1)
-  }
+  const handleClick = useCallback(() => {
+    context.cartRef.current = context.cartRef.current + 1;
+    console.log(context.cartRef.current)
+  }, []);
   
 console.log(cocktail)
 const { strDrinkThumb, strDrink } = cocktail
-return useMemo(() =>{
   return (
     <div className=''>
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
         <h2>Персональна рекомендація: {numberCart}</h2>
         <RandomCocktail img={strDrinkThumb} drinkName={strDrink} 
-        order={<Order handleClick={() => context.dispatch({type: 'increment'})} />}/>    
-        {/* order={<Order handleClick={handleClick} />}/>     */}
+        // order={<Order handleClick={() => context.dispatch({type: 'increment'})} />}/>    
+        order={<Order handleClick={handleClick} />}/>    
       </div>
     </div>
   )
-}, [strDrink, strDrinkThumb, context, numberCart])
 }
 
 export default MainPage

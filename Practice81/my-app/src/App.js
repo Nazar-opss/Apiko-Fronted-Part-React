@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import React, { useState, useCallback, memo, useReducer } from "react";
+import React, { useState, useCallback, memo, useReducer, useRef } from "react";
 import MainPage from "./pages/MainPage.js"
 import Catalog from "./pages/Catalog.js"
 import Cocktail from "./pages/Cocktail.js"
@@ -35,15 +35,21 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleClick = useCallback(() => {
-    setNumber(numberCart => numberCart + 1)
-  }, []);
+  // const handleClick = useCallback(() => {
+  //   setNumber(numberCart => numberCart + 1)
+  // }, []);
   // function handleClick() {
   //   setNumber(numberCart => numberCart + 1)
   // }
   
+  let cartRef = useRef(0);
+
+  const handleClick = () => {
+      cartRef.current = cartRef.current + 1;
+  }
+
   return (
-  <CocktailContext.Provider value={{handleClick, numberCart, setNumber, initialState, reducer, state, dispatch}} >
+  <CocktailContext.Provider value={{handleClick, numberCart, cartRef, setNumber, initialState, reducer, state, dispatch}} >
     <div className="App">
       <header className="header">
         <img src={logo} alt="logo" className="logo" onClick={navigateHome}></img>
@@ -56,7 +62,7 @@ function App() {
           <h2>Cart</h2>
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           {/* <span className="cart_counter">{numberCart}</span> */}
-          <span className="cart_counter">{state.count}</span>
+          <span className="cart_counter">{cartRef.current}</span>
         </Box>
       </header>
       <main>
