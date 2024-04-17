@@ -14,6 +14,7 @@ export const CocktailContext = React.createContext()
 
 function App() {
   const [numberCart, setNumber] = useState(0)
+  const [search, setSearch] = useState('')
   const navigate = useNavigate();
  
     const navigateHome = () => {
@@ -48,6 +49,11 @@ function App() {
       cartRef.current = cartRef.current + 1;
   }
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value)
+    console.log(search)
+}
+  // TODO: Stop re-rerender please AAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!! Fix search rere
   return (
   <CocktailContext.Provider value={{handleClick, numberCart, cartRef, setNumber, initialState, reducer, state, dispatch}} >
     <div className="App">
@@ -55,7 +61,7 @@ function App() {
         <img src={logo} alt="logo" className="logo" onClick={navigateHome}></img>
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
-          <TextField id="input-with-sx" label="Пошук" variant="standard" color="warning" />
+          <TextField id="input-with-sx" label="Пошук" variant="standard" color="warning" value={search} onChange={e => handleSearch(e)} />
         </Box>
       
         <Box onClick={handleClick} className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
