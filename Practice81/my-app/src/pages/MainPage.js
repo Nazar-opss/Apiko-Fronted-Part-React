@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { CocktailContext } from '../App';
 
-const RandomCocktail = memo((props) => {
+const RandomCocktail = (props) => {
   return ( 
     <div className='random_cocktail'>
       <img src={props.img} alt={props.drinkName} className='random_cocktail_img'></img>
@@ -14,11 +14,11 @@ const RandomCocktail = memo((props) => {
       </div>
     </div>
   )
-})
+}
 
 // TODO: Find why page re fetching cocktail when adding to cart
 
-const Order = memo((props) => {
+const Order = (props) => {
   return (
     <Button onClick={props.handleClick} variant="contained" endIcon={<ShoppingCartIcon />} 
       sx={{
@@ -30,7 +30,7 @@ const Order = memo((props) => {
       Замовити
     </Button>
   )
-})
+}
 
 // fix re render
 
@@ -57,15 +57,10 @@ const useFetchCocktails = () => {
     return { cocktail }
   }
 
-function MainPage () { 
+function MainPage (props) { 
   const context = useContext(CocktailContext)
-  const [numberCart, setNumber] = useState(0)
-  const { cocktail } = useFetchCocktails()
   
-  const handleClick = useCallback(() => {
-    context.cartRef.current = context.cartRef.current + 1;
-    console.log(context.cartRef.current)
-  }, []);
+  const { cocktail } = useFetchCocktails()
   
 console.log(cocktail)
 const { strDrinkThumb, strDrink } = cocktail
@@ -73,10 +68,10 @@ const { strDrinkThumb, strDrink } = cocktail
     <div className=''>
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
-        <h2>Персональна рекомендація: {numberCart}</h2>
+        <h2>Персональна рекомендація: {}</h2>
         <RandomCocktail img={strDrinkThumb} drinkName={strDrink} 
-        // order={<Order handleClick={() => context.dispatch({type: 'increment'})} />}/>    
-        order={<Order handleClick={handleClick} />}/>    
+        // order={<Order handleClick={props.handleClick} />}/>    
+        order={<Order handleClick={context.handleClick} />}/> 
       </div>
     </div>
   )

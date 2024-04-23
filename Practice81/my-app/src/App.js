@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import React, { useState, useCallback, memo, useReducer, useRef } from "react";
+import React, { useState, useCallback, memo, useReducer, useRef, useMemo } from "react";
 import MainPage from "./pages/MainPage.js"
 import Catalog from "./pages/Catalog.js"
 import Cocktail from "./pages/Cocktail.js"
@@ -21,32 +21,8 @@ function App() {
       navigate("/")
     }
 
-  const initialState = {count: 0};
-
-  function reducer(state, action) {
-    switch (action.type) {
-      case 'increment':
-        return {count: state.count + 1};
-      case 'decrement':
-        return {count: state.count - 1};
-      default:
-        throw new Error();
-    }
-  }
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  // const handleClick = useCallback(() => {
-  //   setNumber(numberCart => numberCart + 1)
-  // }, []);
-  // function handleClick() {
-  //   setNumber(numberCart => numberCart + 1)
-  // }
-  
-  let cartRef = useRef(0);
-
   const handleClick = () => {
-      cartRef.current = cartRef.current + 1;
+    setNumber(numberCart + 1)
   }
 
   const handleSearch = (e) => {
@@ -55,7 +31,6 @@ function App() {
 }
   // TODO: Stop re-rerender please AAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!! Fix search rere
   return (
-  <CocktailContext.Provider value={{handleClick, numberCart, cartRef, setNumber, initialState, reducer, state, dispatch}} >
     <div className="App">
       <header className="header">
         <img src={logo} alt="logo" className="logo" onClick={navigateHome}></img>
@@ -64,20 +39,20 @@ function App() {
           <TextField id="input-with-sx" label="Пошук" variant="standard" color="warning" value={search} onChange={e => handleSearch(e)} />
         </Box>
       
-        <Box onClick={handleClick} className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+        <Box onClick={setNumber} className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
           <h2>Cart</h2>
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
-          {/* <span className="cart_counter">{numberCart}</span> */}
-          <span className="cart_counter">{cartRef.current}</span>
+          <span className="cart_counter">{numberCart}</span>
         </Box>
       </header>
+  <CocktailContext.Provider value={{numberCart, setNumber, handleClick}} >
       <main>
         <div className="main_container">
           <Routes>
             <Route key='Main' exact path="/" 
               Component={() => <MainPage />}
             />
-            <Route key='Catalog' path="/Catalog" 
+            <Route key='Catalog' path="/Catalog/:letter" 
               Component={() => <Catalog />}
             />
             <Route key='Cocktail' path="/Cocktail" 
@@ -89,8 +64,8 @@ function App() {
       <footer>
         <Footer/>
       </footer>
-    </div>
   </CocktailContext.Provider>
+    </div>
   );
 }
 

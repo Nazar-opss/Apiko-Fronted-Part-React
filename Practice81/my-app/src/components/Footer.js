@@ -17,7 +17,7 @@ const Footer = () => {
       {alphabet.map((symbol, i, alphabet) => {
         if (i + 1 === alphabet.length) {
           return (
-            <Link key={symbol} to={`/Catalog/${symbol}`} href="#">
+            <Link key={symbol} to={`/Catalog/:letter`} href="#">
               {symbol}
             </Link>
           );
