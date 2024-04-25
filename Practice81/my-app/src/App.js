@@ -1,4 +1,4 @@
-import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import logo from './logo.svg'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -48,7 +48,8 @@ function App() {
   <CocktailContext.Provider value={{numberCart, setNumber, handleClick}} >
       <main>
         <div className="main_container">
-          <Routes>
+          <Outlet></Outlet>
+          {/* <Routes>
             <Route key='Main' exact path="/" 
               Component={() => <MainPage />}
             />
@@ -58,7 +59,7 @@ function App() {
             <Route key='Cocktail' path="/Cocktail" 
               Component={() => <Cocktail />}
             />
-          </Routes>
+          </Routes> */}
         </div>
       </main>
       <footer>

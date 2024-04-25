@@ -62,16 +62,24 @@ function MainPage (props) {
   
   const { cocktail } = useFetchCocktails()
   
+  const { strDrinkThumb, strDrink } = cocktail
+  
+  const handleSubmit = () => {
+    context.setNumber(strDrink)
+    console.log(context.numberCart)
+  }
+
+  // TODO try rerender again and fix pages
 console.log(cocktail)
-const { strDrinkThumb, strDrink } = cocktail
   return (
     <div className=''>
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
         <h2>Персональна рекомендація: {}</h2>
         <RandomCocktail img={strDrinkThumb} drinkName={strDrink} 
-        // order={<Order handleClick={props.handleClick} />}/>    
-        order={<Order handleClick={context.handleClick} />}/> 
+        order={<Order handleClick={handleSubmit} />}/>
+
+        {/* order={<Order handleClick={context.handleClick} />}/>  */}
       </div>
     </div>
   )
