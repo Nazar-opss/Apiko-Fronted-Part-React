@@ -29,7 +29,7 @@ function App() {
     setSearch(e.target.value)
     console.log(search)
 }
-  // TODO: Stop re-rerender please AAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!!!!!!!! Fix search rere
+
   return (
     <div className="App">
       <header className="header">

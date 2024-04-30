@@ -65,7 +65,8 @@ function MainPage (props) {
   const { strDrinkThumb, strDrink } = cocktail
   
   const handleSubmit = () => {
-    context.setNumber(strDrink)
+    context.setNumber(context.numberCart + 1)
+    console.log(strDrink)
     console.log(context.numberCart)
   }
 
