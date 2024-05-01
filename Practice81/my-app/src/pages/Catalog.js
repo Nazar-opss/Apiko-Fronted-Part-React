@@ -1,37 +1,19 @@
 import React from 'react'
 import { useContext, useState, useEffect } from 'react'
 import { CocktailContext } from '../App'
+import { useLoaderData, useParams } from 'react-router-dom'
 
-const useFetchCocktails = () => {
-  const [cocktail, setCocktail] = useState('')
-  const context = useContext(CocktailContext)
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-        //   .then(async response => await response.json())
-        //   .then(data => setCocktail(data.drinks[0]))
-        //   .catch((error) => console.log(error));
-        const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita');
-        const jsonData = await response.json();
-        setCocktail(jsonData.drinks[0]);
-      } catch (error) {
-        console.log("Error", error)
-      }
-    }
-    fetchData()
-}, [])
-  return { cocktail }
-}
+// TODO: Make catalog great again!
 
 function Catalog() {
-  const { cocktail } = useFetchCocktails()
+  const { letter } = useParams()
+  const { jsonData } = useLoaderData()
+  console.log(jsonData)
 
   return (
-    <>
-      HYI
-    </>
+    <div>
+      Cocktails for {letter}
+    </div>
   )
 }
 

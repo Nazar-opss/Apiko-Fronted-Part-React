@@ -12,21 +12,13 @@ import {
 import MainPage from './pages/MainPage';
 
 const fetchData = async (symbol) => {
-  try {
-    // await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-    //   .then(async response => await response.json())
-    //   .then(data => setCocktail(data.drinks[0]))
-    //   .catch((error) => console.log(error));
-    const response = await fetch(`www.thecocktaildb.com/api/json/v1/1/search.php?f=${symbol}`);
-    const jsonData = await response.json();
-    console.log(jsonData)
-    return jsonData;
-  } catch (error) {
-    console.log("Error", error)
-  }
+  const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${symbol}`);
+  const jsonData = await response.json();
+  console.log(jsonData)
+  return { jsonData }
 }
 
-//TODO: solve loader 
+//TODO:  
 const router = createBrowserRouter([
   {
     path: "/",
@@ -37,7 +29,7 @@ const router = createBrowserRouter([
         index: true,
       },
       {
-        path: "/catalog/:letter",
+        path: "catalog/:letter",
         element: <Catalog />,
         loader: async ({ params }) => fetchData(params.letter),
       },

@@ -3,6 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 const Footer = () => {
   const alphabet = [..."abcdefghijklmnopqrstuvwxyz"];
 
+  // TODO in future: make this look better cuz it's hardcoded imho
   const LinkTo = (props) => (
     <>
       <Link to={`/catalog/${props.symbol}`} href="#">

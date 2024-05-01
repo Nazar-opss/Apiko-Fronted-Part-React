@@ -32,8 +32,6 @@ const Order = (props) => {
   )
 }
 
-// fix re render
-
 const useFetchCocktails = () => {
     const [cocktail, setCocktail] = useState('')
     const context = useContext(CocktailContext)
@@ -41,10 +39,6 @@ const useFetchCocktails = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          // await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
-          //   .then(async response => await response.json())
-          //   .then(data => setCocktail(data.drinks[0]))
-          //   .catch((error) => console.log(error));
           const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php');
           const jsonData = await response.json();
           setCocktail(jsonData.drinks[0]);
@@ -70,7 +64,6 @@ function MainPage (props) {
     console.log(context.numberCart)
   }
 
-  // TODO try rerender again and fix pages
 console.log(cocktail)
   return (
     <div className=''>
