@@ -14,7 +14,6 @@ import MainPage from './pages/MainPage';
 const fetchData = async (symbol) => {
   const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${symbol}`);
   const jsonData = await response.json();
-  console.log(jsonData)
   return { jsonData }
 }
 

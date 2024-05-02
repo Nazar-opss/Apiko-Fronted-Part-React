@@ -16,8 +16,6 @@ const RandomCocktail = (props) => {
   )
 }
 
-// TODO: Find why page re fetching cocktail when adding to cart
-
 const Order = (props) => {
   return (
     <Button onClick={props.handleClick} variant="contained" endIcon={<ShoppingCartIcon />} 
