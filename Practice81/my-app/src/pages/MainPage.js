@@ -4,9 +4,9 @@ import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { CocktailContext } from '../App';
 
-const RandomCocktail = (props) => {
+export const RandomCocktail = (props) => {
   return ( 
-    <div className='random_cocktail'>
+    <div className='random_cocktail' onClick={props.handleOnClick}>
       <img src={props.img} alt={props.drinkName} className='random_cocktail_img'></img>
       <div className='random_cocktail_nb'>
         <h3>{props.drinkName}</h3>

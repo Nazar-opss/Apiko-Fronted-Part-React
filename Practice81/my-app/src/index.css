@@ -107,7 +107,9 @@ code {
   justify-content: center;
   text-align: center;
   margin-top: 20px;
+  margin-bottom: 5px;
   border-top: black 2px solid;
+  flex-wrap: wrap;
 }
 .footer > a, .slash {
   font-weight: bold;
@@ -120,4 +122,27 @@ code {
 }
 .footer > a:hover {
   color: #ed6c02;
+}
+.catalog_container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.catalog_container > .random_cocktail > .random_cocktail_nb > h3 {
+  margin: 0;
+}
+.catalog_container > .random_cocktail > .random_cocktail_nb {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.catalog_container > .random_cocktail {
+  width: 25%;
+  align-items:center;
+}
+.catalog_container > .random_cocktail:hover {
+  color: #ed6c02;
+}
+
+.catalog_container > .random_cocktail > .random_cocktail_img {
+  width: 90%;
 }

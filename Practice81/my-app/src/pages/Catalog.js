@@ -2,7 +2,7 @@ import React from 'react'
 import { useContext, useState, useEffect } from 'react'
 import { CocktailContext } from '../App'
 import { useLoaderData, useParams } from 'react-router-dom'
-
+import { RandomCocktail } from './MainPage'
 // TODO: Make catalog great again! and again!
 
 function Catalog() {
@@ -13,13 +13,14 @@ function Catalog() {
   const FillCatalog = () => {
     const drinks = jsonData.drinks
     return (
-      <>
+      <div className='catalog_container'>
         {
           drinks.map(drink => (
-            <div key={drink.strDrink}>{drink.strDrink}</div>
+            /* <div key={drink.strDrink}>{drink.strDrink}</div> */
+            <RandomCocktail key={drink.strDrink} img={drink.strDrinkThumb} drinkName={drink.strDrink} handleOnClick={() => console.log(`Handle ${drink.strDrink} `)} />
           ))
         }
-      </>
+      </div>
 
     )
   }
