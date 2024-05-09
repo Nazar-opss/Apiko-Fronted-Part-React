@@ -16,6 +16,11 @@ const fetchData = async (symbol) => {
   const jsonData = await response.json();
   return { jsonData }
 }
+const fetchSearch = async (name) => {
+  const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`);
+  const jsonSearch = await response.json();
+  return { jsonSearch }
+}
 
 //TODO:  
 const router = createBrowserRouter([
@@ -26,6 +31,11 @@ const router = createBrowserRouter([
       {
         element: <MainPage/>,
         index: true,
+      },
+      {
+        path: "catalog/search/?s=:name",
+        element: <Catalog />,
+        loader: async ({ params }) => fetchSearch(params.name),
       },
       {
         path: "catalog/:letter",

@@ -3,10 +3,10 @@ import { useContext, useState, useEffect } from 'react'
 import { CocktailContext } from '../App'
 import { useLoaderData, useParams } from 'react-router-dom'
 import { RandomCocktail } from './MainPage'
-// TODO: Make catalog great again! and again!
+// TODO: ...start separated page about each cocktail 
 
 function Catalog() {
-  const { letter } = useParams()
+  const { letter, name } = useParams()
   const { jsonData } = useLoaderData()
   console.log(jsonData.drinks)
 

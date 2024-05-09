@@ -16,18 +16,28 @@ function App() {
   const [numberCart, setNumber] = useState(0)
   const [search, setSearch] = useState('')
   const navigate = useNavigate();
- 
-    const navigateHome = () => {
-      navigate("/")
+  console.log(search)
+
+  const navigateHome = () => {
+    navigate("/")
+  }
+
+  const navigateSearch = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      console.log((`/catalog/search/?s=${search}`))
+      navigate(`/catalog/search/?s=${search}`)
+      // try useSearchParams
     }
+  }
 
   const handleClick = () => {
     setNumber(numberCart + 1)
   }
 
   const handleSearch = (e) => {
-    setSearch(e.target.value)
     console.log(search)
+    setSearch(e.target.value)
 }
 
   return (
@@ -36,8 +46,8 @@ function App() {
         <img src={logo} alt="logo" className="logo" onClick={navigateHome}></img>
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
-          <TextField id="input-with-sx" label="Пошук" variant="standard" color="warning" value={search} onChange={e => handleSearch(e)} />
-        </Box>
+          <TextField id="input-with-sx" label="Пошук" type="text" variant="standard" color="warning" onKeyDown={(e) => navigateSearch(e)} value={search} onChange={(e) => setSearch(e.target.value)} />
+        </Box> 
       
         <Box onClick={setNumber} className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
           <h2>Cart</h2>
