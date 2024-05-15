@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Navigate, Outlet, Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import logo from './logo.svg'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -15,6 +15,7 @@ export const CocktailContext = React.createContext()
 function App() {
   const [numberCart, setNumber] = useState(0)
   const [search, setSearch] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate();
   console.log(search)
 
@@ -25,9 +26,17 @@ function App() {
   const navigateSearch = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      console.log((`/catalog/search/?s=${search}`))
-      navigate(`/catalog/search/?s=${search}`)
-      // try useSearchParams
+      // console.log(search)
+      // setSearchParams({s: search})
+      // console.log(searchParams)
+      // console.log((`catalog/search/?s=${search}`))
+      // navigate(`catalog/search/${search}`)
+      // navigate({
+      //   pathname: `catalog/search/${searchParams}`,
+      // })
+      navigate(`catalog/search/${search}`)
+      setSearch('')
+      // TODO in future: make it like ?s={search}
     }
   }
 
@@ -35,18 +44,16 @@ function App() {
     setNumber(numberCart + 1)
   }
 
-  const handleSearch = (e) => {
-    console.log(search)
-    setSearch(e.target.value)
-}
-
   return (
     <div className="App">
       <header className="header">
         <img src={logo} alt="logo" className="logo" onClick={navigateHome}></img>
         <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
           <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
-          <TextField id="input-with-sx" label="Пошук" type="text" variant="standard" color="warning" onKeyDown={(e) => navigateSearch(e)} value={search} onChange={(e) => setSearch(e.target.value)} />
+          <TextField id="input-with-sx" label="Пошук" type="text" variant="standard" color="warning" 
+            value={search} 
+            onKeyDown={(e) => navigateSearch(e)} 
+            onChange={(e) => setSearch(e.target.value)} />
         </Box> 
       
         <Box onClick={setNumber} className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>

@@ -18,11 +18,17 @@ const fetchData = async (symbol) => {
 }
 const fetchSearch = async (name) => {
   const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`);
-  const jsonSearch = await response.json();
-  return { jsonSearch }
+  const jsonData = await response.json();
+  return { jsonData }
 }
 
-//TODO:  
+const fetchDetails = async (id) => {
+  const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
+  const jsonData = await response.json();
+  return { jsonData }
+}
+
+//TODO:  fix search
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,18 +39,24 @@ const router = createBrowserRouter([
         index: true,
       },
       {
-        path: "catalog/search/?s=:name",
-        element: <Catalog />,
-        loader: async ({ params }) => fetchSearch(params.name),
+        path: "catalog",
+        children: [
+          {
+            path: "search/:name",
+            element: <Catalog />,
+            loader: async ({ params }) => fetchSearch(params.name),
+          },
+          {
+            path: "letter/:letter",
+            element: <Catalog />,
+            loader: async ({ params }) => fetchData(params.letter),
+          },
+        ]
       },
       {
-        path: "catalog/:letter",
-        element: <Catalog />,
-        loader: async ({ params }) => fetchData(params.letter),
-      },
-      {
-        path: "cocktail",
+        path: "cocktail/:id",
         element: <Cocktail />,
+        loader: async ({params}) => fetchDetails(params.id)
       },
     ],
   },

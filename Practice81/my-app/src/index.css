@@ -67,6 +67,7 @@ code {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  margin-top: 5px;
   text-align: center;
 }
 
@@ -126,6 +127,7 @@ code {
 .catalog_container {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 5px;
 }
 .catalog_container > .random_cocktail > .random_cocktail_nb > h3 {
   margin: 0;
@@ -138,6 +140,7 @@ code {
 .catalog_container > .random_cocktail {
   width: 25%;
   align-items:center;
+  justify-content: flex-start;
 }
 .catalog_container > .random_cocktail:hover {
   color: #ed6c02;

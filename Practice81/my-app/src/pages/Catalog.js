@@ -9,15 +9,20 @@ function Catalog() {
   const { letter, name } = useParams()
   const { jsonData } = useLoaderData()
   console.log(jsonData.drinks)
-
+  // console.log(jsonSearch)
   const FillCatalog = () => {
-    const drinks = jsonData.drinks
+    const drinks = jsonData.drinks || jsonData
+    console.log(drinks)
     return (
       <div className='catalog_container'>
         {
           drinks.map(drink => (
-            /* <div key={drink.strDrink}>{drink.strDrink}</div> */
-            <RandomCocktail key={drink.strDrink} img={drink.strDrinkThumb} drinkName={drink.strDrink} handleOnClick={() => console.log(`Handle ${drink.strDrink} `)} />
+            /* TODO: fix click on cocktail and text it is out of image and text */
+            <RandomCocktail 
+              key={drink.strDrink} 
+              img={drink.strDrinkThumb} 
+              drinkName={drink.strDrink} 
+              handleOnClick={() => console.log(`Handle ${drink.strDrink} `)} />
           ))
         }
       </div>
@@ -26,7 +31,7 @@ function Catalog() {
   }
   return (
     <div>
-      Cocktails for {letter.toUpperCase(letter)}
+      Cocktails for {name || letter}
       <FillCatalog/>
     </div>
   )

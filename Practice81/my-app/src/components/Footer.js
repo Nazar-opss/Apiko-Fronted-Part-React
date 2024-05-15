@@ -6,7 +6,7 @@ const Footer = () => {
   // TODO in future: make this look better cuz it's hardcoded imho
   const LinkTo = (props) => (
     <>
-      <Link to={`/catalog/${props.symbol}`} href="#">
+      <Link to={`catalog/letter/${props.symbol}`} href="#">
         {props.symbol}
       </Link>
       <span className="slash">&nbsp;/&nbsp;</span>
@@ -22,7 +22,7 @@ const Footer = () => {
               {symbol}
             </Link> */
 
-            <NavLink key={symbol} to={`/catalog/${symbol}`}>{symbol}</NavLink>
+            <NavLink key={symbol} to={`catalog/letter/${symbol}`}>{symbol}</NavLink>
           );
         } else {
           return <LinkTo key={symbol} symbol={symbol} />;
