@@ -58,6 +58,7 @@ const router = createBrowserRouter([
         element: <Cocktail />,
         loader: async ({params}) => fetchDetails(params.id)
       },
+      // todo cocktail
     ],
   },
 ]);
