@@ -2,7 +2,20 @@ import React, { useContext, useState, useCallback, memo, useReducer, useMemo } f
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { NavLink } from "react-router-dom";
 import { CocktailContext } from '../App';
+
+export const Cocktail = (props) => {
+  return ( 
+    <div className='catalog_cocktail' onClick={props.handleOnClick}>    
+      <img src={props.img} alt={props.drinkName} className='catalog_cocktail_img'></img>
+      <div className='catalog_cocktail_nb'>
+        <h3>{props.drinkName}</h3>
+        {/* <NavLink to={`cocktail/${props.idDrink}`}>{props.drinkName}</NavLink> */}
+      </div>
+    </div>
+  )
+}
 
 export const RandomCocktail = (props) => {
   return ( 

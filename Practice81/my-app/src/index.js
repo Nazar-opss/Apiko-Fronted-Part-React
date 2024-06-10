@@ -28,7 +28,6 @@ const fetchDetails = async (id) => {
   return { jsonData }
 }
 
-//TODO:  fix search
 const router = createBrowserRouter([
   {
     path: "/",
@@ -51,12 +50,12 @@ const router = createBrowserRouter([
             element: <Catalog />,
             loader: async ({ params }) => fetchData(params.letter),
           },
+          {
+            path: "cocktail/:id",
+            element: <Cocktail />,
+            loader: async ({ params }) => fetchDetails(params.id)
+          },
         ]
-      },
-      {
-        path: "cocktail/:id",
-        element: <Cocktail />,
-        loader: async ({params}) => fetchDetails(params.id)
       },
       // todo cocktail
     ],
