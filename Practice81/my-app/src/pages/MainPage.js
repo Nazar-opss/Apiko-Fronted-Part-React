@@ -29,7 +29,7 @@ export const RandomCocktail = (props) => {
   )
 }
 
-const Order = (props) => {
+export const Order = (props) => {
   return (
     <Button onClick={props.handleClick} variant="contained" endIcon={<ShoppingCartIcon />} 
       sx={{

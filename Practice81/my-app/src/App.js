@@ -1,5 +1,6 @@
 import { Link, Navigate, Outlet, Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
 import logo from './logo.svg'
+import { createPortal } from 'react-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
@@ -16,6 +17,9 @@ function App() {
   const [numberCart, setNumber] = useState(0)
   const [search, setSearch] = useState('')
   const [searchParams, setSearchParams] = useSearchParams()
+
+  const [showModal, setShowModal] = useState(false);
+
   const navigate = useNavigate();
   console.log(search)
 
@@ -44,6 +48,20 @@ function App() {
     setNumber(numberCart + 1)
   }
 
+  
+
+  const ModalContent = ({ onClose }) => {
+    console.log('opened')
+    return(
+      <div className="modal">
+        <h1>Modal</h1>
+
+        <button onClick={onClose}>Close</button>
+      </div>
+    )
+  }
+
+
   return (
     <div className="App">
       <header className="header">
@@ -56,11 +74,15 @@ function App() {
             onChange={(e) => setSearch(e.target.value)} />
         </Box> 
       
-        <Box onClick={setNumber} className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+        <Box onClick={numberCart === 0 ? () => alert("Спочатку оберіть коктейль") : () => setShowModal(true) } className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
           <h2>Cart</h2>
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           <span className="cart_counter">{numberCart}</span>
         </Box>
+        {showModal && createPortal(
+        <ModalContent onClose={() => setShowModal(false)} />,
+        document.body
+      )}
       </header>
   <CocktailContext.Provider value={{numberCart, setNumber, handleClick}} >
       <main>
