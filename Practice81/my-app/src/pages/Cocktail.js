@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useParams, useLoaderData } from 'react-router-dom'
 import { Order } from './MainPage'
 import { CocktailContext } from '../App'
@@ -10,8 +10,15 @@ function Cocktail() {
 
   const handleSubmit = () => {
     context.setNumber(context.numberCart + 1)
-    console.log(context.numberCart)
+    // context.setCartItems(context.cartItems + jsonData.drinks[0])
+    context.addToCart(jsonData.drinks[0])
+    
   }
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(context.cartItems));
+  }, [context.cartItems]);
+
   const { strDrink, strDrinkThumb } = jsonData.drinks[0]
   console.log(strDrink)
   return (

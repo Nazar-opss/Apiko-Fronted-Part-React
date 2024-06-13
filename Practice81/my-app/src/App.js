@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import React, { useState, useCallback, memo, useReducer, useRef, useMemo } from "react";
+import React, { useState, useCallback, memo, useReducer, useRef, useMemo, useEffect } from "react";
 import MainPage from "./pages/MainPage.js"
 import Catalog from "./pages/Catalog.js"
 import Cocktail from "./pages/Cocktail.js"
@@ -16,6 +16,7 @@ export const CocktailContext = React.createContext()
 function App() {
   const [numberCart, setNumber] = useState(0)
   const [search, setSearch] = useState('')
+  const [cartItems, setCartItems] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [showModal, setShowModal] = useState(false);
@@ -44,18 +45,49 @@ function App() {
     }
   }
 
-  const handleClick = () => {
-    setNumber(numberCart + 1)
-  }
+  // const handleClick = () => {
+  //   setNumber(numberCart + 1)
+    
+  // }
+
+  const addToCart = (item) => {
+    const isItemInCart = cartItems.find((cartItem) => cartItem.id === item.id); // check if the item is already in the cart
+  
+    if (isItemInCart) {
+    setCartItems(
+        cartItems.map((cartItem) => // if the item is already in the cart, increase the quantity of the item
+        cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem // otherwise, return the cart item
+        )
+    );
+    } else {
+    setCartItems([...cartItems, { ...item, quantity: 1 }]); // if the item is not in the cart, add the item to the cart
+    }
+  };
+
+  const clearCart = () => {
+    setCartItems([]); // set the cart items to an empty array
+  };
 
   
-
+console.log(cartItems)
+console.log(numberCart)
   const ModalContent = ({ onClose }) => {
-    console.log('opened')
+    useEffect(() => {
+      const cartItems = localStorage.getItem("cartItems");
+      if (cartItems) {
+        setCartItems(JSON.parse(cartItems));
+      }
+    }, []);
+    
+    // TODO: list added to cart items
     return(
       <div className="modal">
         <h1>Modal</h1>
+        {cartItems.map((elem) => {
 
+        })}
         <button onClick={onClose}>Close</button>
       </div>
     )
@@ -84,7 +116,7 @@ function App() {
         document.body
       )}
       </header>
-  <CocktailContext.Provider value={{numberCart, setNumber, handleClick}} >
+  <CocktailContext.Provider value={{numberCart, setNumber, cartItems, setCartItems, addToCart}} >
       <main>
         <div className="main_container">
           <Outlet></Outlet>
