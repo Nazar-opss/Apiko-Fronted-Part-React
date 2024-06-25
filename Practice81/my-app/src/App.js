@@ -16,7 +16,7 @@ export const CocktailContext = React.createContext()
 function App() {
   const [numberCart, setNumber] = useState(0)
   const [search, setSearch] = useState('')
-  const [cartItems, setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState(localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [])
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [showModal, setShowModal] = useState(false);
@@ -51,7 +51,7 @@ function App() {
   // }
 
   const addToCart = (item) => {
-    const isItemInCart = cartItems.find((cartItem) => cartItem.id === item.id); // check if the item is already in the cart
+    const isItemInCart = cartItems.find((cartItem) => cartItem.idDrink === item.idDrink); // check if the item is already in the cart
   
     if (isItemInCart) {
     setCartItems(
@@ -69,25 +69,28 @@ function App() {
   const clearCart = () => {
     setCartItems([]); // set the cart items to an empty array
   };
-
   
-console.log(cartItems)
-console.log(numberCart)
+// console.log(cartItems)
+// console.log(numberCart)
+
   const ModalContent = ({ onClose }) => {
     useEffect(() => {
       const cartItems = localStorage.getItem("cartItems");
-      if (cartItems) {
-        setCartItems(JSON.parse(cartItems));
-      }
+        if (cartItems) {
+          setCartItems(JSON.parse(cartItems));
+        }
     }, []);
-    
+    // use effect modal infinity bug STILL
+    console.log(cartItems)
     // TODO: list added to cart items
     return(
       <div className="modal">
-        <h1>Modal</h1>
-        {cartItems.map((elem) => {
-
-        })}
+        <h1>Modal</h1> 
+        {
+          cartItems.map((elem) => (
+            console.log(elem)
+          ))
+        }
         <button onClick={onClose}>Close</button>
       </div>
     )
@@ -112,9 +115,9 @@ console.log(numberCart)
           <span className="cart_counter">{numberCart}</span>
         </Box>
         {showModal && createPortal(
-        <ModalContent onClose={() => setShowModal(false)} />,
-        document.body
-      )}
+          <ModalContent onClose={() => setShowModal(false)} />,
+          document.getElementById('modal-root'),
+        )}
       </header>
   <CocktailContext.Provider value={{numberCart, setNumber, cartItems, setCartItems, addToCart}} >
       <main>

@@ -20,7 +20,7 @@ function Cocktail() {
   }, [context.cartItems]);
 
   const { strDrink, strDrinkThumb } = jsonData.drinks[0]
-  console.log(strDrink)
+  // console.log(strDrink)
   return (
     <div className='cocktailPage'>
       <h4>
