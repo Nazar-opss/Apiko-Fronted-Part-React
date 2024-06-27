@@ -24,7 +24,7 @@ function Cocktail() {
   return (
     <div className='cocktailPage'>
       <h4>
-        Cocktail {strDrink}
+        {strDrink}
       </h4>
       <img src={strDrinkThumb} alt={strDrink} className='cocktailPage_img'></img>
       <Order handleClick={handleSubmit}/>

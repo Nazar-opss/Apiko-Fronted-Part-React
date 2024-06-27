@@ -10,6 +10,8 @@ import MainPage from "./pages/MainPage.js"
 import Catalog from "./pages/Catalog.js"
 import Cocktail from "./pages/Cocktail.js"
 import Footer from "./components/Footer.js";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 export const CocktailContext = React.createContext()
 
@@ -22,7 +24,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
-  console.log(search)
+
 
   const navigateHome = () => {
     navigate("/")
@@ -68,34 +70,71 @@ function App() {
 
   const clearCart = () => {
     setCartItems([]); // set the cart items to an empty array
+    console.log(cartItems)
+    setShowModal(false)
   };
   
-// console.log(cartItems)
-// console.log(numberCart)
+console.log(cartItems)
+console.log(numberCart)
 
-  const ModalContent = ({ onClose }) => {
-    useEffect(() => {
-      const cartItems = localStorage.getItem("cartItems");
-        if (cartItems) {
-          setCartItems(JSON.parse(cartItems));
-        }
-    }, []);
-    // use effect modal infinity bug STILL
-    console.log(cartItems)
-    // TODO: list added to cart items
+// delete quantity or fix it
+
+  useEffect(() => {
+    const cartItems = localStorage.getItem("cartItems");
+      if (cartItems) {
+        setCartItems(JSON.parse(cartItems));
+      }
+  }, []);
+
+  // Fix alert when cart number > 0, but cartItems is clear
+
+  const ModalNew = ({ onClose }) => {
     return(
-      <div className="modal">
-        <h1>Modal</h1> 
-        {
-          cartItems.map((elem) => (
-            console.log(elem)
+      <Modal show={showModal} onHide={onClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Корзина</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            cartItems.map((elem) => (
+            <div className="modal_list_item" key={elem.idDrink}>
+              <img src={elem.strDrinkThumb} alt={elem.strDrink} className='cocktailModal_img'></img>
+              <div>{elem.strDrink}</div>
+            </div>
           ))
-        }
-        <button onClick={onClose}>Close</button>
-      </div>
+          }
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={onClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={clearCart}>
+            Підтвердити
+          </Button>
+        </Modal.Footer>
+      </Modal>
     )
   }
 
+  const ModalContent = ({ onClose }) => {
+    console.log(cartItems.length)
+    // TODO: list added to cart items
+    return(
+      <div className="modal">
+        <h1>Корзина</h1> 
+        {
+          cartItems.map((elem) => (
+            <div className="modal_list_item" key={elem.idDrink}>
+              <img src={elem.strDrinkThumb} alt={elem.strDrink} className='cocktailModal_img'></img>
+              <div>{elem.strDrink}</div>
+            </div>
+          ))
+        }
+        <button onClick={onClose}>Close</button>
+        <button onClick={clearCart}>Підтвердити</button>
+      </div>
+    )
+  }
 
   return (
     <div className="App">
@@ -114,8 +153,12 @@ function App() {
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           <span className="cart_counter">{numberCart}</span>
         </Box>
-        {showModal && createPortal(
+        {/* {showModal && createPortal(
           <ModalContent onClose={() => setShowModal(false)} />,
+          document.getElementById('modal-root'),
+        )} */}
+        {showModal && createPortal(
+          <ModalNew onClose={() => setShowModal(false)} />,
           document.getElementById('modal-root'),
         )}
       </header>
