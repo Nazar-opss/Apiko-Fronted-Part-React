@@ -148,7 +148,7 @@ console.log(numberCart)
             onChange={(e) => setSearch(e.target.value)} />
         </Box> 
       
-        <Box onClick={numberCart === 0 ? () => alert("Спочатку оберіть коктейль") : () => setShowModal(true) } className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+        <Box onClick={ cartItems.length === 0 ? () => alert("Спочатку оберіть коктейль") : () => setShowModal(true) } className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
           <h2>Cart</h2>
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           <span className="cart_counter">{numberCart}</span>
