@@ -190,7 +190,7 @@ code {
 
 .modal_list_item {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   
 }

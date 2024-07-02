@@ -58,7 +58,7 @@ function App() {
     if (isItemInCart) {
     setCartItems(
         cartItems.map((cartItem) => // if the item is already in the cart, increase the quantity of the item
-        cartItem.id === item.id
+        cartItem.idDrink === item.idDrink
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem // otherwise, return the cart item
         )
@@ -86,8 +86,6 @@ console.log(numberCart)
       }
   }, []);
 
-  // Fix alert when cart number > 0, but cartItems is clear
-
   const ModalNew = ({ onClose }) => {
     return(
       <Modal show={showModal} onHide={onClose}>
@@ -100,6 +98,7 @@ console.log(numberCart)
             <div className="modal_list_item" key={elem.idDrink}>
               <img src={elem.strDrinkThumb} alt={elem.strDrink} className='cocktailModal_img'></img>
               <div>{elem.strDrink}</div>
+              <div>{elem.quantity}</div>
             </div>
           ))
           }
@@ -151,7 +150,7 @@ console.log(numberCart)
         <Box onClick={ cartItems.length === 0 ? () => alert("Спочатку оберіть коктейль") : () => setShowModal(true) } className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
           <h2>Cart</h2>
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
-          <span className="cart_counter">{numberCart}</span>
+          <span className="cart_counter">{cartItems.length}</span>
         </Box>
         {/* {showModal && createPortal(
           <ModalContent onClose={() => setShowModal(false)} />,
