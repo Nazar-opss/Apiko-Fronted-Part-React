@@ -2,27 +2,21 @@ import React, { useContext, useState, useCallback, memo, useReducer, useMemo } f
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { CocktailContext } from '../App';
 
-export const Cocktail = (props) => {
-  return ( 
-    <div className='catalog_cocktail' onClick={props.handleOnClick}>    
-      <img src={props.img} alt={props.drinkName} className='catalog_cocktail_img'></img>
-      <div className='catalog_cocktail_nb'>
-        <h3>{props.drinkName}</h3>
-        {/* <NavLink to={`cocktail/${props.idDrink}`}>{props.drinkName}</NavLink> */}
-      </div>
-    </div>
-  )
-}
-
 export const RandomCocktail = (props) => {
+  const navigate = useNavigate();
   return ( 
     <div className='random_cocktail' onClick={props.handleOnClick}>
-      <img src={props.img} alt={props.drinkName} className='random_cocktail_img'></img>
+      <img 
+        src={props.img} 
+        alt={props.drinkName} 
+        onClick={() => navigate(`catalog/cocktail/${props.idDrink}`)} 
+        className='random_cocktail_img'>
+      </img>
       <div className='random_cocktail_nb'>
-        <h3>{props.drinkName}</h3>
+        <h3 onClick={() => navigate(`catalog/cocktail/${props.idDrink}`)}>{props.drinkName}</h3>
         {props.order}
       </div>
     </div>
@@ -67,12 +61,11 @@ function MainPage (props) {
   
   const { cocktail } = useFetchCocktails()
   
-  const { strDrinkThumb, strDrink } = cocktail
+  const { strDrinkThumb, strDrink, idDrink } = cocktail
   
   const handleSubmit = () => {
     context.setNumber(context.numberCart + 1)
-    console.log(strDrink)
-    console.log(context.numberCart)
+    context.addToCart(cocktail)    
   }
 
 console.log(cocktail)
@@ -81,10 +74,12 @@ console.log(cocktail)
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
         <h2>Персональна рекомендація: {}</h2>
-        <RandomCocktail img={strDrinkThumb} drinkName={strDrink} 
-        order={<Order handleClick={handleSubmit} />}/>
-
-        {/* order={<Order handleClick={context.handleClick} />}/>  */}
+        <RandomCocktail 
+          img={strDrinkThumb} 
+          drinkName={strDrink} 
+          order={<Order handleClick={handleSubmit} />}
+          idDrink={idDrink}
+          />
       </div>
     </div>
   )

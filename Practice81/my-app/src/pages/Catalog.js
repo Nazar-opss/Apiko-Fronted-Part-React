@@ -2,8 +2,19 @@ import React from 'react'
 import { useContext, useState, useEffect } from 'react'
 import { CocktailContext } from '../App'
 import { useLoaderData, useParams, useNavigate } from 'react-router-dom'
-import { Cocktail } from './MainPage'
 // TODO: ...start separated page about each cocktail 
+
+const Cocktail = (props) => {
+  return ( 
+    <div className='catalog_cocktail' onClick={props.handleOnClick}>    
+      <img src={props.img} alt={props.drinkName} className='catalog_cocktail_img'></img>
+      <div className='catalog_cocktail_nb'>
+        <h3>{props.drinkName}</h3>
+        {/* <NavLink to={`cocktail/${props.idDrink}`}>{props.drinkName}</NavLink> */}
+      </div>
+    </div>
+  )
+}
 
 function Catalog() {
   const { letter, name } = useParams()
@@ -25,10 +36,7 @@ function Catalog() {
               drinkName={drink.strDrink} 
               // idDrink={drink.idDrink}
               handleOnClick={() =>  navigate(`../cocktail/${drink.idDrink}`)} 
-              // handleOnClick={() => console.log(`Handle ${drink.strDrink} `)} 
-
-
-              />
+            />
           ))
         }
       </div>
@@ -37,7 +45,9 @@ function Catalog() {
   }
   return (
     <div>
-      Cocktails for {name || letter}
+      <h4>
+        Cocktails for {name || letter}
+      </h4>
       <FillCatalog/>
     </div>
   )

@@ -89,7 +89,8 @@ code {
   cursor: pointer;
 }
 .random_cocktail_img{
-  border-radius: 5%;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .random_cocktail_nb {
@@ -166,7 +167,7 @@ code {
   width: 25%;
 }
 .cocktailPage_img {
-  border-radius: 5%;
+  border-radius: 8px;
 }
 .cocktailPage > button {
   margin-top: 21.28px;
@@ -190,10 +191,11 @@ code {
 
 .modal_list_item {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  
+  padding: 5px 20px;
 }
 .cocktailModal_img{
   width: 20%;
+  border-radius: 8px;
 }

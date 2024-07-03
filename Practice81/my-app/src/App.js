@@ -77,8 +77,6 @@ function App() {
 console.log(cartItems)
 console.log(numberCart)
 
-// delete quantity or fix it
-
   useEffect(() => {
     const cartItems = localStorage.getItem("cartItems");
       if (cartItems) {
@@ -115,26 +113,6 @@ console.log(numberCart)
     )
   }
 
-  const ModalContent = ({ onClose }) => {
-    console.log(cartItems.length)
-    // TODO: list added to cart items
-    return(
-      <div className="modal">
-        <h1>Корзина</h1> 
-        {
-          cartItems.map((elem) => (
-            <div className="modal_list_item" key={elem.idDrink}>
-              <img src={elem.strDrinkThumb} alt={elem.strDrink} className='cocktailModal_img'></img>
-              <div>{elem.strDrink}</div>
-            </div>
-          ))
-        }
-        <button onClick={onClose}>Close</button>
-        <button onClick={clearCart}>Підтвердити</button>
-      </div>
-    )
-  }
-
   return (
     <div className="App">
       <header className="header">
@@ -152,10 +130,6 @@ console.log(numberCart)
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           <span className="cart_counter">{cartItems.length}</span>
         </Box>
-        {/* {showModal && createPortal(
-          <ModalContent onClose={() => setShowModal(false)} />,
-          document.getElementById('modal-root'),
-        )} */}
         {showModal && createPortal(
           <ModalNew onClose={() => setShowModal(false)} />,
           document.getElementById('modal-root'),
