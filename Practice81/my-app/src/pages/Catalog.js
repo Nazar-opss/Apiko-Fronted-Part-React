@@ -49,5 +49,5 @@ function Catalog() {
     </div>
   )
 }
-// letter.toUpperCase(letter) WTF, find smth better
+
 export default Catalog
