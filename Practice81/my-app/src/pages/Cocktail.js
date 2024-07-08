@@ -10,9 +10,7 @@ function Cocktail() {
 
   const handleSubmit = () => {
     context.setNumber(context.numberCart + 1)
-    // context.setCartItems(context.cartItems + jsonData.drinks[0])
     context.addToCart(jsonData.drinks[0])
-    
   }
 
   useEffect(() => {
@@ -20,7 +18,7 @@ function Cocktail() {
   }, [context.cartItems]);
 
   const { strDrink, strDrinkThumb } = jsonData.drinks[0]
-  // console.log(strDrink)
+
   return (
     <div className='cocktailPage'>
       <h4>

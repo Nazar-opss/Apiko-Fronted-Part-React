@@ -1,14 +1,11 @@
-import { Link, Navigate, Outlet, Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import logo from './logo.svg'
 import { createPortal } from 'react-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import React, { useState, useCallback, memo, useReducer, useRef, useMemo, useEffect } from "react";
-import MainPage from "./pages/MainPage.js"
-import Catalog from "./pages/Catalog.js"
-import Cocktail from "./pages/Cocktail.js"
+import React, { useState, useEffect } from "react";
 import Footer from "./components/Footer.js";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -19,12 +16,10 @@ function App() {
   const [numberCart, setNumber] = useState(0)
   const [search, setSearch] = useState('')
   const [cartItems, setCartItems] = useState(localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : [])
-  const [searchParams, setSearchParams] = useSearchParams()
 
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
-
 
   const navigateHome = () => {
     navigate("/")
@@ -33,24 +28,11 @@ function App() {
   const navigateSearch = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      // console.log(search)
-      // setSearchParams({s: search})
-      // console.log(searchParams)
-      // console.log((`catalog/search/?s=${search}`))
-      // navigate(`catalog/search/${search}`)
-      // navigate({
-      //   pathname: `catalog/search/${searchParams}`,
-      // })
       navigate(`catalog/search/${search}`)
       setSearch('')
       // TODO in future: make it like ?s={search}
     }
   }
-
-  // const handleClick = () => {
-  //   setNumber(numberCart + 1)
-    
-  // }
 
   const addToCart = (item) => {
     const isItemInCart = cartItems.find((cartItem) => cartItem.idDrink === item.idDrink); // check if the item is already in the cart
@@ -69,8 +51,8 @@ function App() {
   };
 
   const clearCart = () => {
-    setCartItems([]); // set the cart items to an empty array
-    console.log(cartItems)
+    setCartItems([]);
+    console.log('Ordered: ', cartItems.map(item => item.strDrink))
     setShowModal(false)
   };
   
@@ -84,13 +66,17 @@ console.log(numberCart)
       }
   }, []);
 
-  const ModalNew = ({ onClose }) => {
+  const CartModal = ({ onClose }) => {
     return(
       <Modal show={showModal} onHide={onClose}>
         <Modal.Header closeButton>
           <Modal.Title>Корзина</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <div style={{display:'flex', justifyContent:'flex-end'}}>
+          <h4>Назва</h4>
+          <h4 style={{marginLeft: '60px'}}>Кількість</h4>
+        </div>
           {
             cartItems.map((elem) => (
             <div className="modal_list_item" key={elem.idDrink}>
@@ -103,7 +89,7 @@ console.log(numberCart)
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={onClose}>
-            Close
+            Закрити
           </Button>
           <Button variant="primary" onClick={clearCart}>
             Підтвердити
@@ -126,12 +112,12 @@ console.log(numberCart)
         </Box> 
       
         <Box onClick={ cartItems.length === 0 ? () => alert("Спочатку оберіть коктейль") : () => setShowModal(true) } className='cart'sx={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-          <h2>Cart</h2>
+          <h2 className="cart_text">Корзина</h2>
           <ShoppingCartIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }}/>
           <span className="cart_counter">{cartItems.length}</span>
         </Box>
         {showModal && createPortal(
-          <ModalNew onClose={() => setShowModal(false)} />,
+          <CartModal onClose={() => setShowModal(false)} />,
           document.getElementById('modal-root'),
         )}
       </header>
@@ -139,17 +125,6 @@ console.log(numberCart)
       <main>
         <div className="main_container">
           <Outlet></Outlet>
-          {/* <Routes>
-            <Route key='Main' exact path="/" 
-              Component={() => <MainPage />}
-            />
-            <Route key='Catalog' path="/Catalog/:letter" 
-              Component={() => <Catalog />}
-            />
-            <Route key='Cocktail' path="/Cocktail" 
-              Component={() => <Cocktail />}
-            />
-          </Routes> */}
         </div>
       </main>
       <footer>

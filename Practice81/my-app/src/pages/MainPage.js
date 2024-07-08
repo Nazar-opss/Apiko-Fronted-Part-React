@@ -1,13 +1,16 @@
-import React, { useContext, useState, useCallback, memo, useReducer, useMemo } from 'react'
+import React, { useContext, useState } from 'react'
 import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CocktailContext } from '../App';
+
+// Clear code from useless comment and imports, use suspense
 
 export const RandomCocktail = (props) => {
   const navigate = useNavigate();
   return ( 
+    <>
     <div className='random_cocktail' onClick={props.handleOnClick}>
       <img 
         src={props.img} 
@@ -15,11 +18,12 @@ export const RandomCocktail = (props) => {
         onClick={() => navigate(`catalog/cocktail/${props.idDrink}`)} 
         className='random_cocktail_img'>
       </img>
-      <div className='random_cocktail_nb'>
-        <h3 onClick={() => navigate(`catalog/cocktail/${props.idDrink}`)}>{props.drinkName}</h3>
-        {props.order}
-      </div>
     </div>
+    <div className='random_cocktail_nb'>
+      <h3 onClick={() => navigate(`catalog/cocktail/${props.idDrink}`)}>{props.drinkName}</h3>
+      {props.order}
+    </div>
+    </>
   )
 }
 
@@ -39,7 +43,6 @@ export const Order = (props) => {
 
 const useFetchCocktails = () => {
     const [cocktail, setCocktail] = useState('')
-    const context = useContext(CocktailContext)
     
     useEffect(() => {
       const fetchData = async () => {
@@ -73,7 +76,7 @@ console.log(cocktail)
     <div className=''>
       <h2  >Для вибору коктейлю скористайтесь пошуком або фільтром</h2>
       <div className='random'>
-        <h2>Персональна рекомендація: {}</h2>
+        <h2>Персональна рекомендація: </h2>
         <RandomCocktail 
           img={strDrinkThumb} 
           drinkName={strDrink} 
