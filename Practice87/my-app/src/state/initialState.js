@@ -1,3 +1,6 @@
+import { themes } from "../utils/const"
 export const initialState = {
-    theme: [],
+    // theme: themes.dark
+    theme: 'light',
+    fetchStore: []
 }

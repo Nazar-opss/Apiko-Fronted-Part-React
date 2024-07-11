@@ -7,45 +7,55 @@ import { themes } from "./utils/const.js";
 import GridLoader from "react-spinners/GridLoader.js"
 import { PopUp } from "./components/PopUp.js";
 import { Film } from "./components/Film.js";
-import { Link, Navigate, Route, Routes, Outlet } from "react-router-dom";
+import { Link, Navigate, Route, Routes, Outlet, useLoaderData } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const useFetchMovies = (url) => {
-    const [films, setFilms] = useState([]);
-    const [page, setPage] = useState(1)
-    const [total_pages, setTotalPages] = useState(0)
-    const [loading, setLoading] = useState(true)
-    const [urlLink, setUrl] = useState(url)
+// const useFetchMovies = (url) => {
+//     const [films, setFilms] = useState([]);
+//     const [page, setPage] = useState(1)
+//     const [total_pages, setTotalPages] = useState(0)
+//     const [loading, setLoading] = useState(true)
+//     const [urlLink, setUrl] = useState(url)
     
-    useEffect(() => {
-        async function fetch() {
-            try {
-                setLoading(true)
-                setFilms([])
-                let fetchFilms1 = await API.fetchMovies(urlLink)
-                setFilms(fetchFilms1.results)
-                setPage(fetchFilms1.page)
-                setTotalPages(fetchFilms1.total_pages)
-            } catch (error) {
-                console.log("Error")
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetch()
-    }, [urlLink])
+//     useEffect(() => {
+//         async function fetch() {
+//             try {
+//                 setLoading(true)
+//                 setFilms([])
+//                 let fetchFilms1 = await API.fetchMovies(urlLink)
+//                 setFilms(fetchFilms1.results)
+//                 setPage(fetchFilms1.page)
+//                 setTotalPages(fetchFilms1.total_pages)
+//             } catch (error) {
+//                 console.log("Error")
+//             } finally {
+//                 setLoading(false)
+//             }
+//         }
+//         fetch()
+//     }, [urlLink])
     
-    return [{data: films, total: total_pages, page: page, loading: loading}, setUrl]
-}
+//     return [{data: films, total: total_pages, page: page, loading: loading}, setUrl]
+// }
 
 export const FilmList = (props) => {
+    useEffect(() =>{
+
+    })
+
     const [selectedFilm, setSelectedFilm] = useState(null)
     
-    const url = props.url;
+    const theme = useSelector((state) => state.theme.theme)
+    const currentTheme = themes[theme];
 
-    const [{data, total, page, loading}, setUrl] = useFetchMovies(url)
+    const { results, page, total_pages } = useLoaderData();
+
+    const url = props.url;
+    console.log(url)
+    // const [{data, total, page, loading}, setUrl] = useFetchMovies(url)
     
     function setPageFetch(page){
-        setUrl(`${url}&page=${page}`);
+        // setUrl(`${url}&page=${page}`);
     }
 
     function handleFilm(selectedFilm) {
@@ -54,25 +64,27 @@ export const FilmList = (props) => {
 
     return(
         <div>
-            <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: `${props.color}` }}>{props.header}</h1>
+            <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTheme.foreground }}>{props.header}</h1>
             <Pagination
                 page={page}
-                totalPages={total}
+                // totalPages={total}
+                totalPages={total_pages}
                 changePage={setPageFetch}
-                color={props.color}
+                color={currentTheme.foreground}
             />
             <GridLoader
                     className="loader"
                     size={100}
-                    color={props.color}
-                    loading={loading}
+                    color={currentTheme.foreground}
+                    // loading={loading}
                     speedMultiplier={1.5}
                     aria-label="Loading Spinner"
                     data-testid="loader"
                 />
             {
-                data.map(film => (
-                    <Film key={film.id} {...film} openLink={handleFilm} color={props.color} />
+                //data.map(film => (
+                results.map(film => (
+                    <Film key={film.id} {...film} openLink={handleFilm} color={currentTheme.foreground} />
                 ))
             }
             {selectedFilm && (
@@ -83,20 +95,22 @@ export const FilmList = (props) => {
 }
 
 const Content = (props) => {
-    const theme = useContext(ThemeContext)
+
     const blankWIP = () => {
         alert('This Page is under construction')
     }
     console.log()
+    const theme = useSelector((state) => state.theme.theme)
+    const currentTheme = themes[theme];
     return (
         <div className="header">
             <nav className="router">
-                <Link to={'/'} style={{color: `${theme.theme.foreground}`}}>Home</Link>
-                <Link to={'/top_rated'} style={{color: `${theme.theme.foreground}`}}>Top Rated Movies</Link>
-                <Link to={'/tv_shows'} onClick={blankWIP} style={{color: `${theme.theme.foreground}`}}>TV Shows</Link>
+                <Link to={'/'} style={{color: currentTheme.foreground}}>Home</Link>
+                <Link to={'/top_rated'} style={{color:currentTheme.foreground}}>Top Rated Movies</Link>
+                <Link to={'/tv_shows'} onClick={blankWIP} style={{color: currentTheme.foreground}}>TV Shows</Link>
             </nav>
 
-            <ThemedToggleButton onClick={theme.toggleTheme} />
+            <ThemedToggleButton />
 
             <Outlet></Outlet>
             {/*         
@@ -127,18 +141,13 @@ const Content = (props) => {
     )
 }
 
-export const Movies = () => {
-    const [currentTheme, setTheme] = useState(themes.dark)
+export const Movies = () => {            
+    const theme = useSelector((state) => state.theme.theme)
+    const currentTheme = themes[theme];
+
     document.body.style.backgroundColor = currentTheme.background
 
-    const toggleTheme = () => {
-        setTheme((prevTheme) => (
-            prevTheme === themes.dark ? themes.light : themes.dark
-        ));
-    };
     return(
-        <ThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
-            <Content />
-        </ThemeContext.Provider>
+        <Content />
     )
 }

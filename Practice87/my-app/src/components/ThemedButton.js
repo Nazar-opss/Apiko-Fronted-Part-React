@@ -1,18 +1,27 @@
 import React from 'react'
 import { themes } from '../utils/const'
 import { useContext } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { themeChanged } from '../state/slice/themeSlice'
 
-export const ThemeContext = React.createContext({
-    theme: themes.dark,
-    toggleTheme: () => {}
-})
+// export const ThemeContext = React.createContext({
+//     theme: themes.dark,
+//     toggleTheme: () => {}
+// })
 
 export const ThemedToggleButton = (props) =>{
-    const theme = useContext(ThemeContext)
+    // const theme = useContext(ThemeContext)
+
+    const theme = useSelector((state) => state.theme.theme)
+    const dispatch = useDispatch();
+    console.log(theme)
+
+    const currentTheme = themes[theme];
     return (
         <button
-            onClick={ props.onClick }
-            style={{ backgroundColor: `${theme.theme.background}`, backgroundImage: `url(${theme.theme.icon})`, width: '80px', height: '80px', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}
+            // onClick={ props.onClick }
+            onClick={() => dispatch(themeChanged())}
+            style={{ backgroundColor: currentTheme.background, backgroundImage: `url(${currentTheme.icon})`, width: '80px', height: '80px', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}
             className='themetoggle'
         >
         </button>
