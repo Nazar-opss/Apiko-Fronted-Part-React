@@ -9,7 +9,7 @@ import { themeChanged } from '../state/slice/themeSlice'
 //     toggleTheme: () => {}
 // })
 
-export const ThemedToggleButton = (props) =>{
+export const ThemedToggleButton = () =>{
     // const theme = useContext(ThemeContext)
 
     const theme = useSelector((state) => state.theme.theme)
@@ -19,7 +19,6 @@ export const ThemedToggleButton = (props) =>{
     const currentTheme = themes[theme];
     return (
         <button
-            // onClick={ props.onClick }
             onClick={() => dispatch(themeChanged())}
             style={{ backgroundColor: currentTheme.background, backgroundImage: `url(${currentTheme.icon})`, width: '80px', height: '80px', backgroundRepeat: 'no-repeat', backgroundSize: 'contain' }}
             className='themetoggle'

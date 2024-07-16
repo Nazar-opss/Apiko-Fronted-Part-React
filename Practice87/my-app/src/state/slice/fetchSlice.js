@@ -1,15 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "../initialState";
+
+const initialState = {fetchList: []}
 
 const fetchSlice = createSlice({
     name:'fetch',
     initialState,
     reducers: {
-        fetchStore(state, action) {
-            state.fetchStore += state.fetchStore;
+        setFetchList: (state, action) => {
+            state.fetchList = action.payload
         }
     }
 })
-export const { fetchStore } = fetchSlice.actions
+export const { setFetchList } = fetchSlice.actions
 
 export default fetchSlice.reducer

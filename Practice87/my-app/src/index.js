@@ -16,11 +16,11 @@ const fetchDetails = async (urlLink) => {
   let fetchFilms1 = await Api.fetchMovies(urlLink)
   const { results, page, total_pages } = fetchFilms1
   console.log(fetchFilms1)
-  // const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
-  // const jsonData = await response.json();
-  // return { jsonData }
+
   return { results, page, total_pages }
 }
+
+// fix router to work pagination with render
 
 const router = createBrowserRouter([
   
@@ -29,19 +29,21 @@ const router = createBrowserRouter([
     element: <Movies />,
     children: [
       {
+        path:"/:page",
         element:  <FilmList
-                  // url={`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`}
-                  header='Favorite Movies'/>,
+                  url={`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`}
+                  header='Favorite Movies'
+                  />,
         index: true,
-        loader:() => fetchDetails(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`)
+        loader: async () => fetchDetails(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`)
       },
       {
         path: "/top_rated",
         element: <FilmList
-                  // url={'https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc'}
+                  url={'https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc'}
                   header='Top Rated Movies'
                   />,
-        loader:() => fetchDetails('https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc')
+        // loader:() => fetchDetails('https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc')
       },
       {
         path: "/tv_shows",
@@ -54,13 +56,13 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <RouterProvider
         router={router}
         fallbackElement={"loading"}
       />
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 

@@ -5,8 +5,7 @@ import fetchSlice from "./slice/fetchSlice";
 export const store = configureStore({
     reducer: {
         theme: themeSlice,
-        fetchStore: fetchSlice,
+        fetchList: fetchSlice,
     },
-    preloadedState: {}
 }
 );
