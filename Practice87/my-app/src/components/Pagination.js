@@ -1,12 +1,14 @@
 import React from 'react'
+import { redirect, useNavigate } from 'react-router-dom';
 
 export const Pagination = (props) => {
+    const navigate = useNavigate();
     return (
         <div className='Pagination'>
             <div style={{color: `${props.color}`}}>Current page: {props.page}</div>
             <div className='Buttons'>
-                <button onClick={() => props.changePage(props.page - 1)} disabled={props.page === 1}>Previous page </button>
-                <button onClick={() => props.changePage(props.page + 1)} disabled={props.page === props.totalPages}>Next Page</button>
+                <button onClick={() => navigate(`/${props.page - 1}`)} disabled={props.page === 1}>Previous page </button>
+                <button onClick={() => navigate(`/${props.page + 1}`)} disabled={props.page === props.totalPages}>Next Page</button>
             </div>
         </div>
     )

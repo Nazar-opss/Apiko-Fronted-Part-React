@@ -11,39 +11,54 @@ import { Link, Navigate, Route, Routes, Outlet, useLoaderData } from "react-rout
 import { useDispatch, useSelector } from "react-redux";
 import { setFetchList } from "./state/slice/fetchSlice.js";
 import { store } from "./state/store.js";
+import { useNavigate } from "react-router-dom";
 
 const useFetchMovies = (url) => {
     // const { results, page, total_pages } = useLoaderData();
-    const [films, setFilms] = useState([]);
-    const [page, setPage] = useState(1)
-    const [total_pages, setTotalPages] = useState(0)
+    // const [films, setFilms] = useState([]);
+    // const [page, setPage] = useState(1)
+    // const [total_pages, setTotalPages] = useState(0)
+    // const [urlLink, setUrl] = useState(url)
+
     const [loading, setLoading] = useState(true)
-    const [urlLink, setUrl] = useState(url)
+
+    
 
     const dispatch = useDispatch()
     
+    const { results, page, total_pages } = useLoaderData();
+
+    console.log(results, page, total_pages)
+
     useEffect(() => {
+        console.log('Loading state before fetch:', loading);
         async function fetch() {
             try {
-                setLoading(true)
+
                 // setFilms([])
-                dispatch(setFetchList([]))
-                let fetchFilms1 = await API.fetchMovies(urlLink)
-                dispatch(setFetchList(fetchFilms1.results))
+                // dispatch(setFetchList([]))
+                // let fetchFilms1 = await API.fetchMovies(urlLink)
+                // dispatch(setFetchList(fetchFilms1.results))
                 // setFilms(fetchFilms1.results)
-                setPage(fetchFilms1.page)
-                setTotalPages(fetchFilms1.total_pages)
+                // setPage(fetchFilms1.page)
+                // setTotalPages(fetchFilms1.total_pages)
+                setLoading(true)
+                console.log('Loading state after setting true:', loading);
+                dispatch(setFetchList(results))
+                // setPage(page_load)
+                // setTotalPages(total_pages_load)
             } catch (error) {
                 console.log("Error")
             } finally {
                 setLoading(false)
+                console.log('Loading state after setting false:', loading);
+
             }
         }
         fetch()
-        console.log('Fetching movies with URL:', urlLink);
-    }, [urlLink, dispatch])
-
-    return [{ total: total_pages, page: page, loading: loading}, setUrl]
+        console.log('Fetching movies with URL:', results);
+    }, [dispatch, results])
+    return { total: total_pages, page: page, loading: loading}
 }
 
 export const FilmList = (props) => {
@@ -59,13 +74,13 @@ export const FilmList = (props) => {
 
     console.log(store.getState())
 
-    const url = props.url;
-    console.log(url)
-    const [{ total, page, loading}, setUrl] = useFetchMovies(url)
+    // const url = props.url;
+    // console.log(url)
+    const { total, page, loading} = useFetchMovies()
     
-    function setPageFetch(page){
-        setUrl(`${url}&page=${page}`);
-    }
+    // function setPageFetch(page){
+    //     setUrl(`${url}&page=${page}`);
+    // }
 
     function handleFilm(selectedFilm) {
         setSelectedFilm(selectedFilm)
@@ -78,7 +93,7 @@ export const FilmList = (props) => {
                 page={page}
                 totalPages={total}
                 // totalPages={total_pages}
-                changePage={setPageFetch}
+                // changePage={setPageFetch}
                 color={currentTheme.foreground}
             />
             <GridLoader
@@ -150,7 +165,12 @@ const Content = (props) => {
     )
 }
 
-export const Movies = () => {            
+export const Movies = () => {     
+    const navigate = useNavigate();
+    useEffect(()=> {
+        navigate('/1')
+    },[navigate])
+    
     const theme = useSelector((state) => state.theme.theme)
     const currentTheme = themes[theme];
 
