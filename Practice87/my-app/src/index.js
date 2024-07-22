@@ -10,6 +10,7 @@ import { Movies, FilmList } from './Movies';
 import { store } from './state/store';
 import { Provider } from 'react-redux'
 import Api from './utils/Api';
+import GridLoader from 'react-spinners/GridLoader';
 
 const fetchDetails = async (page_load, name) => { 
 
@@ -55,7 +56,15 @@ root.render(
     <Provider store={store}>
       <RouterProvider
         router={router}
-        fallbackElement={"loading"}
+        fallbackElement={<GridLoader
+                    className="loader"
+                    size={100}
+                    color={'black'}
+                    loading={true}
+                    speedMultiplier={1.5}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                />}
       />
     </Provider>
   // </React.StrictMode>

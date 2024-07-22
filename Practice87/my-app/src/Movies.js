@@ -82,8 +82,6 @@ export const FilmList = (props) => {
             <Pagination
                 page={page}
                 totalPages={total}
-                // totalPages={total_pages}
-                // changePage={setPageFetch}
                 header={props.header}
                 color={currentTheme.foreground}
             />
@@ -98,7 +96,6 @@ export const FilmList = (props) => {
                 />
             {
                 fetchList.map(film => (
-                //data.map(film => (
                     <Film key={film.id} {...film} openLink={handleFilm} color={currentTheme.foreground} />
                 ))
             }
@@ -155,10 +152,10 @@ const Content = (props) => {
 }
 
 export const Movies = () => {     
-    const navigate = useNavigate();
-    useEffect(()=> {
-        navigate('/1')
-    },[navigate])
+    // const navigate = useNavigate();
+    // useEffect(()=> {
+    //     navigate('/1')
+    // },[navigate])
     
     const theme = useSelector((state) => state.theme.theme)
     const currentTheme = themes[theme];
