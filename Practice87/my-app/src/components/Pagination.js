@@ -1,5 +1,5 @@
 import React from 'react'
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect, useNavigate, useParams } from 'react-router-dom';
 
 export const Pagination = (props) => {
     const navigate = useNavigate();
@@ -7,8 +7,10 @@ export const Pagination = (props) => {
         <div className='Pagination'>
             <div style={{color: `${props.color}`}}>Current page: {props.page}</div>
             <div className='Buttons'>
-                <button onClick={() => navigate(`/${props.page - 1}`)} disabled={props.page === 1}>Previous page </button>
-                <button onClick={() => navigate(`/${props.page + 1}`)} disabled={props.page === props.totalPages}>Next Page</button>
+                <button onClick={props.header === 'Top Rated Movies' ? () => navigate(`/top_rated/${props.page - 1}`) : () => navigate(`/${props.page - 1}`) } disabled={props.page === 1}>Previous page </button>
+                <button onClick={props.header === 'Top Rated Movies' ? () => navigate(`/top_rated/${props.page + 1}`) : () => navigate(`/${props.page + 1}`) } disabled={props.page === props.totalPages}>Next Page</button>
+                
+                {/* <button onClick={() => navigate(`/${props.page + 1}`)} disabled={props.page === props.totalPages}>Next Page</button> */}
             </div>
         </div>
     )

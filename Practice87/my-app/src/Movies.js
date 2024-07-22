@@ -7,7 +7,7 @@ import { themes } from "./utils/const.js";
 import GridLoader from "react-spinners/GridLoader.js"
 import { PopUp } from "./components/PopUp.js";
 import { Film } from "./components/Film.js";
-import { Link, Navigate, Route, Routes, Outlet, useLoaderData } from "react-router-dom";
+import { Link, Navigate, Route, Routes, Outlet, useLoaderData, useLocation, useRevalidator } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setFetchList } from "./state/slice/fetchSlice.js";
 import { store } from "./state/store.js";
@@ -22,8 +22,6 @@ const useFetchMovies = (url) => {
 
     const [loading, setLoading] = useState(true)
 
-    
-
     const dispatch = useDispatch()
     
     const { results, page, total_pages } = useLoaderData();
@@ -31,10 +29,10 @@ const useFetchMovies = (url) => {
     console.log(results, page, total_pages)
 
     useEffect(() => {
+        
         console.log('Loading state before fetch:', loading);
         async function fetch() {
             try {
-
                 // setFilms([])
                 // dispatch(setFetchList([]))
                 // let fetchFilms1 = await API.fetchMovies(urlLink)
@@ -43,6 +41,7 @@ const useFetchMovies = (url) => {
                 // setPage(fetchFilms1.page)
                 // setTotalPages(fetchFilms1.total_pages)
                 setLoading(true)
+                console.log(loading)
                 console.log('Loading state after setting true:', loading);
                 dispatch(setFetchList(results))
                 // setPage(page_load)
@@ -70,18 +69,9 @@ export const FilmList = (props) => {
 
     const fetchList = useSelector((state) => state.fetchList.fetchList)
     console.log(fetchList)
-    // const { results, page, total_pages } = useLoaderData();
 
-    console.log(store.getState())
-
-    // const url = props.url;
-    // console.log(url)
     const { total, page, loading} = useFetchMovies()
     
-    // function setPageFetch(page){
-    //     setUrl(`${url}&page=${page}`);
-    // }
-
     function handleFilm(selectedFilm) {
         setSelectedFilm(selectedFilm)
     }
@@ -94,6 +84,7 @@ export const FilmList = (props) => {
                 totalPages={total}
                 // totalPages={total_pages}
                 // changePage={setPageFetch}
+                header={props.header}
                 color={currentTheme.foreground}
             />
             <GridLoader
@@ -118,8 +109,6 @@ export const FilmList = (props) => {
     )
 }
 
-//////////////////////////////////////////////////////////////// theme easier pls props
-
 const Content = (props) => {
 
     const blankWIP = () => {
@@ -129,8 +118,8 @@ const Content = (props) => {
     return (
         <div className="header">
             <nav className="router">
-                <Link to={'/'} style={{color: props.currentTheme.foreground}}>Home</Link>
-                <Link to={'/top_rated'} style={{color: props.currentTheme.foreground}}>Top Rated Movies</Link>
+                <Link to={'/1'} style={{color: props.currentTheme.foreground}}>Home</Link>
+                <Link to={'/top_rated/1'} style={{color: props.currentTheme.foreground}}>Top Rated Movies</Link>
                 <Link to={'/tv_shows'} onClick={blankWIP} style={{color: props.currentTheme.foreground}}>TV Shows</Link>
             </nav>
 

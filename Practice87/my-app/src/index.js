@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { BrowserRouter,
+import { 
       createBrowserRouter,
     Navigate,
-    redirect,
     RouterProvider,
-    useNavigate, 
 } from 'react-router-dom'
 import { Movies, FilmList } from './Movies';
 import { store } from './state/store';
 import { Provider } from 'react-redux'
 import Api from './utils/Api';
 
+const fetchDetails = async (page_load, name) => { 
 
-const fetchDetails = async (page_load, name) => {
-
-  let fetchFilms1 = await Api.fetchMovies(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=${page_load}&sort_by=created_at.asc`)
+  let fetchFilms1 = await Api.fetchMovies(`https://api.themoviedb.org/3/account/Invuukeeee/${name}/movies?language=en-US&page=${page_load}&sort_by=created_at.asc`)
   const { results, page, total_pages } = fetchFilms1
   console.log(fetchFilms1)
 
   return { results, page, total_pages }
 }
-
-// fix path '/' and make top_rated
 
 const router = createBrowserRouter([
   {
@@ -31,31 +26,23 @@ const router = createBrowserRouter([
     element: <Movies />,
     children: [
       {
-            
-            path:"/:page",
-            index: true,
-            element:  <FilmList
-                      // url={`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`}
-                      header='Favorite Movies'
-                      />,
-            loader: async ({ params }) => fetchDetails(params.page),
-          
-        
-        // loader: async () => fetchDetails(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`)
+        path:"/:page",
+        index: true,
+        element:  <FilmList
+                  header='Favorite Movies'
+                  />,
+        loader: async ({ params }) => fetchDetails(params.page, 'favorite'),
       },
-      
       {
         path: "/top_rated/:page",
         element: <FilmList
-                  url={'https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc'}
                   header='Top Rated Movies'
                   />,
-        loader: async ({ params }) => fetchDetails(params.page),
-        // loader:() => fetchDetails('https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc')
+        loader: async ({ params }) => fetchDetails(params.page, 'rated'),
       },
       {
         path: "/tv_shows",
-        element: <Navigate to='/'/>
+        element: <Navigate to='/1'/>
       }
     ],
   },
