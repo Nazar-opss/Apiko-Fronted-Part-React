@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Pagination } from "./components/Pagination.js";
 import { ThemedToggleButton } from "./components/ThemedButton.js";
-import API from "./utils/Api.js";
 import { themes } from "./utils/const.js";
 import GridLoader from "react-spinners/GridLoader.js"
 import { PopUp } from "./components/PopUp.js";
 import { Film } from "./components/Film.js";
 import { Link, Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchContent } from "./state/slice/fetchSlice.js";
+import { fetchMoviesList } from "./state/slice/fetchSlice.js";
 import { store } from "./state/store.js";
 
 // const useFetchMovies = (url) => {
@@ -59,16 +58,20 @@ import { store } from "./state/store.js";
 // }
 
 export const FilmList = (props) => {
+    const [page_fetch, setPageFetch] = useState('')
+    const [selectedFilm, setSelectedFilm] = useState(null)
+
     const dispatch = useDispatch()
+    
     
     useEffect(() => {
         console.log('useEffect running');
-        dispatch(fetchContent())
-    }, [dispatch])
-    
-    const [selectedFilm, setSelectedFilm] = useState(null)
-
-    //The reason this happens is because the api call is asynchronus, it doesn't populate the state immediately, so the render happens first and tries to read .current from the initial weather state null.
+        
+        props.header === 'Top Rated Movies' 
+        ? dispatch(fetchMoviesList({pageFetch: page_fetch, fetchCategory: 'rated'})) 
+        : dispatch(fetchMoviesList({pageFetch: page_fetch, fetchCategory: 'favorite'}))
+        
+    }, [dispatch, page_fetch, props.header])
     
     const theme = useSelector((state) => state.theme.theme)
     const currentTheme = themes[theme];
@@ -77,12 +80,22 @@ export const FilmList = (props) => {
     const isLoading = useSelector((state) => state.fetchList.isLoading)
     const error = useSelector((state) => state.fetchList.error)
     
-    const { page, total_pages, results } = fetches
-
-    console.log(results)
+    let {page, total_pages, results } = fetches
+    
+    console.log(page)
     
     console.log(store.getState())
+    
+    //Fix page fetch, return every page to 1 after change category
 
+    const fetchMinus= () => {
+        setPageFetch(page - 1)
+        // page = page - 1 
+    }
+    const fetchPlus= () => {
+        setPageFetch(page + 1)
+        // page = page + 1
+    }
     
     // const fetchList = useSelector((state) => state.fetchList.fetches)
     // console.log(fetchList)
@@ -95,49 +108,48 @@ export const FilmList = (props) => {
         setSelectedFilm(selectedFilm)
     }
 
-    // if (isLoading) {
-    //     return <GridLoader
-    //     className="loader"
-    //     size={100}
-    //     color={currentTheme.foreground}
-    //     loading={isLoading}
-    //     speedMultiplier={1.5}
-    //     aria-label="Loading Spinner"
-    //     data-testid="loader"
-    // />
-    // }
-    
-    // if (error) {
-    //     return error
-    // }
+    if (error) {
+        return error
+    }
 
     return(
         <div>
             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTheme.foreground }}>{props.header}</h1>
-            {/* <Pagination
+            <Pagination
                 page={page}
                 totalPages={total_pages}
                 header={props.header}
                 color={currentTheme.foreground}
-            /> */}
+                page_fetchMinus={fetchMinus}
+                page_fetchPlus={fetchPlus}
+            />
             <GridLoader
-                    className="loader"
-                    size={100}
-                    color={currentTheme.foreground}
-                    // loading={loading}
-                    speedMultiplier={1.5}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                />
+                className="loader"
+                size={100}
+                color={currentTheme.foreground}
+                loading={isLoading}
+                speedMultiplier={1.5}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+            />
             {
-                // fetchList.map(film => ( */}
-                results.map(film => (
-                    <Film key={film.id} {...film} openLink={handleFilm} color={currentTheme.foreground} />
-                ))
+                results && results.map(film => (
+                    <Film 
+                        key={film.id} 
+                        {...film} 
+                        openLink={handleFilm} 
+                        color={currentTheme.foreground} 
+                    />
+                )) 
             }
-            {selectedFilm && (
-                    <PopUp filmLink={selectedFilm} closePopUp={() => handleFilm(null)}/>
-                )}
+            {
+                selectedFilm && (
+                    <PopUp 
+                        filmLink={selectedFilm} 
+                        closePopUp={() => handleFilm(null)}
+                    />
+                )
+            }
         </div>
     )
 }
@@ -147,11 +159,12 @@ const Content = (props) => {
     const blankWIP = () => {
         alert('This Page is under construction')
     }
+
     return (
         <div className="header">
             <nav className="router">
-                <Link to={'/1'} style={{color: props.currentTheme.foreground}}>Home</Link>
-                <Link to={'/top_rated/1'} style={{color: props.currentTheme.foreground}}>Top Rated Movies</Link>
+                <Link to={'/'} style={{color: props.currentTheme.foreground}}>Home</Link>
+                <Link to={'/top_rated'} style={{color: props.currentTheme.foreground}}>Top Rated Movies</Link>
                 <Link to={'/tv_shows'} onClick={blankWIP} style={{color: props.currentTheme.foreground}}>TV Shows</Link>
             </nav>
 
@@ -197,7 +210,7 @@ export const Movies = () => {
 
     document.body.style.backgroundColor = currentTheme.background
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     // useEffect(() => {
     //     dispatch(fetchContent())

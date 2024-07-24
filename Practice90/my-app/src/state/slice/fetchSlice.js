@@ -17,10 +17,12 @@ const initialState = {
 //     }
 // })
 
-export const fetchContent = createAsyncThunk (
-    'content/fetchContent',
-    async () => {
-        const res = await axios(`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&page=1&sort_by=created_at.asc`,  
+export const fetchMoviesList = createAsyncThunk (
+    'content/fetchMoviesList',
+    async (dataFetch) => {
+        console.log(dataFetch)
+        const{ pageFetch, fetchCategory } = dataFetch
+        const res = await axios(`https://api.themoviedb.org/3/account/Invuukeeee/${fetchCategory}/movies?language=en-US&page=${pageFetch || 1}&sort_by=created_at.asc`,  
             { 
                 headers: {
                     accept: "application/json",
@@ -39,14 +41,15 @@ export const fetchSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(fetchContent.pending, (state) => {
+        builder.addCase(fetchMoviesList.pending, (state) => {
             state.isLoading = true
+            state.fetches = []
         })
-        builder.addCase(fetchContent.fulfilled, (state, action) => {
+        builder.addCase(fetchMoviesList.fulfilled, (state, action) => {
             state.isLoading = false
             state.fetches = action.payload
         })
-        builder.addCase(fetchContent.rejected, (state, action) => {
+        builder.addCase(fetchMoviesList.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.error.message
         })
