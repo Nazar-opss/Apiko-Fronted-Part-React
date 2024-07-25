@@ -10,60 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMoviesList } from "./state/slice/fetchSlice.js";
 import { store } from "./state/store.js";
 
-// const useFetchMovies = (url) => {
-//     // const { results, page, total_pages } = useLoaderData();
-//     // const [films, setFilms] = useState([]);
-//     // const [page, setPage] = useState(1)
-//     // const [total_pages, setTotalPages] = useState(0)
-//     // const [urlLink, setUrl] = useState(url)
-
-//     const [loading, setLoading] = useState(true)
-
-//     const dispatch = useDispatch()
-    
-//     const { results, page, total_pages } = useLoaderData();
-
-//     console.log(results, page, total_pages)
-
-//     useEffect(() => {
-        
-//         console.log('Loading state before fetch:', loading);
-//         async function fetch() {
-//             try {
-//                 // setFilms([])
-//                 // dispatch(setFetchList([]))
-//                 // let fetchFilms1 = await API.fetchMovies(urlLink)
-//                 // dispatch(setFetchList(fetchFilms1.results))
-//                 // setFilms(fetchFilms1.results)
-//                 // setPage(fetchFilms1.page)
-//                 // setTotalPages(fetchFilms1.total_pages)
-//                 setLoading(true)
-//                 console.log(loading)
-//                 console.log('Loading state after setting true:', loading);
-//                 dispatch(setFetchList(results))
-//                 // setPage(page_load)
-//                 // setTotalPages(total_pages_load)
-//             } catch (error) {
-//                 console.log("Error")
-//             } finally {
-//                 setLoading(false)
-//                 console.log('Loading state after setting false:', loading);
-
-//             }
-//         }
-//         fetch()
-//         console.log('Fetching movies with URL:', results);
-//     }, [dispatch, results])
-//     return { total: total_pages, page: page, loading: loading}
-// }
-
 export const FilmList = (props) => {
     const [page_fetch, setPageFetch] = useState('')
     const [selectedFilm, setSelectedFilm] = useState(null)
 
     const dispatch = useDispatch()
     
-    
+    useEffect(() => {
+        setPageFetch(1);
+    }, [props.header]);
+
     useEffect(() => {
         console.log('useEffect running');
         
@@ -80,29 +36,16 @@ export const FilmList = (props) => {
     const isLoading = useSelector((state) => state.fetchList.isLoading)
     const error = useSelector((state) => state.fetchList.error)
     
-    let {page, total_pages, results } = fetches
-    
-    console.log(page)
+    let { total_pages, results } = fetches
     
     console.log(store.getState())
-    
-    //Fix page fetch, return every page to 1 after change category
 
     const fetchMinus= () => {
-        setPageFetch(page - 1)
-        // page = page - 1 
+        setPageFetch(page_fetch - 1)
     }
     const fetchPlus= () => {
-        setPageFetch(page + 1)
-        // page = page + 1
+        setPageFetch(page_fetch + 1)
     }
-    
-    // const fetchList = useSelector((state) => state.fetchList.fetches)
-    // console.log(fetchList)
-
-    // const { total, page, loading} = useFetchMovies()
-    
-    // console.log(results)
 
     function handleFilm(selectedFilm) {
         setSelectedFilm(selectedFilm)
@@ -116,7 +59,7 @@ export const FilmList = (props) => {
         <div>
             <h1 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: currentTheme.foreground }}>{props.header}</h1>
             <Pagination
-                page={page}
+                page={page_fetch}
                 totalPages={total_pages}
                 header={props.header}
                 color={currentTheme.foreground}
@@ -171,56 +114,16 @@ const Content = (props) => {
             <ThemedToggleButton />
 
             <Outlet></Outlet>
-            {/*         
-            <Routes>
-                <Route key='Favorite Movies' exact path="/" 
-                    Component={() =>
-                        <FilmList
-                            url={`https://api.themoviedb.org/3/account/Invuukeeee/favorite/movies?language=en-US&sort_by=created_at.asc`}
-                            color={theme.theme.foreground}
-                            header='Favorite Movies'
-                        />
-                    }
-                />
-                <Route key='Top Rated Movies' path="/top_rated"
-                    Component={() =>
-                        <FilmList
-                            url={'https://api.themoviedb.org/3/account/Invuukeeee/rated/movies?language=en-US&sort_by=created_at.asc'}
-                            color={theme.theme.foreground}
-                            header='Top Rated Movies'
-                        />
-                    }
-                />
-                <Route key='TV Shows' path="/tv_shows" 
-                    element={<Navigate to='/' />}
-                />
-            </Routes> */}
         </div>
     )
 }
 
 export const Movies = () => {     
-    // const navigate = useNavigate();
-    // useEffect(()=> {
-    //     navigate('/1')
-    // },[navigate])
-    
     const theme = useSelector((state) => state.theme.theme)
     const currentTheme = themes[theme];
 
     document.body.style.backgroundColor = currentTheme.background
 
-    // const dispatch = useDispatch()
-
-    // useEffect(() => {
-    //     dispatch(fetchContent())
-    // }, [dispatch])
-    
-    // const fetches = useSelector((state) => state.fetchList.fetches)
-    // const isLoading = useSelector((state) => state.fetchList.isLoading)
-    // const error = useSelector((state) => state.fetchList.error)
-
-    // console.log(fetches)
 
     return(
         <Content currentTheme={currentTheme} />

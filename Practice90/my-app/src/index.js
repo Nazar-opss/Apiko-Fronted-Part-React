@@ -21,14 +21,12 @@ const router = createBrowserRouter([
         element:  <FilmList
                   header='Favorite Movies'
                   />,
-        // loader: async ({ params }) => fetchDetails(params.page, 'favorite'),
       },
       {
         path: "/top_rated",
         element: <FilmList
                   header='Top Rated Movies'
                   />,
-        // loader: async ({ params }) => fetchDetails(params.page, 'rated'),
       },
       {
         path: "/tv_shows",
