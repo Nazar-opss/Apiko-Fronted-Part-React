@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { useDispatch } from "react-redux";
 
 const initialState = {
     fetches: [],
@@ -39,7 +40,11 @@ export const fetchMoviesList = createAsyncThunk (
 export const fetchSlice = createSlice({
     name:'fetch',
     initialState,
-    reducers: {},
+    reducers: {
+        // setLoading: (state, action) => {
+        //     state.isLoading = action.payload
+        // } 
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchMoviesList.pending, (state) => {
             state.isLoading = true
@@ -57,6 +62,6 @@ export const fetchSlice = createSlice({
 })
 
 
-export const { setFetchList } = fetchSlice.actions
+export const { setLoading } = fetchSlice.actions
 
 export default fetchSlice.reducer
