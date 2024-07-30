@@ -1,0 +1,21 @@
+# ignore ALL .log files
+# *.log
+
+# ignore ALL files in ANY directory named error.log
+# error.log
+
+# ignore ALL folder in ANY directory containing module_ in the name and any single digit after
+# module_?
+
+# ignore ALL submodule folders at any project depth
+# **submodule
+
+# ignore ALL submodule folders contained as child folders of module_2 and module_3
+# /module_[23]/submodule/
+
+# ignore ALL submodule folders containing submodule folder
+# **/submodule/submodule
+
+# ignore ALL folders and files except .gitignore
+*
+!.gitignore
