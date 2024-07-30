@@ -8,7 +8,7 @@
 # module_?
 
 # ignore ALL submodule folders at any project depth
-# **submodule
+**submodule
 
 # ignore ALL submodule folders contained as child folders of module_2 and module_3
 # /module_[23]/submodule/
