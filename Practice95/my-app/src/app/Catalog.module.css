@@ -1,0 +1,28 @@
+.filter{
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+}
+.filter_container {
+    background: #FFFFFF;
+    box-shadow: 0px 1px 4px 0px #0000001A;
+    width: 100%;
+    max-width: 860px;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 25px;
+}
+.filter_search, .filter_category {
+    max-width: 290px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 26px;
+}
+.filter_category {
+}
+.filter_sort {
+    max-width: 182px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 26px;
+}
