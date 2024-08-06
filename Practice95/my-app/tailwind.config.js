@@ -7,8 +7,9 @@ module.exports = {
   ],
   theme: {
     colors: {
+      'white': '#ffffff',
       'select-hover' : '#F2F2F2',
-      'select-border' : '#DEDEE0'
+      'select-border' : '#DEDEE0',
     },
     extend: {
       backgroundImage: {

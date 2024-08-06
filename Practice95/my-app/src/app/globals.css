@@ -1,3 +1,10 @@
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background: #F8F8F8;
+
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,13 +24,6 @@
 }
 
 
-body {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  background: #F8F8F8;
-
-}
 
 .footer {
   position: fixed;
