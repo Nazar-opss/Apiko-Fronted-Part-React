@@ -11,7 +11,7 @@ const Content = dynamic(
 export default async function Catalog() {
     
     return (
-        <div>
+        <div className={styles.container}>
             <Filter/>
             <Content/>
         </div>

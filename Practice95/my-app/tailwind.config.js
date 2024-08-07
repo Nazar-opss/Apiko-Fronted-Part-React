@@ -10,6 +10,12 @@ module.exports = {
       'white': '#ffffff',
       'select-hover' : '#F2F2F2',
       'select-border' : '#DEDEE0',
+      'dark_1': '#373738',
+      'dark_3': '#E0E0E0',
+      'blue_btn': '#148DFD',
+    },
+    boxShadow: {
+        'item-shadow': '0px 4px 14px 0px rgba(121, 121, 121, 0.05)',
     },
     extend: {
       backgroundImage: {

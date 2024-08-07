@@ -1,0 +1,797 @@
+Final Project Requirements
+Final Project Requirements
+
+“\*” - additional optional tasks
+
+Basic notes:
+All fields should be validated on user input instantly
+All async changes made by user should have UI loading state (overlay with spinner above items, spinner on submit button, etc)
+
+There should be only 1 opened popup at the same time
+
+Such actions as page transitions or displaying results should be reactive without page reload
+
+Mobile responsiveness can be ignored but it would be great to have (Additional score will be applied)
+
+Register
+As a user I want to register on the platform to be able to use all of its features.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the platform
+
+Trigger
+
+User clicks on the Register button
+
+Scenario
+
+A modal opens up
+
+User views the fields: Email, Password, Name, Phone
+
+Email should have the correct email format (some@example.idk)
+
+Password requirements - at least 1 letter, 1 special symbol, 1 number
+
+Name field cannot have special characters and numbers
+
+User cannot enter letters into the Phone Field, phone number can have optional “+” at the beginning and should contain 10-14 numbers
+
+User enters all the data
+
+User finishes the registration
+
+A modal window closes
+
+An account is created with the data entered by the user
+
+Post-Conditions
+
+User is logged in
+
+User has access to the Profile Settings, Favourites and Checkout
+
+An avatar with the initials of the name is created and set as a profile picture
+
+Exception Scenario
+
+User doesn’t enter required info
+
+User views an error message “Required info is missing”
+
+User enters the email that was already used during the registration
+
+User views an error message “Such email is already used”
+
+User enters invalid data
+
+Validation error is appeared below the incorrect field
+
+User switches to the login window
+
+The page/modal is not refreshed
+
+User views a login window
+
+User enters the info that didn’t pass validation
+
+User views an error message “Incorrect data”
+
+Login
+As a user I want to login to the system to be able to use all of its features.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the platform
+
+User has registered account
+
+Trigger
+
+User clicks on the Login button
+
+Scenario
+
+A modal window opens up
+
+User views the fields where he can enter an email and password
+
+User views an option to go to the registration modal
+
+User enters email address
+
+User enters the password (letter, number special symbol)
+
+System validates both email and password
+
+Modal window closes
+
+Post-Conditions
+
+User is logged in and views the homepage. User has the access to the Profile Settings, Favourites and Cart
+
+Exception Scenario
+
+User enters wrong password
+
+User views an error message “Email or password incorrect”
+
+User enters an email that is not in the database
+
+User views an error message “Email or password incorrect”
+
+User switches to the registration modal
+
+User views the registration modal with all the fields
+
+The page is not refreshed
+
+User has a possibility to switch to the login again
+
+Header and Footer
+Header
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is anywhere on site
+
+Case 1 (Logged out):
+
+Scenario
+
+User views a header: Logo, register/sign in CTA`s
+
+Logo should redirect to home at any place of site (redirect to /)
+
+Register CTA should open registration popup
+
+Sign in CTA should open sign in popup
+
+Case 2 (Logged in):
+
+Scenario
+
+User views a header: Logo, favourites icon, cart icon, “Welcome, [username]!” with user’s avatar auto generated from initials, clickable my account arrow
+
+Logo should redirect to home at any place of site (redirect to /)
+
+Favourites icon should redirect to account favourites
+
+Cart icon should redirect to the cart
+
+User avatar and arrow should open context menu with user’s name, email and 2 options: Settings and Log Out
+
+Settings link should lead to Edit account details page
+
+Log Out link should log out user and reset session
+
+Footer
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is anywhere on site
+
+Scenario
+
+User views footer with a copyright text
+
+Homepage
+As a user I want to view the homepage with all its content to understand what this platform is about.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is at the home page
+
+Acceptance Criteria
+
+User views the items available on the platform
+
+User can view items (clicks on the card and single product popup is opened)
+
+User views the Search field
+
+User views the sorting options
+
+User views the categories
+
+User can load more products by a “Load more” button if more products are available
+
+Search
+As a user I want to quickly find what I need through the search.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the homepage
+
+Trigger
+
+User enters a search phrase of more than 3 symbols into the search box
+
+Scenario
+
+The system makes the search by name of the items
+
+The search is not case sensitive
+
+The search is made by the names of the items only
+
+Category and sorting selects are absent in search results mode
+
+Loading overlay is shown for users when search is in progress.
+
+Loading overlay disappears when results are ready. User views only the items that match the search request
+
+User types additional letters and can see refreshed results (with loader while in progress)
+
+\*API calls for search should be debounced by 300ms (More about debounce is here)
+
+Exception Scenario
+
+System didn’t find any matches
+
+User views a No Results Found message
+
+Filter by Categories
+As a user I want to filter the items by categories to find quicker what I need.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the home page
+
+Trigger
+
+User clicks on the Categories
+
+Scenario
+
+User views the Categories Options
+
+User selects one category
+
+The options disappear
+
+Loading overlay is shown (previous results are still under the overlay)
+
+When new results are ready loading overlay disappears, new results are shown instead of previous
+
+Post-Conditions
+
+User views the items belonging only to the selected category
+
+Exception Scenario
+
+There are no items in the category selected
+
+User views “No items in this category yet” message
+
+NOTE: Sort and category selects are hidden, when search is active right now. Search results shouldn’t be sorted or filtered by a category
+
+Sorting
+As a user I want to sort the items according to my needs.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the platform views the items
+
+Trigger
+
+User selects the sort option
+
+Scenario
+
+User views the options: by Popular, Latest
+
+User selects one of the options
+
+The options disappear
+
+Loading overlay is shown (previous results are still under the overlay)
+
+When new results are ready loading overlay disappears
+
+The system sorts the items accordingly
+
+User wants to reset sorting and clicks on a close icon near it
+
+The system resets sorting
+
+Post-Conditions
+
+User views sorted products respectively to the selected option:
+
+The most Popular first descending (From most popular to less popular)
+
+The Latest first descending (From latest to oldest)
+
+Add to Favourites
+As a user I want to save the items I like in order to purchase them in future.
+
+Case 1:
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is logged in
+
+User is on main page or single product popup
+
+Trigger
+
+User clicks on the Save button depends on UI/UX design
+
+Scenario
+
+Button changes its state
+
+The item added to the favourites page
+
+Exception Scenario
+
+The item has already been added to the favourites list
+
+The user views a different state of the button
+
+If the user clicks on the button the item is removed from the favourites list
+
+Case 2:
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is logged out
+
+User is on main page or single product popup
+
+Trigger
+
+User clicks on the Save button depends on UI/UX design
+
+Scenario
+
+Popup with text and 3 options is shown
+
+Continue to sign-in
+
+Continue to register
+
+Continue as guest
+
+User chose to sign in
+
+Current popup is closed
+
+Login popup appears
+
+\*Selected product is added to favourites after the sign in
+
+User chose to register
+
+Current popup is closed
+
+Register popup appears
+
+\*Selected product is added to favourites after the registration
+
+User chose to continue as guest
+
+Current popup is closed
+
+User closes popup
+
+Current popup is closed
+
+Single item popup
+As a user I want to view a popup with more detailed information about the particular item
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User views the items on the homepage
+
+Trigger
+
+User selects/clicks the item on the homepage
+
+Scenario
+
+Single item popup is shown
+
+User views the item’s picture
+
+User views the item’s description
+
+User views the quantity input with increment and decrement buttons
+
+User views the price
+
+User views the total which reflect price x quantity
+
+User views the button to add to favourites
+
+User views the button to add the item to the cart
+
+User views the button to buy the item now
+
+Add to Cart
+As a user I want to add the items to the cart to purchase them.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the Single Item popup
+
+Trigger
+
+User clicks on the add to cart button
+
+Scenario
+
+Current popup is closed
+
+On-screen notification with “The [item name] is successfully added to cart” appears
+
+The notification can be closed
+
+- The notification slowly disappears after 3 sec.
+
+Post-Conditions
+
+The items are saved within the cart for one session only, until the browser or tab is quit.
+
+Each time the new item is added to the cart a counter on a cart header icon is refreshed to reflect current cart items quantity.
+
+Exception Scenario
+
+User is logged out
+
+Current popup is closed
+
+“Continue to” popup is shown (all popup behaviour should be the same as on add to favourites case)
+
+\*Item is added and Post-conditions are done after registration or signing in
+
+Buy now
+As a user I want to buy an item instantly.
+
+Actors
+
+Any user
+
+Pre-Conditions
+
+User is on the Single Item popup
+
+Trigger
+
+User clicks on the buy now button
+
+Scenario
+
+User is redirected to the cart page with current item with the right quantity added
+
+Post-Conditions
+
+The items are saved within the cart for one session only, until the browser or tab is quit.
+
+Header icon is refreshed to reflect current cart items quantity.
+
+Exception Scenario
+
+User is logged out
+
+Current popup is closed
+
+“Continue to” popup is shown (all popup behaviour should be the same as on add to favourites case)
+
+\*User is redirected to the cart page with current item with the right quantity added and post-conditions are done after registration or signing in
+
+Cart
+As a user I want to finish the purchase process and make my order.
+
+Case 1:
+
+Actors
+
+Logged in user
+
+Pre-conditions
+
+Used doesn’t have any items added to a cart
+
+Trigger
+
+User clicks on the cart icon depends on UI/UX design
+
+Scenario
+
+“There are no items in a cart” message is shown
+
+Checkout fields and “Confirm the purchase” button are disabled
+
+Case 2:
+
+Actors
+
+Logged in user
+
+Pre-conditions
+
+Used have some items added to a cart
+
+Trigger
+
+User clicks on the cart icon depends on UI/UX design
+
+Scenario
+
+User views all cart items with name, quantity input, total and remove from cart icon each
+
+User views active checkout fields with personal data, which is autofilled from an account if user is logged in and have address fields filled in the account
+
+All fields are mandatory
+
+Country field is a select. All options should be fetched from /api/location/countries
+
+Each field should pass validation, be not empty and should be validated on a user input
+
+“Confirm the purchase” button is disabled until all fields are filled and valid
+
+User views “Confirm the purchase” and “Continue shopping” buttons
+
+“Continue shopping” button will redirect user back to the homepage
+
+“Confirm the purchase” button will trigger order creation
+
+User creates an order
+
+The success popup is shown. With text and 2 options: “View order history” (only for logged in users) and “Go Home” buttons
+
+“View order history” button will redirect user to his order history tab
+
+“Go Home” button will redirect to the homepage
+
+Popup close will redirect to the homepage
+
+Post-Conditions
+
+The order is created and displayed in the Order History in the Account Settings
+
+My Account: Edit Profile
+As a user I want to be able to manage my account.
+
+Actors
+
+Logged in user
+
+Pre-Conditions
+
+User is logged in
+
+Trigger
+
+User goes to My Account Settings section from the Header
+
+Case 1: (View Edit Account)
+
+Scenario
+
+User views 3 sections/tabs depends on UI/UX design
+
+Edit Account
+
+Orders History
+
+Favourites
+
+User is landed on the Edit Profile by default
+
+User views 2 sections: “Account details” and “Change password”. Both of them can be updated separately by clicking on corresponding “Save changes” button
+
+User can view and edit any of the following fields: Name, Phone, Email, Country, Town, Address
+
+Case 2 (Edit account details):
+
+Scenario
+
+User edits the field
+
+User saves the changes
+
+On-screen notification with “Account details are updated successfully” appears
+
+The notification can be closed
+
+\*The notification slowly disappears after 3 sec.
+
+Post-Conditions
+
+User stays on the same page, the field is updated. The account Picture is updated according to the new initials (if name was changed).
+
+Exception Scenario
+
+The field is failed by validation
+
+User views a validation error message below the field
+
+“Save changes” button is disabled
+
+User corrects incorrect field
+
+Validation error is disappeared
+
+“Save changes” button is enabled again
+
+Case 3 (Change password):
+
+User enters the current password
+
+User enters a new password and confirming it entering it again in a field below
+
+User saves the changes
+
+On-screen notification with “Your password is updated successfully” appears
+
+The notification can be closed
+
+\*The notification slowly disappears after 3 sec.
+
+Exception Scenario
+
+The field is failed by validation
+
+User views a validation error message below the field
+
+“Save changes” button is disabled
+
+User corrects incorrect field
+
+Validation error is disappeared
+
+“Save changes” button is enabled again
+
+New passwords don’t match
+
+User views a “Passwords don’t match” error message below the second new password field
+
+“Save changes” button is disabled
+
+User corrects any of the new password field
+
+Validation error is disappeared
+
+“Save changes” button is enabled again
+
+Post-Conditions
+
+User stays on the same page, the password is successfully updated.
+
+NOTE! Validation criteria applied are the same as on the registration
+
+My Account: Favourites
+As a user I want to view the items I added to favourites.
+
+Actors
+
+Logged in user
+
+Pre-Conditions
+
+User has added some items to favourites
+
+Trigger
+
+User goes to Favourites
+
+Acceptance Criteria:
+
+User views all the favourites he has added
+
+The favourites are sorted by the date added (newest to oldest)
+
+User can remove the items from the favourites by clicking on a heart icon
+
+My Account: Order History
+As a user I want to view the history of all my orders.
+
+Actors
+
+Logged in User
+
+Trigger
+
+User goes to the History Section in My Account Settings
+
+Scenario
+
+User views all the orders sorted from newest to oldest
+
+User views the order ID
+
+User views the total price of the order
+
+User views the date of the order
+
+Exception Scenario
+
+User don’t have orders yet
+
+“Currently you have no orders” message is shown
+
+- My Account: Order Detail View Popup
+
+As a user I want to view the details of my order to make sure everything is correct.
+
+Actors
+
+Logged in user
+
+Pre-Conditions
+
+User has made the order
+
+User views the orders page
+
+Trigger
+
+User clicks on the Order ID
+
+Scenario
+
+Order Detail View Popup is shown
+
+User views Order #
+
+User views the previews of the items purchased and their quantities
+
+User views the date of the order
+
+User views the price for each item
+
+User views the total price paid
+
+User views the address that was provided align with the order
