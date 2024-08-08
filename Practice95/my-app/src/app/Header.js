@@ -1,8 +1,20 @@
-import { headers } from 'next/headers';
+'use client'
+import { useState } from 'react';
 import styles from './Header.module.css'
 import Image from 'next/image';
+import Register from './Register';
 
 export default function Header() {
+    let [isOpen, setIsOpen] = useState(false)
+
+    function open() {
+        setIsOpen(true)
+    }
+    
+    function close() {
+        setIsOpen(false)
+    }
+
     return (
         <div className={styles.header}>
             <div className={styles.header_container}>
@@ -30,11 +42,16 @@ export default function Header() {
                     </div>
                 </div>
                 <div className={styles.header_auth}>
-                    <a>REGISTER</a>
+                    <button onClick={open}>REGISTER</button>
+                    <Register 
+                        close={close}
+                        isOpen={isOpen}
+                        />
                     <div className={styles.vl}></div>
                     <a>LOG IN</a>
                 </div>
             </div>
         </div>
+        
     );
 }
