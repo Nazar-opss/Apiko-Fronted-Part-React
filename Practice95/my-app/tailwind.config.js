@@ -8,11 +8,14 @@ module.exports = {
   theme: {
     colors: {
       'white': '#ffffff',
+      'black' : '#000000',
       'select-hover' : '#F2F2F2',
       'select-border' : '#DEDEE0',
       'dark_1': '#373738',
+      'dark_2': '#707070',
       'dark_3': '#E0E0E0',
       'blue_btn': '#148DFD',
+      'orange_btn': '#FD7114'
     },
     boxShadow: {
         'item-shadow': '0px 4px 14px 0px rgba(121, 121, 121, 0.05)',
