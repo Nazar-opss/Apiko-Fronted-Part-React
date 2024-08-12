@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styles from './Header.module.css'
 import Image from 'next/image';
 import Register from './Register';
+import { createPortal } from 'react-dom';
 
 export default function Header() {
     let [isOpen, setIsOpen] = useState(false)
@@ -47,6 +48,10 @@ export default function Header() {
                         close={close}
                         isOpen={isOpen}
                         />
+                    {/* {isOpen && createPortal(
+                        <Register isOpen={isOpen} close={() => setIsOpen(false)} />,
+                        document.getElementById('myroot'),
+                        )} */}
                     <div className={styles.vl}></div>
                     <a>LOG IN</a>
                 </div>
