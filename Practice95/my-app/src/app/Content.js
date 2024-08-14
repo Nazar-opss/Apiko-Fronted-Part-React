@@ -50,6 +50,7 @@ const Item = (props) => {
 
 export default async function Content() {
     const data = await getData()
+    
     console.log(data)
 return (
     <>

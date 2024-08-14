@@ -6,20 +6,16 @@ import Image from 'next/image';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
-const optionsCategory = [
-    {value: '1', text: "Choose Category1" },
-    {value: '2', text: "Choose Category2" },
-    {value: '3', text: "Choose Category3" },
-]
-
 const optionsSort = [
     {value: '1', text: "Popular" },
     {value: '2', text: "New" },
 ]
 
-function Filter() {
+function Filter(props) {
     const [selectedCategory, setSelectedCategory] = useState("Choose Category")
     const [selectedSort, setSelectedSort] = useState("Sorting")
+    const categories = props.categories
+
 
   return (
     <div className={styles.filter}>
@@ -57,7 +53,7 @@ function Filter() {
                                 width={17}
                                 height={14}
                             />
-                            <span className="ml-3 block truncate">{selectedCategory}</span>
+                            <span className="ml-1.5 block truncate">{selectedCategory}</span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                             <ChevronDownIcon
@@ -69,18 +65,18 @@ function Filter() {
 
                         <ListboxOptions
                             transition
-                            className="absolute z-10 max-h-56 w-full overflow-auto rounded-b-md bg-white text-base shadow-lg outline outline-1 outline-select-border focus:outline-1 data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+                            className="absolute z-10 max-h-56 w-full rounded-b-md bg-white text-sm leading-[26px] shadow-lg outline outline-1 outline-select-border focus:outline-1 data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in"
                         >
-                            {optionsCategory.map((option) => (
+                            {categories.map((option) => (
                                 <ListboxOption
-                                    key={option.value}
-                                    value={option.text}
-                                    disabled={option.disabled}
-                                    className="group relative cursor-pointer select-none bg-white py-1 pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
+                                    key={option.id}
+                                    value={option.name}
+
+                                    className="group relative cursor-pointer select-none bg-white pt-[8px] pb-[7px] pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
                                 >
                                     <div className="flex items-center">
-                                        <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
-                                        {option.text}
+                                        <span className="ml-[33px] block truncate font-normal group-data-[selected]:font-semibold">
+                                        {option.name}
                                         </span>
                                     </div>
                                 </ListboxOption>
@@ -112,17 +108,17 @@ function Filter() {
                         
                         <ListboxOptions
                         transition
-                        className="absolute z-10 max-h-56 w-full overflow-auto rounded-b-md bg-white text-base shadow-lg outline outline-1 outline-select-border focus:outline-1 data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+                        className="absolute z-10 max-h-56 w-full overflow-auto rounded-b-md bg-white text-sm leading-[26px] shadow-lg outline outline-1 outline-select-border focus:outline-1 data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
                         >
                         {optionsSort.map((option) => (
                             <ListboxOption
                                 key={option.value}
                                 value={option.text}
                                 disabled={option.disabled}
-                                className="group relative cursor-pointer select-none bg-white py-1 pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
+                                className="group relative cursor-pointer select-none bg-white pt-[8px] pb-[7px] pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
                             >
                             <div className="flex items-center">
-                                <span className="ml-3 block truncate font-normal group-data-[selected]:font-semibold">
+                                <span className="ml-[33px] block truncate font-normal group-data-[selected]:font-semibold">
                                 {option.text}
                                 </span>
                             </div>
