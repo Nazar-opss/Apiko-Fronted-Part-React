@@ -3,6 +3,7 @@ import { Button, CloseButton, Dialog, DialogBackdrop, DialogPanel, DialogTitle }
 import { useForm } from 'react-hook-form'
 import Input from './Input'
 import Image from 'next/image'
+import IconInput from './IconInput'
 
 function Login(props) {
     const {
@@ -65,7 +66,7 @@ function Login(props) {
                   type='email'
                   name='email'
                 />
-                <Input
+                <IconInput 
                   image={ <Image
                     className='absolute right-[17px] top-[13px]'
                     src={'/password_show.svg'}
