@@ -1,20 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, CloseButton, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import Input from './Input'
 import Image from 'next/image'
 import IconInput from './IconInput'
 
 function Login(props) {
+  const [show, setShot] = useState('/password_show.svg')
+  
+  const handleIcon = () =>{
+    setShot('/password_hide.svg')
+  }
     const {
         register,
         handleSubmit,
         control,
     } = useForm({
         values: {
-            fullName: '',
             email: '',
-            phoneNumber: '',
             password: '',
         }
     })
@@ -61,24 +64,40 @@ function Login(props) {
 
 
          
-                <Input
-                  placeholder='Email'
-                  type='email'
+                <Controller
                   name='email'
+                  control={control}
+                  rules={{required: true}}
+                  render={({field}) =>(
+                    <Input
+                      placeholder='Email'
+                      type='email'
+                      name='email'
+                      fieldRef={field}
+                    />
+                  )}
                 />
-                <IconInput 
-                  image={ <Image
-                    className='absolute right-[17px] top-[13px]'
-                    src={'/password_show.svg'}
-                    width={18}
-                    height={18}
-                    alt='Show Password'
-                  />}
-                  placeholder='Password'
-                //   handleIcon={handleIcon}
-                  type='password'
+                <Controller
                   name='password'
-                /> 
+                  control={control}
+                  rules={{required: true}}
+                  render={({field}) =>(
+                      <IconInput 
+                        image={ <Image
+                          className='absolute right-[17px] top-[13px]'
+                          src={show}
+                          width={18}
+                          height={18}
+                          alt='Show Password'
+                        />}
+                        placeholder='Password'
+                        handleIcon={handleIcon}
+                        type='password'
+                        name='password'
+                        fieldRef={field}
+                      /> 
+                  )}
+                />
                 <div className="mt-4">
                   <Button
                     type="submit"

@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export const Item = (props) => { 
     return(
-        <div class="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow dark:bg-gray-800 dark:border-gray-700" >
+        <div className="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow dark:bg-gray-800 dark:border-gray-700" >
             <a href="#" className='flex justify-center'>
                 <Image
                     className='max-w-[201px] max-h-[147px] mt-1 rounded-[3px] mb-[6px] object-contain'
@@ -21,12 +21,12 @@ export const Item = (props) => {
                     height={17}
                 />
             </div>
-            <div class="px-3">
+            <div className="px-3">
                 <a href="#">
-                    <h5 class="truncate text-[15px] tracking-tight text-gray-900 dark:text-dark_1">{props.title}</h5>
+                    <h5 className="truncate text-[15px] tracking-tight text-gray-900 dark:text-dark_1">{props.title}</h5>
                 </a>
-                <div class="flex items-center justify-between align-text-bottom mb-[5px]">
-                    <span class="text-lg font-bold text-gray-900 dark:text-dark_1">${props.price}</span>
+                <div className="flex items-center justify-between align-text-bottom mb-[5px]">
+                    <span className="text-lg font-bold text-gray-900 dark:text-dark_1">${props.price}</span>
                 </div>
             </div>
         </div>

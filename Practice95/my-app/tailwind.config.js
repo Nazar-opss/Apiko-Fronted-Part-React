@@ -15,7 +15,8 @@ module.exports = {
       'dark_2': '#707070',
       'dark_3': '#E0E0E0',
       'blue_btn': '#148DFD',
-      'orange_main': '#FD7114'
+      'orange_main': '#FD7114',
+      'error': '#F44336'
     },
     boxShadow: {
         'item-shadow': '0px 4px 14px 0px rgba(121, 121, 121, 0.05)',

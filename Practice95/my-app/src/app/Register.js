@@ -1,3 +1,4 @@
+"use client"
 import { Button, CloseButton, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import React, { useState } from 'react'
 import Image from 'next/image';
@@ -11,6 +12,7 @@ function Register(props) {
     const {
       reset,
       register,
+      setError,
       handleSubmit,
       control,
       formState: { errors },
@@ -23,9 +25,28 @@ function Register(props) {
       }
     })
     
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
+      const {email, fullName, phoneNumber, password} = data
+      try {
+        await fetch('https://demo-api.apiko.academy/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            "email": email,
+            "fullName": fullName,
+            "phone": phoneNumber,
+            "password":password
+           } ),
+        })
+      } catch (error) {
+        setError("root", {
+          message:"Such email is already used"
+        })
+      }
+      // validate such email
       console.log(data);
-      reset();
+
+      // reset();
     }
     
     const [show, setShot] = useState('/password_show.svg')
@@ -108,9 +129,10 @@ required
                 <Controller
                   name='fullName'
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: 'Mandatory info missing'}}
                   render={({field}) =>(
                     <Input
+                      errors={errors}
                       placeholder='Full Name'
                       type='text'
                       name='fullName'
@@ -118,12 +140,14 @@ required
                     />
                   )}
                 />
+               
                 <Controller
                   name='email'
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: 'Mandatory info missing'}}
                   render={({field}) =>(
                     <Input
+                      errors={errors}
                       placeholder='Email'
                       type='email'
                       name='email'
@@ -131,12 +155,14 @@ required
                     />
                   )}
                 />
+                 {errors.root ? <p>{errors.root.message}</p> : <p>"no error"</p>}
                 <Controller
                   name='phoneNumber'
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: 'Mandatory info missing'}}
                   render={({field}) =>(
                     <Input
+                      errors={errors}
                       placeholder='Phone number'
                       type='tel'
                       name='phoneNumber'
@@ -144,6 +170,7 @@ required
                     />
                   )}
                 />
+               
                 {/* <Input
                   placeholder='Phone number'
                   type='tel'
@@ -152,7 +179,7 @@ required
                 <Controller
                   name='password'
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: 'Mandatory info missing'}}
                   render={({field}) =>(
                       <IconInput 
                         image={ <Image
@@ -162,6 +189,7 @@ required
                           height={18}
                           alt='Show Password'
                         />}
+                        errors={errors}
                         placeholder='Password'
                         handleIcon={handleIcon}
                         type='password'
@@ -183,7 +211,7 @@ required
                   type='password'
                   name='password'
                 />  */}
-                <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1special symbol, 1 number</p>
+                <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p>
                 <div className="mt-4">
                   <Button
                     type="submit"
