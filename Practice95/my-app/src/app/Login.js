@@ -14,6 +14,7 @@ function Login(props) {
     const {
         register,
         handleSubmit,
+        setError,
         control,
     } = useForm({
         values: {
@@ -22,7 +23,28 @@ function Login(props) {
         }
     })
 
-    const onSubmit = (data) => console.log(data)
+    const onSubmit = async (data) => {
+      const {email, password} = data
+      try {
+        await fetch('https://demo-api.apiko.academy/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            "email": email,
+            "password":password
+           } ),
+        })
+        throw new Error()
+      } catch (error) {
+        setError("root", {
+          message:"Such email is already used"
+        })
+      }
+      // validate such email
+      console.log(data);
+
+      // reset();
+    }
 
   return (
     <Dialog
@@ -114,7 +136,7 @@ function Login(props) {
                 transition
                 className="w-full max-w-[425px] mt-[15px] text-sm leading-[26px] rounded text-center bg-white pl-[108px] pt-[30px] pr-[111px] pb-5 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                 > 
-                <p>I have no account, <a href='#' className='text-orange_main'>Register now</a></p>
+                <p>I have no account, <a onClick={props.RegIn} className='text-orange_main cursor-pointer'>Register now</a></p>
               </DialogPanel>
             </div>
           </DialogPanel>

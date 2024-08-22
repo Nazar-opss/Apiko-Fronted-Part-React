@@ -20,9 +20,16 @@ function IconInput({type, name, errors, image, placeholder, fieldRef, hasError})
         {placeholder}
       </label>
     </div>
-    {errors && errors[name]?.type === "required" && (
+    {errors && errors[name]?.type && (
+      <span className="text-error text-xs leading-5 tracking-[0.4px]">""</span>
+    ) ? (
       <span className="text-error text-xs leading-5 tracking-[0.4px]">{errors[name]?.message}</span>
+    ) : (
+      <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p>
     )}
+    {/* {errors && errors[name]?.type === "required" && (
+      <span className="text-error text-xs leading-5 tracking-[0.4px]">{errors[name]?.message}</span>
+    )} */}
     </>
   )
   // find a way to change icon on type in password input and install react hook forms

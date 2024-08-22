@@ -45,9 +45,9 @@ export default function Header() {
           <div className={styles.vl}></div>
           {modalContent === "Login" 
             ? (
-            <Login close={closeModal} isOpen={isOpen} />
+            <Login close={closeModal} RegIn={() => openModal("Register")} isOpen={isOpen} />
           ) : (
-            <Register close={closeModal} isOpen={isOpen} />
+            <Register close={closeModal} LogIn={() => openModal("Login")} isOpen={isOpen} />
           )}
           <button onClick={() => openModal("Login")}>LOG IN</button>
           {/* <button> <Link href="/login">Open modal</Link></button> */}

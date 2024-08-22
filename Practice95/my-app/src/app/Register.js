@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Input from './Input';
 import { Controller, useForm } from "react-hook-form"
 import IconInput from './IconInput';
+import { resolve } from 'styled-jsx/css';
 
 
 
@@ -42,8 +43,8 @@ function Register(props) {
         setError("root", {
           message:"Such email is already used"
         })
-      }
-      // validate such email
+      } 
+      // cant catch error 409 https://stackoverflow.com/questions/38235715/fetch-reject-promise-and-catch-the-error-if-status-is-not-ok
       console.log(data);
 
       // reset();
@@ -129,7 +130,10 @@ required
                 <Controller
                   name='fullName'
                   control={control}
-                  rules={{required: 'Mandatory info missing'}}
+                  rules={{required: 'Mandatory info missing', pattern: {
+                    value: /^[a-zA-Z\s]+$/,
+                    message: 'Only letters. Cannot have special characters and numbers',
+                  } }}
                   render={({field}) =>(
                     <Input
                       errors={errors}
@@ -144,7 +148,11 @@ required
                 <Controller
                   name='email'
                   control={control}
-                  rules={{required: 'Mandatory info missing'}}
+                  rules={{required: 'Mandatory info missing', pattern: {
+                    value: /\S+@\S+/,
+                    message: 'Should contain @',
+                  }
+                  }}
                   render={({field}) =>(
                     <Input
                       errors={errors}
@@ -155,11 +163,17 @@ required
                     />
                   )}
                 />
-                 {errors.root ? <p>{errors.root.message}</p> : <p>"no error"</p>}
+                {errors.root ? <p className='text-error text-xs leading-5 tracking-[0.4px]'>{errors.root.message}</p> : <p></p>}
+
                 <Controller
                   name='phoneNumber'
                   control={control}
-                  rules={{required: 'Mandatory info missing'}}
+                  rules={{required: 'Mandatory info missing', 
+                    pattern: {
+                      value: /^(\+)?([0-9]){10,14}$/,
+                      message: "Should contain 10-14 numbers, can have optional + at the beginning"
+                    }
+                  }}
                   render={({field}) =>(
                     <Input
                       errors={errors}
@@ -179,7 +193,14 @@ required
                 <Controller
                   name='password'
                   control={control}
-                  rules={{required: 'Mandatory info missing'}}
+                  rules={{required: 'Mandatory info missing', 
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
+                      message: "Should contain at least 1 letter, 1 special symbol, 1 number"
+                    }, 
+                    min: 1,
+                    max: 35,
+                  }}
                   render={({field}) =>(
                       <IconInput 
                         image={ <Image
@@ -211,7 +232,7 @@ required
                   type='password'
                   name='password'
                 />  */}
-                <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p>
+                {/* <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p> */}
                 <div className="mt-4">
                   <Button
                     type="submit"
@@ -228,7 +249,7 @@ required
                 transition
                 className="w-full max-w-[425px] mt-[15px] text-sm leading-[26px] rounded text-center bg-white pl-[108px] pt-[30px] pr-[111px] pb-5 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                 > 
-                <p>I already have an account, <a href='#' className='text-orange_main'>Log In</a></p>
+                <p>I already have an account, <a onClick={props.LogIn} className='text-orange_main cursor-pointer'>Log In</a></p>
               </DialogPanel>
             </div>
           </DialogPanel>
