@@ -26,26 +26,28 @@ function Login(props) {
     const onSubmit = async (data) => {
       const {email, password} = data
       try {
-        await fetch('https://demo-api.apiko.academy/api/auth/login', {
+        const user = await fetch('https://demo-api.apiko.academy/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             "email": email,
             "password":password
            } ),
-        })
-        throw new Error()
+        }) .then(response => response.json())
+        .then(response => console.log(JSON.stringify(response)))
+        // working to get token continue with this and read this https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
+        console.log(JSON.stringify(user))
+        return user.json()
       } catch (error) {
-        setError("root", {
-          message:"Such email is already used"
-        })
+        // setError("root", {
+        //   message:"Such email is already used"
+        // })
       }
       // validate such email
-      console.log(data);
+
 
       // reset();
     }
-
   return (
     <Dialog
       open={props.isOpen}
@@ -89,8 +91,13 @@ function Login(props) {
                 <Controller
                   name='email'
                   control={control}
-                  rules={{required: true}}
-                  render={({field}) =>(
+                  rules={{required: true,
+                    pattern: {
+                      value: /\S+@\S+/,
+                      message: 'Should contain @'
+                    }
+                  }}
+                  render={({field}) => (
                     <Input
                       placeholder='Email'
                       type='email'

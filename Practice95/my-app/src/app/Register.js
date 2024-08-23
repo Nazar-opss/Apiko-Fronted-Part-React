@@ -38,6 +38,11 @@ function Register(props) {
             "phone": phoneNumber,
             "password":password
            } ),
+        }).then((response) => {
+          if (response.status === 409) {
+            throw new Error();
+          }
+          console.log(JSON.stringify(response))
         })
       } catch (error) {
         setError("root", {
@@ -148,10 +153,11 @@ required
                 <Controller
                   name='email'
                   control={control}
-                  rules={{required: 'Mandatory info missing', pattern: {
-                    value: /\S+@\S+/,
-                    message: 'Should contain @',
-                  }
+                  rules={{required: 'Mandatory info missing',
+                    pattern: {
+                      value: /\S+@\S+/,
+                      message: 'Should contain @',
+                    }
                   }}
                   render={({field}) =>(
                     <Input

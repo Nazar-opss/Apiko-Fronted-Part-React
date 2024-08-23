@@ -12,6 +12,8 @@ const Filter = dynamic(
     { ssr: false }
     
 )
+
+// TODO: get out fetch from here
 async function getCategories() {
     const res = await fetch(`https://demo-api.apiko.academy/api/categories`)
     // The return value is *not* serialized
@@ -22,7 +24,7 @@ async function getCategories() {
     throw new Error('Failed to fetch data')
     }
 
-    return res.json()
+    return await res.json()
 }
 
 export default async function Catalog() {
