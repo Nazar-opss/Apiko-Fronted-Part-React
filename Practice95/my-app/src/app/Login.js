@@ -6,15 +6,15 @@ import Image from 'next/image'
 import IconInput from './IconInput'
 
 function Login(props) {
-  const [show, setShot] = useState('/password_show.svg')
-  
-  const handleIcon = () =>{
-    setShot('/password_hide.svg')
+  const [isVisible, setIsVisible] = useState(true)
+  const passwordToggle = () => {
+    setIsVisible(!isVisible)
   }
     const {
         register,
         handleSubmit,
         setError,
+        formState: {errors},
         control,
     } = useForm({
         values: {
@@ -34,17 +34,22 @@ function Login(props) {
             "password":password
            } ),
         }) .then(response => response.json())
-        .then(response => console.log(JSON.stringify(response)))
+            // .then(response => console.log(response))
+            .then(response => {
+              if (response.status === 401) {
+              throw new Error();
+            }})
+            
         // working to get token continue with this and read this https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
-        console.log(JSON.stringify(user))
-        return user.json()
       } catch (error) {
-        // setError("root", {
-        //   message:"Such email is already used"
-        // })
+        setError("root", {
+          message:"Email or password is wrong"
+        })
       }
       // validate such email
-
+      // setError("root", {
+      //   message:"Email or password is wrong"
+      // })
 
       // reset();
     }
@@ -91,7 +96,7 @@ function Login(props) {
                 <Controller
                   name='email'
                   control={control}
-                  rules={{required: true,
+                  rules={{required: 'Mandatory info missing',
                     pattern: {
                       value: /\S+@\S+/,
                       message: 'Should contain @'
@@ -102,6 +107,7 @@ function Login(props) {
                       placeholder='Email'
                       type='email'
                       name='email'
+                      errors={errors}
                       fieldRef={field}
                     />
                   )}
@@ -109,24 +115,22 @@ function Login(props) {
                 <Controller
                   name='password'
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: 'Mandatory info missing',}}
                   render={({field}) =>(
-                      <IconInput 
-                        image={ <Image
-                          className='absolute right-[17px] top-[13px]'
-                          src={show}
-                          width={18}
-                          height={18}
-                          alt='Show Password'
-                        />}
+                    <IconInput 
+                        errors={errors}
                         placeholder='Password'
-                        handleIcon={handleIcon}
-                        type='password'
+                        handleIcon={passwordToggle}
+                        isVisible={isVisible}
+                        type={isVisible === true ? 'password' : 'text'}
                         name='password'
                         fieldRef={field}
                       /> 
                   )}
                 />
+                {
+                  errors.root && <div className='text-error text-xs leading-5 tracking-[0.4px]'>{errors.root.message}</div>
+                }
                 <div className="mt-4">
                   <Button
                     type="submit"

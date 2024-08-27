@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Input from './Input';
 import { Controller, useForm } from "react-hook-form"
 import IconInput from './IconInput';
-import { resolve } from 'styled-jsx/css';
+
 
 
 
@@ -13,6 +13,7 @@ function Register(props) {
     const {
       reset,
       register,
+      watch,
       setError,
       handleSubmit,
       control,
@@ -54,15 +55,14 @@ function Register(props) {
 
       // reset();
     }
-    
-    const [show, setShot] = useState('/password_show.svg')
 
-    const handleIcon = () =>{
-      setShot('/password_hide.svg')
+    const [isVisible, setIsVisible] = useState(true)
+    const passwordToggle = () => {
+      setIsVisible(!isVisible)
     }
 
-
-
+    const watchPassword = watch('password');
+    // console.log(watchPassword.length)
   return (
     <Dialog
       open={props.isOpen}
@@ -206,24 +206,24 @@ required
                     }, 
                     min: 1,
                     max: 35,
+                    validate:() => {
+                      if (watchPassword.length == '') {
+                        return <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p>;
+                      }
+                    }
                   }}
                   render={({field}) =>(
                       <IconInput 
-                        image={ <Image
-                          className='absolute right-[17px] top-[13px]'
-                          src={show}
-                          width={18}
-                          height={18}
-                          alt='Show Password'
-                        />}
                         errors={errors}
                         placeholder='Password'
-                        handleIcon={handleIcon}
-                        type='password'
+                        handleIcon={passwordToggle}
+                        isVisible={isVisible}
+                        type={isVisible === true ? 'password' : 'text'}
                         name='password'
                         fieldRef={field}
                       /> 
                   )}
+                  // {...watchPassword.length <= 0 ? <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p> : <p>HEAdl</p>}
                 />
                 {/* <IconInput 
                   image={ <Image

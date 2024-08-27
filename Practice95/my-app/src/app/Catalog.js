@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import styles from './Catalog.module.css'
 import dynamic from 'next/dynamic';
@@ -24,7 +23,7 @@ async function getCategories() {
     throw new Error('Failed to fetch data')
     }
 
-    return await res.json()
+    return res.json()
 }
 
 export default async function Catalog() {

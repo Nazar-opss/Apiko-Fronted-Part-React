@@ -1,6 +1,3 @@
-import Image from "next/image";
-import Header from "./Header";
-import Footer from "./Footer";
 import Catalog from "./Catalog";
 
 export default function Home() {

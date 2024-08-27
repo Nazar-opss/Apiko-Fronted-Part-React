@@ -3,7 +3,6 @@ body {
   margin: 0;
   box-sizing: border-box;
   background: #F8F8F8;
-
 }
 @tailwind base;
 @tailwind components;
@@ -32,6 +31,14 @@ body {
   color: #707070;
   font-size: 14px;
   line-height: 26px;
+}
+
+input[type="password"] {
+  /* -webkit-text-security: disc;
+  font-size: 45px; */
+  font: large Verdana,sans-serif;
+  letter-spacing: 1px;
+  font-size: 25px;
 }
 
 @layer utilities {
