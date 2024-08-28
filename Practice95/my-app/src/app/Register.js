@@ -6,9 +6,6 @@ import Input from './Input';
 import { Controller, useForm } from "react-hook-form"
 import IconInput from './IconInput';
 
-
-
-
 function Register(props) {
     const {
       reset,

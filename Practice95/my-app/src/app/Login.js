@@ -1,58 +1,69 @@
+'use client'
 import React, { useState } from 'react'
 import { Button, CloseButton, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { Controller, useForm } from 'react-hook-form'
 import Input from './Input'
 import Image from 'next/image'
 import IconInput from './IconInput'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAccessToken } from './state/slice/AuthSlice'
 
 function Login(props) {
+  const authCheck = useSelector((state) => state.auth.accessToken)
+  const dispatch = useDispatch()
+
   const [isVisible, setIsVisible] = useState(true)
+
   const passwordToggle = () => {
     setIsVisible(!isVisible)
   }
-    const {
-        register,
-        handleSubmit,
-        setError,
-        formState: {errors},
-        control,
-    } = useForm({
-        values: {
-            email: '',
-            password: '',
-        }
-    })
 
-    const onSubmit = async (data) => {
-      const {email, password} = data
-      try {
-        const user = await fetch('https://demo-api.apiko.academy/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            "email": email,
-            "password":password
-           } ),
-        }) .then(response => response.json())
-            // .then(response => console.log(response))
-            .then(response => {
-              if (response.status === 401) {
-              throw new Error();
-            }})
-            
-        // working to get token continue with this and read this https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
-      } catch (error) {
-        setError("root", {
-          message:"Email or password is wrong"
-        })
+  const {
+      register,
+      handleSubmit,
+      setError,
+      formState: {errors},
+      control,
+  } = useForm({
+      values: {
+          email: '',
+          password: '',
       }
-      // validate such email
-      // setError("root", {
-      //   message:"Email or password is wrong"
-      // })
+  })
 
-      // reset();
-    }
+  const onSubmit = async (data) => {
+    const {email, password} = data
+    try {
+      await fetch('https://demo-api.apiko.academy/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          "email": email,
+          "password":password
+          } ),
+      }) .then(response => response.json())
+          // .then(response => console.log(response))
+          .then(response => {l
+            dispatch(setAccessToken(response.token))
+            if (response.status === 401) {
+              throw new Error();
+            }}
+          )
+        } catch (error) {
+          setError("root", {
+            message:"Email or password is wrong"
+          })
+        }
+        console.log(data)
+        // validate such email
+        // setError("root", {
+          //   message:"Email or password is wrong"
+          // })
+          
+    // working to get token continue with this and read this https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
+    // reset();
+  }
+  console.log(authCheck)
   return (
     <Dialog
       open={props.isOpen}
@@ -131,6 +142,8 @@ function Login(props) {
                 {
                   errors.root && <div className='text-error text-xs leading-5 tracking-[0.4px]'>{errors.root.message}</div>
                 }
+                <Button className="text-white bg-orange_main w-full max-w-[362px] tracking-wide mt-[71px] font-medium rounded text-sm  leading-6 px-[153px] py-1.5 hover:opacity-80" 
+                onClick={() => console.log(authCheck)}/>
                 <div className="mt-4">
                   <Button
                     type="submit"
