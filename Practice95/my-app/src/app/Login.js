@@ -6,10 +6,11 @@ import Input from './Input'
 import Image from 'next/image'
 import IconInput from './IconInput'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAccessToken } from './state/slice/AuthSlice'
+import { setAccessToken, setIsLoggedIn } from './state/slice/AuthSlice'
 
 function Login(props) {
   const authCheck = useSelector((state) => state.auth.accessToken)
+
   const dispatch = useDispatch()
 
   const [isVisible, setIsVisible] = useState(true)
@@ -43,11 +44,14 @@ function Login(props) {
           } ),
       }) .then(response => response.json())
           // .then(response => console.log(response))
-          .then(response => {l
+          .then(response => {
             dispatch(setAccessToken(response.token))
             if (response.status === 401) {
+              dispatch(setIsLoggedIn(false))
               throw new Error();
-            }}
+            } 
+            dispatch(setIsLoggedIn(true))
+            }
           )
         } catch (error) {
           setError("root", {
@@ -55,6 +59,8 @@ function Login(props) {
           })
         }
         console.log(data)
+        console.log(authCheck)
+        
         // validate such email
         // setError("root", {
           //   message:"Email or password is wrong"
@@ -63,7 +69,7 @@ function Login(props) {
     // working to get token continue with this and read this https://reqbin.com/code/javascript/wzp2hxwh/javascript-post-request-example
     // reset();
   }
-  console.log(authCheck)
+
   return (
     <Dialog
       open={props.isOpen}
