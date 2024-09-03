@@ -6,7 +6,7 @@ import Input from './Input'
 import Image from 'next/image'
 import IconInput from './IconInput'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAccessToken, setIsLoggedIn } from './state/slice/AuthSlice'
+import { login, setAccessToken, setIsLoggedIn } from './state/slice/AuthSlice'
 
 function Login(props) {
   const authCheck = useSelector((state) => state.auth.accessToken)
@@ -51,6 +51,7 @@ function Login(props) {
               throw new Error();
             } 
             dispatch(setIsLoggedIn(true))
+            dispatch(login())
             }
           )
         } catch (error) {

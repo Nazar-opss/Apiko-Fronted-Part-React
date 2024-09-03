@@ -6,37 +6,19 @@ import { useSelector } from 'react-redux'
 const initialState = {
   accessToken: '',
   isLoggedIn: false,
+  userData: {}
 }
 
 export const login = createAsyncThunk(
     'auth/login',
-    // async (authCheck) => {
-    //     console.log(authCheck)
-    //     const response = await axios.get('https://demo-api.apiko.academy/api/account', {
-    //         headers: {
-    //             Authorization: `Bearer ${authCheck}`}
-    //       })
-    //       console.log(response.data)
-    // }
-    
-    // async (_, { rejectWithValue }) => {
-    //     try {
-    //       const response = await apiLogin.get('/api/account');
-    //       return response.data;
-    //     } catch (error) {
-    //       return rejectWithValue(error.response?.data || 'Unknown error');
-    //     }
-    //   }
     async () => {
-        apiLogin.get('/api/account')
-          .then(response => {
-            console.log(response.data);
-          }) 
+        const response = await apiLogin.get('/api/account')
           .catch(error => {
-            // Handle errors
             console.error('Error in request:', error);
           })
-          console.log(response)
+          const data = await response.data
+          console.log(data)
+          return data
     }
 )
 
@@ -54,17 +36,19 @@ export const authSlice =  createSlice({
             state.isLoggedIn = action.payload
         }
     },
-    // extraReducers: (builder) => {
-    //     builder.addCase(login.pending, (state) => {
-    //         console.log(state)
-    //     })
-    //     builder.addCase(login.fulfilled, (state, action) => {
-    //         console.log(state, action)
-    //     })
-    //     builder.addCase(login.rejected, (state) => {
-    //         console.log(state)
-    //     })
-    // }
+    extraReducers: (builder) => {
+        builder.addCase(login.pending, (state) => {
+            console.log(state)
+        })
+        builder.addCase(login.fulfilled, (state, action) => {
+            state.userData = action.payload
+            console.log(state, action)
+            console.log(state.userData)
+        })
+        builder.addCase(login.rejected, (state) => {
+            console.log(state)
+        })
+    }
 })
 
 export const { setAccessToken, setIsLoggedIn } = authSlice.actions

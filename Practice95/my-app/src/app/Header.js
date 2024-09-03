@@ -14,8 +14,9 @@ export default function Header() {
   
   const authCheck = useSelector((state) => state.auth.accessToken)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const userData = useSelector((state) => state.auth.userData)
   
-  console.log(authCheck)
+  const {fullName, email, phoneNumber, phone, id} = userData
 
   const dispatch = useDispatch()
 
@@ -29,7 +30,9 @@ export default function Header() {
     setModalContent(null);
   };
 
-  console.log(isLoggedIn)
+  
+
+  console.log(userData)
   return (
     <div className={styles.header}>
       <div className={styles.header_container}>
@@ -49,8 +52,11 @@ export default function Header() {
         {
           isLoggedIn === true 
           ? 
-            <div>
-              <p>LOX</p>
+            <div className='flex items-center ml-8 justify-center text-white text-xs leading-[17.63px] '>
+              <p className=''>Welcome, {fullName}!</p>
+              <div className='w-full h-full max-w-[40px] max-h-[38px] ml-4 rounded-[100%] bg-white flex justify-center text-center'>
+                <div className='text-black py-2 px-3 text-sm leading-[26px]'>{fullName.charAt(0)}</div>
+              </div>
             </div>
           : 
             <div className={styles.header_auth}>
@@ -67,9 +73,7 @@ export default function Header() {
               <button onClick={() => openModal("Login")}>LOG IN</button>
               {/* <button> <Link href="/login">Open modal</Link></button> */}
             </div>
-            
         }
-              <button onClick={() => dispatch(login(authCheck))}>LOG IN</button>
       </div>
     </div>
   );
