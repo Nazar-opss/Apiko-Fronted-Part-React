@@ -4,9 +4,8 @@ import styles from './Header.module.css'
 import Image from 'next/image';
 import Register from './Register';
 import Login from './Login';
-import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from './state/slice/AuthSlice';
+import { Menu, MenuButton, MenuItem, MenuItems, MenuSeparator } from '@headlessui/react'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +15,7 @@ export default function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const userData = useSelector((state) => state.auth.userData)
   
-  const {fullName, email, phoneNumber, phone, id} = userData
+  let {fullName, email, phoneNumber, phone, id} = userData
 
   const dispatch = useDispatch()
 
@@ -30,9 +29,9 @@ export default function Header() {
     setModalContent(null);
   };
 
-  
+  const avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
 
-  console.log(userData)
+  console.log(avatarInitials)
   return (
     <div className={styles.header}>
       <div className={styles.header_container}>
@@ -53,10 +52,43 @@ export default function Header() {
           isLoggedIn === true 
           ? 
             <div className='flex items-center ml-8 justify-center text-white text-xs leading-[17.63px] '>
-              <p className=''>Welcome, {fullName}!</p>
-              <div className='w-full h-full max-w-[40px] max-h-[38px] ml-4 rounded-[100%] bg-white flex justify-center text-center'>
-                <div className='text-black py-2 px-3 text-sm leading-[26px]'>{fullName.charAt(0)}</div>
-              </div>
+              <p className='truncate'>Welcome, {fullName}!</p>
+              <Menu>
+                <MenuButton
+                  className='ml-4 flex justify-center items-center '
+                >
+                  <div className=' h-full max-w-[40px] max-h-[38px] rounded-[100%] bg-white flex  border-2 border-orange_main justify-center'>
+                    <div className='text-black py-2 px-3 text-sm'>{avatarInitials}</div>
+                  </div>
+                  <Image
+                    className='ml-[11px]' 
+                    src="/arrow_down.svg"
+                    alt="Arrow Down"
+                    width={18}
+                    height={13}
+                  />
+                </MenuButton>
+                <MenuItems
+                  transition
+                  anchor="bottom end"
+                  className="w-52 mt-[19px] flex drop-shadow-md flex-col origin-top-right rounded-lg border border-white bg-white text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                >
+                  <div className='flex flex-col py-[17px] px-4 text-[13px] leading-[19px] tracking-wide '>
+                    <p className='text-dark_1'>{fullName}</p>
+                    <p className='text-dark_2 font-light mt-px'>{email}</p>
+                  </div>
+                  <MenuSeparator className="h-px bg-[#E4E4E4]" />
+                  <div className='flex flex-col text-sm leading-[26px] py-[10px] px-4 gap-[14px]'>
+                    <MenuItem as='button' className='text-dark_1 text-start ' onClick={() => console.log('setting')}>
+                      Settings
+                    </MenuItem>
+                    <MenuItem as='button' className='text-error text-start ' onClick={() => console.log('logout')}>
+                      Log Out
+                    </MenuItem>
+                  </div>
+                </MenuItems>
+              </Menu>
+                
             </div>
           : 
             <div className={styles.header_auth}>

@@ -57,8 +57,7 @@ function Filter(props) {
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                             <ChevronDownIcon
-                            aria-hidden="true"
-                            className="h-5 w-5 text-gray-400"
+                                className='w-7 h-7'
                             />
                         </span>
                         </ListboxButton>
@@ -100,8 +99,7 @@ function Filter(props) {
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                             <ChevronDownIcon
-                            aria-hidden="true"
-                            className="h-5 w-5 text-gray-400"
+                                className='w-7 h-7'
                             />
                         </span>
                         </ListboxButton>
