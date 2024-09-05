@@ -41,6 +41,7 @@ function Register(props) {
             throw new Error();
           }
           console.log(JSON.stringify(response))
+          props.close()
         })
       } catch (error) {
         setError("root", {

@@ -34,7 +34,12 @@ export const authSlice =  createSlice({
         },
         setIsLoggedIn: (state, action) => {
             state.isLoggedIn = action.payload
-        }
+        },
+        logOut: (state) => {
+            state.accessToken = ''
+            state.isLoggedIn = false
+            console.log(state.isLoggedIn, state.accessToken)
+        } 
     },
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
@@ -51,6 +56,6 @@ export const authSlice =  createSlice({
     }
 })
 
-export const { setAccessToken, setIsLoggedIn } = authSlice.actions
+export const { setAccessToken, setIsLoggedIn, logOut } = authSlice.actions
 
 export default authSlice.reducer

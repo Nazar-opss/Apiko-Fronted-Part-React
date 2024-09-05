@@ -6,6 +6,7 @@ import Register from './Register';
 import Login from './Login';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuButton, MenuItem, MenuItems, MenuSeparator } from '@headlessui/react'
+import { logOut } from './state/slice/AuthSlice';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,7 +58,7 @@ export default function Header() {
                 <MenuButton
                   className='ml-4 flex justify-center items-center '
                 >
-                  <div className=' h-full max-w-[40px] max-h-[38px] rounded-[100%] bg-white flex  border-2 border-orange_main justify-center'>
+                  <div className=' h-full max-w-[40px] max-h-[38px] rounded-[100%] bg-select-border flex  border-2 border-orange_main justify-center'>
                     <div className='text-black py-2 px-3 text-sm'>{avatarInitials}</div>
                   </div>
                   <Image
@@ -71,18 +72,18 @@ export default function Header() {
                 <MenuItems
                   transition
                   anchor="bottom end"
-                  className="w-52 mt-[19px] flex drop-shadow-md flex-col origin-top-right rounded-lg border border-white bg-white text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                  className="w-[234px] mt-[19px] flex drop-shadow-md flex-col origin-top-right rounded-lg border border-white bg-white text-black transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                 >
                   <div className='flex flex-col py-[17px] px-4 text-[13px] leading-[19px] tracking-wide '>
-                    <p className='text-dark_1'>{fullName}</p>
-                    <p className='text-dark_2 font-light mt-px'>{email}</p>
+                    <p className='text-dark_1 truncate'>{fullName}</p>
+                    <p className='text-dark_2 font-light mt-px truncate'>{email}</p>
                   </div>
                   <MenuSeparator className="h-px bg-[#E4E4E4]" />
                   <div className='flex flex-col text-sm leading-[26px] py-[10px] px-4 gap-[14px]'>
                     <MenuItem as='button' className='text-dark_1 text-start ' onClick={() => console.log('setting')}>
                       Settings
                     </MenuItem>
-                    <MenuItem as='button' className='text-error text-start ' onClick={() => console.log('logout')}>
+                    <MenuItem as='button' className='text-error text-start ' onClick={() => dispatch(logOut())}>
                       Log Out
                     </MenuItem>
                   </div>
@@ -90,7 +91,7 @@ export default function Header() {
               </Menu>
                 
             </div>
-          : 
+          : // add log out functional
             <div className={styles.header_auth}>
               {/* TODO: Modals by ulr */}
               <button onClick={() => openModal("Register")}>REGISTER</button>

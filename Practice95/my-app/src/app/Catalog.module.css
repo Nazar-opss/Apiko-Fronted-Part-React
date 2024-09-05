@@ -26,6 +26,7 @@
     line-height: 26px;
 }
 .filter_category {
+    transition: ease-in-out;
 }
 .filter_sort {
     max-width: 182px;

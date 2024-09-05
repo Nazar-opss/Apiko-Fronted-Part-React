@@ -45,13 +45,14 @@ function Login(props) {
       }) .then(response => response.json())
           // .then(response => console.log(response))
           .then(response => {
-            dispatch(setAccessToken(response.token))
-            if (response.status === 401) {
-              dispatch(setIsLoggedIn(false))
-              throw new Error();
-            } 
-            dispatch(setIsLoggedIn(true))
-            dispatch(login())
+              dispatch(setAccessToken(response.token))
+              if (response.status === 401) {
+                dispatch(setIsLoggedIn(false))
+                throw new Error();
+              } 
+              dispatch(setIsLoggedIn(true))
+              dispatch(login())
+              props.close()
             }
           )
         } catch (error) {
@@ -100,7 +101,7 @@ function Login(props) {
               <form
                 onSubmit={handleSubmit(onSubmit)}
               >
-                 {/* <input type="text" class="block px-2.5 pb-2.5 pt-4 w-full max-h-[40px] text-base tracking-[0.25px] leading-[19px] text-dark_2 bg-transparent rounded border-dark_3 border-[1px] appearance-none dark:text-dark_1 dark:border-gray-600 focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Full Name" {...register("Full Name", {required: true})} /> */}
+                {/* <input type="text" class="block px-2.5 pb-2.5 pt-4 w-full max-h-[40px] text-base tracking-[0.25px] leading-[19px] text-dark_2 bg-transparent rounded border-dark_3 border-[1px] appearance-none dark:text-dark_1 dark:border-gray-600 focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder="Full Name" {...register("Full Name", {required: true})} /> */}
                 {/* <Controller
                   name='fullName'
                   control={control}
@@ -110,7 +111,7 @@ function Login(props) {
                   
 
 
-         
+        
                 <Controller
                   name='email'
                   control={control}
@@ -149,8 +150,8 @@ function Login(props) {
                 {
                   errors.root && <div className='text-error text-xs leading-5 tracking-[0.4px]'>{errors.root.message}</div>
                 }
-                <Button className="text-white bg-orange_main w-full max-w-[362px] tracking-wide mt-[71px] font-medium rounded text-sm  leading-6 px-[153px] py-1.5 hover:opacity-80" 
-                onClick={() => console.log(authCheck)}/>
+                {/* <Button className="text-white bg-orange_main w-full max-w-[362px] tracking-wide mt-[71px] font-medium rounded text-sm  leading-6 px-[153px] py-1.5 hover:opacity-80" 
+                onClick={() => console.log(authCheck)}/> */}
                 <div className="mt-4">
                   <Button
                     type="submit"
