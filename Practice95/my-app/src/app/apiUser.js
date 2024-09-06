@@ -6,14 +6,14 @@ export const injectStore = (_store) => {
    store = _store;
 };
 
-const apiLogin = axios.create({
+const apiUser = axios.create({
    baseURL: 'https://demo-api.apiko.academy',
    headers: { 'Content-Type': 'application/json' }
 });
 
 
 // Add an interceptor for all requests
-apiLogin.interceptors.request.use(function (config) {
+apiUser.interceptors.request.use(function (config) {
    // Do something before the request is sent
    // For example, add an authentication token to the headers
    
@@ -26,4 +26,4 @@ apiLogin.interceptors.request.use(function (config) {
   },
  );
 
-export default apiLogin;
+export default apiUser;

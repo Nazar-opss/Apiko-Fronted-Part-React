@@ -1,4 +1,4 @@
-import apiLogin from '@/app/apiLogin';
+import apiUser from '@/app/apiUser';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
@@ -12,7 +12,7 @@ const initialState = {
 export const login = createAsyncThunk(
     'auth/login',
     async () => {
-        const response = await apiLogin.get('/api/account')
+        const response = await apiUser.get('/api/account')
           .catch(error => {
             console.error('Error in request:', error);
           })
@@ -41,6 +41,8 @@ export const authSlice =  createSlice({
             console.log(state.isLoggedIn, state.accessToken)
         } 
     },
+
+    // delete dispatch from Login modal and move here
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
             console.log(state)

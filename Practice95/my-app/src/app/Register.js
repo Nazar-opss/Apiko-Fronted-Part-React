@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Input from './Input';
 import { Controller, useForm } from "react-hook-form"
 import IconInput from './IconInput';
+import { login, setAccessToken, setIsLoggedIn } from './state/slice/AuthSlice';
+import { useDispatch } from 'react-redux';
 
 function Register(props) {
     const {
@@ -24,6 +26,8 @@ function Register(props) {
       }
     })
     
+    const dispatch = useDispatch()
+
     const onSubmit = async (data) => {
       const {email, fullName, phoneNumber, password} = data
       try {
@@ -35,23 +39,48 @@ function Register(props) {
             "fullName": fullName,
             "phone": phoneNumber,
             "password":password
-           } ),
-        }).then((response) => {
+          } ),
+        }).then(async (response) => {
           if (response.status === 409) {
             throw new Error();
           }
+          // TODO: make this easier
+          try {
+            await fetch('https://demo-api.apiko.academy/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                "email": email,
+                "password":password
+                } ),
+            })  .then(response => response.json())
+                .then(response => {
+                    dispatch(setAccessToken(response.token))
+                    if (response.status === 401) {
+                      dispatch(setIsLoggedIn(false))
+                      throw new Error();
+                    } 
+                    dispatch(setIsLoggedIn(true))
+                    dispatch(login())
+                    props.close()
+                    console.log(response.token)
+                  }
+                )
+              } catch (error) {
+                setError("root", {
+                  message:"Email or password is wrong"
+                })
+              }
           console.log(JSON.stringify(response))
           props.close()
         })
+
       } catch (error) {
         setError("root", {
           message:"Such email is already used"
         })
       } 
-      // cant catch error 409 https://stackoverflow.com/questions/38235715/fetch-reject-promise-and-catch-the-error-if-status-is-not-ok
       console.log(data);
-
-      // reset();
     }
 
     const [isVisible, setIsVisible] = useState(true)

@@ -1,8 +1,32 @@
+'use client'
 import Image from "next/image"
-
-// hover for likes
+import Item_like from "../../public/item_like.svg"
+import { useDispatch, useSelector } from "react-redux"
+import Favourite_CTA from "./Favourite_CTA"
+import { useState } from "react"
+import { addFavorite } from "./state/slice/UserSlice"
 
 export const Item = (props) => { 
+    const [isOpen, setIsOpen] = useState(false)
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+
+    const dispatch = useDispatch()
+
+    const {id} = props
+
+    const closeModal = () => {
+        setIsOpen(false)
+    };
+    
+    const handleLike = (id) => {
+        console.log(isOpen)
+        if (isLoggedIn === false) {
+            setIsOpen(true)
+        } else {
+            dispatch(addFavorite(id))
+        }
+    }
+
     return(
         <div className="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow dark:bg-gray-800 dark:border-gray-700" >
             <a href="#" className='flex justify-center'>
@@ -14,14 +38,12 @@ export const Item = (props) => {
                     height={147}
                 />
             </a>
-
-            <div className='w-full h-full max-w-[30px] max-h-[30px] right-[8px] drop-shadow-md absolute rounded-[100%] bottom-[46px] bg-white flex justify-center'>
-                <Image
-                    src='/item_like.svg'
-                    alt='item like button'
-                    width={18}
-                    height={17}
-                />
+            
+            {
+                isOpen && <Favourite_CTA close={closeModal} isOpen={isOpen}/>
+            }
+            <div className='w-full h-full max-w-[30px] max-h-[30px] right-[8px] drop-shadow-md absolute rounded-[100%] bottom-[46px] bg-white flex justify-center items-center'>
+                <Item_like width='18' onClick={() => handleLike(id)} height='17' className=' hover:fill-dark_2 hover:cursor-pointer'/>
             </div>
             <div className="px-3">
                 <a href="#">

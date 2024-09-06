@@ -29,6 +29,7 @@ return (
                 return(
                     <Item
                         key={elem.id}
+                        id={elem.id}
                         price={elem.price}
                         title={elem.title}
                         picture={elem.picture}

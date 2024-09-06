@@ -53,6 +53,7 @@ function Login(props) {
               dispatch(setIsLoggedIn(true))
               dispatch(login())
               props.close()
+              console.log(response.token)
             }
           )
         } catch (error) {
@@ -61,7 +62,6 @@ function Login(props) {
           })
         }
         console.log(data)
-        console.log(authCheck)
         
         // validate such email
         // setError("root", {
@@ -76,6 +76,7 @@ function Login(props) {
     <Dialog
       open={props.isOpen}
       as="div"
+      
       className="relative z-10 focus:outline-none"
       onClose={props.close}
     >

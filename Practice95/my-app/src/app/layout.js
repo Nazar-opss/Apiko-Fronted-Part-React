@@ -4,8 +4,8 @@ import "./globals.css";
 import Header from "./Header";
 import Footer from "./Footer";
 import StoreProvider from "./state/StoreProvider";
-import { store } from "./state/AuthStore";
-import { injectStore } from "./apiLogin";
+import { store } from "./state/Store";
+import { injectStore } from "./apiUser";
 const heebo = Heebo({ subsets: ["latin"] });
 
 // export const metadata = {
