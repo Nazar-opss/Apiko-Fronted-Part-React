@@ -2,7 +2,7 @@
 import Image from "next/image"
 import Item_like from "../../public/item_like.svg"
 import { useDispatch, useSelector } from "react-redux"
-import Favourite_CTA from "./Favourite_CTA"
+import Favorite_CTA from "./Favorite_CTA"
 import { useState } from "react"
 import { addFavorite } from "./state/slice/UserSlice"
 
@@ -40,7 +40,7 @@ export const Item = (props) => {
             </a>
             
             {
-                isOpen && <Favourite_CTA close={closeModal} isOpen={isOpen}/>
+                isLoggedIn === false && isOpen && <Favorite_CTA close={closeModal} isOpen={isOpen}/>
             }
             <div className='w-full h-full max-w-[30px] max-h-[30px] right-[8px] drop-shadow-md absolute rounded-[100%] bottom-[46px] bg-white flex justify-center items-center'>
                 <Item_like width='18' onClick={() => handleLike(id)} height='17' className=' hover:fill-dark_2 hover:cursor-pointer'/>

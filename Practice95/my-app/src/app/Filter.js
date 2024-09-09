@@ -4,6 +4,9 @@ import styles from './Catalog.module.css'
 import Image from 'next/image';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { fetchSearchList } from './state/slice/FetchSlice';
 
 const optionsSort = [
     {value: '1', text: "Popular" },
@@ -11,6 +14,11 @@ const optionsSort = [
 ]
 
 function Filter(props) {
+    const searchParams = useSearchParams()
+    const pathname = usePathname()
+    const { replace } = useRouter()
+    const dispatch = useDispatch()
+
     const [selectedCategory, setSelectedCategory] = useState("Choose Category")
     const [selectedSort, setSelectedSort] = useState("Sorting")
     const [searchActive, setSearchActive] = useState(false)
@@ -19,6 +27,19 @@ function Filter(props) {
 
     const toggleSearch = () => {
         setSearchActive(!searchActive)
+    }
+
+    function handleSearch(term) {
+        const params = new URLSearchParams(searchParams)
+        if (term) {
+            if (term.length >= 3) {
+                dispatch(fetchSearchList(term))
+            }
+            params.set('query', term)
+        } else {
+            params.delete('query')
+        }
+        replace(`${pathname}?${params.toString()}`)
     }
 
   return (
@@ -42,6 +63,10 @@ function Filter(props) {
                         id="name"
                         name="name"
                         type="text"
+                        onChange={(e) => {
+                            handleSearch(e.target.value);
+                        }}
+                        defaultValue={searchParams.get('query')?.toString()}
                         placeholder="Search products by name"
                         className="block w-full rounded-md border-0 py-1.5 pl-9 pr-22 text-gray-900 ring-1 ring-select-border ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-select-border sm:text-sm sm:leading-6"
                     />

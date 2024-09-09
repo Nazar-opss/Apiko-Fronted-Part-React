@@ -1,8 +1,19 @@
+'use client'
 import { Button, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
+import Register from './Register'
+import Login from './Login'
+import { useDispatch, useSelector } from 'react-redux'
+import { openModal, closeModal } from './state/slice/ModalSlice'
 
-function Favourite_CTA(props) {
+function Favorite_CTA(props) {
+  const isOpen = useSelector((state) => state.modal.isOpen)
+  const componentName = useSelector((state) => state.modal.componentName)
+
+  const dispatch = useDispatch()
+
+  console.log(isOpen, componentName )
   return (
     <Dialog
     open={props.isOpen}
@@ -36,19 +47,27 @@ function Favourite_CTA(props) {
                     </p>
                     <div className='font-medium text-sm leading-6 h-[158px] flex flex-col justify-between mt-8' >
                         <Button
-                            className="text-white bg-orange_main w-full py-1.5 px-[47.5px] rounded hover:opacity-80"
+                          onClick={() => dispatch(openModal({componentName: 'login'}))}
+                          className="text-white bg-orange_main w-full py-1.5 px-[47.5px] rounded hover:opacity-80"
                         >
-                            Continue to sign in
+                          Continue to sign in
+                          {
+                            isOpen === true && componentName === 'login' && <Login isOpen={isOpen} close={() => dispatch(closeModal())} RegIn={() => dispatch(openModal({componentName: 'register'}))}/>
+                          }
                         </Button>
                         <Button
-                            className="text-white bg-orange_main w-full py-1.5 px-[44px] rounded hover:opacity-80"
+                          onClick={() => dispatch(openModal({componentName: 'register'}))}
+                          className="text-white bg-orange_main w-full py-1.5 px-[44px] rounded hover:opacity-80"
                         >
-                            Continue to register
+                          Continue to register
+                          {
+                            isOpen === true && componentName === 'register' && <Register isOpen={isOpen} close={() => dispatch(closeModal())} LogIn={() => dispatch(openModal({componentName: 'login'}))}/>
+                          }
                         </Button>
                         <Button
-                            className="text-orange_main bg-white w-full py-1.5 px-[47.5px] border-[1px] border-orange_main rounded hover:opacity-80"
+                          className="text-orange_main bg-white w-full py-1.5 px-[47.5px] border-[1px] border-orange_main rounded hover:opacity-80"
                         >
-                            Continue as guest
+                          Continue as guest
                         </Button>
                     </div>
                 </div>
@@ -61,4 +80,4 @@ function Favourite_CTA(props) {
   )
 }
 
-export default Favourite_CTA
+export default Favorite_CTA

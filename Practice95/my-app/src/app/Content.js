@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import { Item } from './Item'
+import { useSelector } from 'react-redux'
 
     // make fetch better https://www.youtube.com/watch?v=MBlZ8Wzkbi4
     
@@ -18,14 +19,20 @@ async function getData() {
 }
 
 export default async function Content() {
+
+    const fetchSearch = useSelector((state) => state.fetch.fetches)
+
     const data = await getData()
     
     console.log(data)
+    console.log(fetchSearch)
 return (
     <>
-    <div className='flex justify-between flex-wrap w-full mt-5'>
+    <div className="flex justify-between  flex-wrap w-full mt-5">
         {
-            data.map((elem) => {
+            // make fetch with search
+            //data.map((elem) => {
+            fetchSearch.map((elem) => {
                 return(
                     <Item
                         key={elem.id}

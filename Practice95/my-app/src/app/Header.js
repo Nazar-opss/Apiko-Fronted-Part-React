@@ -1,15 +1,15 @@
 'use client'
-import { useState } from 'react';
+import { useState } from 'react'
 import styles from './Header.module.css'
-import Image from 'next/image';
-import Register from './Register';
-import Login from './Login';
+import Image from 'next/image'
+import Register from './Register'
+import Login from './Login'
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuButton, MenuItem, MenuItems, MenuSeparator } from '@headlessui/react'
-import { logOut } from './state/slice/AuthSlice';
+import { logOut } from './state/slice/AuthSlice'
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   const [modalContent, setModalContent] = useState(null);
   
   const authCheck = useSelector((state) => state.auth.accessToken)
@@ -21,13 +21,13 @@ export default function Header() {
   const dispatch = useDispatch()
 
   const openModal = (content) => {
-    setModalContent(content);
-    setIsOpen(true);
+    setModalContent(content)
+    setIsOpen(true)
   };
 
   const closeModal = () => {
-    setIsOpen(false);
-    setModalContent(null);
+    setIsOpen(false)
+    setModalContent(null)
   };
 
   const avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
@@ -91,20 +91,22 @@ export default function Header() {
               </Menu>
                 
             </div>
-          : // add log out functional
+          :
             <div className={styles.header_auth}>
               {/* TODO: Modals by ulr */}
               <button onClick={() => openModal("Register")}>REGISTER</button>
 
               <div className={styles.vl}></div>
+
+              <button onClick={() => openModal("Login")}>LOG IN</button>
+              
               {modalContent === "Login" 
                 ? (
                 <Login close={closeModal} RegIn={() => openModal("Register")} isOpen={isOpen} />
               ) : (
                 <Register close={closeModal} LogIn={() => openModal("Login")} isOpen={isOpen} />
               )}
-              <button onClick={() => openModal("Login")}>LOG IN</button>
-              {/* <button> <Link href="/login">Open modal</Link></button> */}
+              
             </div>
         }
       </div>
