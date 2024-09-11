@@ -18,11 +18,26 @@ const initialState = {
 //     }
 // })
 
+export const fetchItemsList = createAsyncThunk (
+    'fetch/fetchItemsList',
+    async () => {
+        const res = await axios(`https://demo-api.apiko.academy/api/products?offset=0&limit=12&sortBy=latest`,  
+            { 
+                headers: {
+                    accept: "application/json"
+                }
+            },
+        )
+        const data = await res.data
+        console.log(data)
+        return data
+    }
+)
 export const fetchSearchList = createAsyncThunk (
     'fetch/fetchSearchList',
     async (keywords) => {
         console.log(keywords)
-        const res = await axios(`https://demo-api.apiko.academy/api/products/search?keywords=${keywords}&offset=0&limit=20`,  
+        const res = await axios(`https://demo-api.apiko.academy/api/products/search?keywords=${keywords}&offset=0&limit=12`,  
             { 
                 headers: {
                     accept: "application/json"
@@ -43,14 +58,29 @@ export const fetchSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchSearchList.pending, (state) => {
             state.isLoading = true
-            state.fetches = []
+            // state.fetches = []
         })
         builder.addCase(fetchSearchList.fulfilled, (state, action) => {
+            console.log('is loading fetchSearchlist')
             state.isLoading = false
             state.fetches = action.payload
             console.log(state.fetches)
         })
         builder.addCase(fetchSearchList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.error.message
+        })
+        builder.addCase(fetchItemsList.pending, (state) => {
+            // state.isLoading = true
+            // state.fetches = []
+        })
+        builder.addCase(fetchItemsList.fulfilled, (state, action) => {
+            console.log('is loading fetchItemslist')
+            state.fetches = action.payload
+            state.isLoading = false
+            console.log(state.fetches)
+        })
+        builder.addCase(fetchItemsList.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.error.message
         })

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import styles from './Catalog.module.css'
 import dynamic from 'next/dynamic';
 
@@ -28,11 +28,22 @@ async function getCategories() {
 
 export default async function Catalog() {
     const categories = await getCategories()
-    
+
+    function Skeleton({ className }) {
+        return <div className={`bg-orange_main/70 motion-safe:animate-pulse ${className}`} />;
+    }
+
     return (
         <div className={styles.container}>
             <Filter categories={categories}/>
-            <Content/>
+            <Suspense fallback={<Skeleton  className="w-[209px] h-[212px] "/>}>
+                <Content/>
+            </Suspense>
+            <button 
+                type="button" 
+                className="text-white bg-blue_btn w-full max-w-[150px] mt-10 font-medium rounded text-sm  leading-6 px-4 py-1.5 mb-[85px] hover:opacity-80">
+                Load More...
+            </button>
         </div>
     );
 }
