@@ -21,16 +21,16 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
         <body className={heebo.className} suppressHydrationWarning={true} >
-    <StoreProvider>
-        <div>
-        <Header/>
-        {children}
-        <Footer/>
-        </div>
-        {/* <div>
-        {auth}
-        </div> */}
-    </StoreProvider>
+          <StoreProvider>
+              <div className="min-h-screen">
+                <Header/>
+                {children}
+                <Footer/>
+              </div>
+              {/* <div>
+              {auth}
+              </div> */}
+          </StoreProvider>
         </body>
       </html>
   );

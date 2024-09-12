@@ -39,11 +39,6 @@ export default async function Catalog() {
             <Suspense fallback={<Skeleton  className="w-[209px] h-[212px] "/>}>
                 <Content/>
             </Suspense>
-            <button 
-                type="button" 
-                className="text-white bg-blue_btn w-full max-w-[150px] mt-10 font-medium rounded text-sm  leading-6 px-4 py-1.5 mb-[85px] hover:opacity-80">
-                Load More...
-            </button>
         </div>
     );
 }

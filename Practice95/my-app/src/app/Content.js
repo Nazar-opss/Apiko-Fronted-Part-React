@@ -26,8 +26,7 @@ export default function Content() {
     const fetchSearch = useSelector((state) => state.fetch.fetches)
     const isLoading = useSelector((state) => state.fetch.isLoading)
     // style no results and fix for first render
-    console.log(fetchSearch)
-    console.log(isLoading)
+
 return (
     <>
         
@@ -36,29 +35,36 @@ return (
     <Suspense fallback={<Skeleton className="w-[209px] h-[212px] "/>}>
     {
         fetchSearch?.length 
-        ? <div className="flex justify-between flex-wrap w-full mt-5">
-            {
-                //data.map((elem) => {
-                
-                // make another name 
-                fetchSearch.map((elem) => {
-                    return(
-                            <Item
-                                key={elem.id}
-                                id={elem.id}
-                                price={elem.price}
-                                title={elem.title}
-                                picture={elem.picture}
-                            />
-                    )
-                }) 
-            }
-        </div>
-        : <div className=' text-center max-w-[347px]'> 
-            <h1 className='text-[#101010] text-lg font-bold leading-[26.44px] tracking-[0.5px]'>
+        ? <>
+            <div className="flex justify-between items-center flex-wrap w-full mt-5">
+                {
+                    //data.map((elem) => {
+                    
+                    // make another name 
+                    fetchSearch.map((elem) => {
+                        return(
+                                <Item
+                                    key={elem.id}
+                                    id={elem.id}
+                                    price={elem.price}
+                                    title={elem.title}
+                                    picture={elem.picture}
+                                />
+                        )
+                    }) 
+                }
+            </div>
+            <button 
+                type="button" 
+                className="text-white bg-blue_btn w-full max-w-[150px] mt-10 font-medium rounded text-sm  leading-6 px-4 py-1.5 mb-[85px] hover:opacity-80">
+                Load More...
+            </button>
+        </> 
+        : <div className=' text-center w-full h-full flex flex-col mt-[209px] justify-center items-center'> 
+            <h1 className='text-[#101010] text-lg font-bold max-w-[347px] leading-[26.44px] tracking-[0.5px]'>
                 No Results Found
             </h1>
-            <span className='text-[15px] text-dark_1 leading-[22px]'>
+            <span className='text-[15px] text-dark_1 max-w-[347px] mt-[10px] leading-[22px]'>
                 We did not find any article that matches this search
                 Make sure that the search text is entered correctly
                 Try using other search criteria
@@ -67,7 +73,7 @@ return (
     }
     </Suspense>
     {/* </Suspense> */}
-    <Skeleton  className="w-[209px] h-[212px] "/>
+    {/* <Skeleton  className="w-[209px] h-[212px] "/> */}
             
     </>
 )

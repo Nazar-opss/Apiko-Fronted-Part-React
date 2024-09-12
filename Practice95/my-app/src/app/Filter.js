@@ -2,60 +2,88 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Catalog.module.css'
 import Image from 'next/image';
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions, ListboxSelectedOption } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { fetchItemsList, fetchSearchList } from './state/slice/FetchSlice';
+import { fetchCategoriesList, fetchItemsList, fetchSearchList } from './state/slice/FetchSlice';
 import { useDebouncedCallback } from 'use-debounce';
 import ArrowDown from "../../public/arrow_down.svg"
+import Close from "../../public/close.svg"
 
 const optionsSort = [
-    {value: '1', text: "Popular" },
-    {value: '2', text: "New" },
+    {value: 'popular', text: "Popular" },
+    {value: 'latest', text: "New" },
 ]
 
 function Filter(props) {
     const searchParams = useSearchParams()
     const pathname = usePathname()
-    const { replace } = useRouter()
+    const { router, replace } = useRouter()
     const dispatch = useDispatch()
 
     const [selectedCategory, setSelectedCategory] = useState("Choose Category")
-    const [selectedSort, setSelectedSort] = useState("Sorting")
+    const [selectedSort, setSelectedSort] = useState({name: 'Sorting', value: ''})
 
     const [searchActive, setSearchActive] = useState(false)
 
     const categories = props.categories
+    console.log(categories)
 
     const toggleSearch = () => {
         setSearchActive(!searchActive)
     }
 
-    console.log(searchParams.get('query')?.length)
+    //make re render after select sort, when selected only category, clear params when searching
+
+    console.log(searchParams.get('category'))
 
     useEffect(() => {
         if (searchParams.size === 1 && searchParams.get('query')?.length >= 3 ) {
             dispatch(fetchSearchList(searchParams.get('query')?.toString()))
+        } else if (searchParams.get('category')?.length >= 1 ) {
+            dispatch(fetchCategoriesList({categoryId: searchParams.get('id'), sortBy: selectedSort.value}))
+            setSelectedCategory(searchParams.get('category'))
+            setSelectedSort({name: searchParams.get('sortBy') === 'popular' ? 'Popular' : 'New' ,value:searchParams.get('sortBy')})
         } else {
             dispatch(fetchItemsList())
         }
         // dispatch(fetchItemsList())
+        console.log(selectedCategory)
     }, [])
     
     const handleSearch = useDebouncedCallback((term) => {
         console.log(`Searching... ${term}`);
+        router.replace('/?', undefined, { shallow: true });
         const params = new URLSearchParams(searchParams)
+        
         if (term) {
             if (term.length >= 3) {
                 dispatch(fetchSearchList(term))
-            } 
+            } else {
+                dispatch(fetchItemsList())
+            }
             params.set('query', term)
         } else {
             params.delete('query')
         }
         replace(`${pathname}?${params.toString()}`)
     }, 300)
+    
+    const handleCategories = ({id, sortBy, name}) => {
+        console.log(id, sortBy, name)
+        const params = new URLSearchParams(searchParams)
+        setSelectedCategory(name)
+        if (id) {
+            dispatch(fetchCategoriesList({categoryId: id, sortBy: sortBy}))
+            params.set('category', name)
+            params.set('id', id)
+            params.set('sortBy', sortBy)
+        } else {
+            params.delete('category')
+        }
+        replace(`${pathname}?${params.toString()}`)
+    }
 
   return (
     <div className={styles.filter}>
@@ -95,7 +123,11 @@ function Filter(props) {
                     : 
                     <>
                         <div className={styles.filter_category}>
-                            <Listbox value={selectedCategory} onChange={setSelectedCategory}>
+                            <Listbox value={selectedCategory} onChange={setSelectedCategory}
+                            // defaultValue={searchParams.get('category')?.toString()}
+                            // onChange={(e) => handleCategories({value: selectedCategory,id: e.target, sortBy: selectedSort})}
+                            >
+                            
                             <div className="relative">
                                 <ListboxButton className="relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-select-border  open:rounded-t-md focus:outline-none sm:text-sm sm:leading-6 ">
                                 <span className="flex items-center">
@@ -108,12 +140,22 @@ function Filter(props) {
                                     <span className="ml-1.5 block truncate text-dark_2">{selectedCategory}</span>
                                 </span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                    <ArrowDown
-                                        width={13}
-                                        height={8}
-                                        className='fill-dark_2'
-                                    />
+                                {
+                                    selectedCategory == 'Choose Category'
+                                        ? <ArrowDown
+                                            width={13}
+                                            height={8}
+                                            className='fill-dark_2'
+                                        />
+                                        : <Close
+                                            onClick={() => setSelectedCategory('Choose Category')}
+                                            className='fill-dark_2 cursor-pointer'
+                                        />
+                                }
                                 </span>
+                                <ListboxSelectedOption placeholder='Choose Category'>
+
+                                </ListboxSelectedOption>
                                 </ListboxButton>
 
                                 <ListboxOptions
@@ -124,7 +166,8 @@ function Filter(props) {
                                         <ListboxOption
                                             key={option.id}
                                             value={option.name}
-
+                                            // defaultValue={searchParams.get('category')?.toString()}
+                                            onClick={() => handleCategories({id: option.id, sortBy: selectedSort.value, name: option.name})}
                                             className="group relative cursor-pointer select-none bg-white pt-[8px] pb-[7px] pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
                                         >
                                             <div className="flex items-center">
@@ -139,7 +182,7 @@ function Filter(props) {
                             </Listbox>
                         </div>
                         <div className={styles.filter_sort}>
-                            <Listbox value={selectedSort} onChange={setSelectedSort}>
+                            <Listbox value={selectedSort.name}>
                             <div className="relative">
                                 <ListboxButton className="relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-select-border focus:outline-none sm:text-sm sm:leading-6">
                                 <span className="flex items-center ">
@@ -149,7 +192,7 @@ function Filter(props) {
                                         width={14}
                                         height={18}
                                     />
-                                    <span className="ml-3 block truncate text-dark_2 open:text-black">{selectedSort}</span>
+                                    <span className="ml-3 block truncate text-dark_2 open:text-black">{selectedSort.name}</span>
                                 </span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                                     <ArrowDown
@@ -169,6 +212,8 @@ function Filter(props) {
                                         key={option.value}
                                         value={option.text}
                                         disabled={option.disabled}
+                                        // defaultValue={searchParams.get('sortBy') === 'popular' ? 'Popular' : 'New'}
+                                        onClick={() => setSelectedSort({name: option.text, value: option.value})}
                                         className="group relative cursor-pointer select-none bg-white pt-[8px] pb-[7px] pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
                                     >
                                     <div className="flex items-center">
