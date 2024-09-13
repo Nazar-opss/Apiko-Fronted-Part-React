@@ -2,14 +2,43 @@
 import React, { useEffect, useState } from 'react'
 import styles from './Catalog.module.css'
 import Image from 'next/image';
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions, ListboxSelectedOption } from '@headlessui/react';
+import { Description, Field, Label, Listbox, ListboxButton, ListboxOption, ListboxOptions, ListboxSelectedOption, Select } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { fetchCategoriesList, fetchItemsList, fetchSearchList } from './state/slice/FetchSlice';
 import { useDebouncedCallback } from 'use-debounce';
+import CreatableSelect from 'react-select/creatable';
 import ArrowDown from "../../public/arrow_down.svg"
 import Close from "../../public/close.svg"
+
+
+const customStyles = {
+    control: (provided) => ({ // class attribute : class=" css-13cymwt-control"
+      ...provided,
+      background: 'white',
+      display: 'flex',
+      flexWrap: 'nowrap',
+      borderRadius: 6 
+    }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+          ...styles,
+          color: '#373738',
+          backgroundColor: isSelected ? '#F2F2F2' : 'white',
+          cursor: isDisabled ? 'not-allowed' : 'default',
+        //   borderTopRightRadius: 6,
+        //   borderTopLeftRadius: 6,
+          "&:hover"  : {
+            background : "#F2F2F2",
+            color      : "#373738",
+            cursor: "pointer"
+          },
+    }),
+    menu: (provided) => ({
+        ...provided,
+        marginTop: 2,
+    }),
+  };
 
 const optionsSort = [
     {value: 'popular', text: "Popular" },
@@ -19,7 +48,7 @@ const optionsSort = [
 function Filter(props) {
     const searchParams = useSearchParams()
     const pathname = usePathname()
-    const { router, replace } = useRouter()
+    const { replace } = useRouter()
     const dispatch = useDispatch()
 
     const [selectedCategory, setSelectedCategory] = useState("Choose Category")
@@ -28,7 +57,7 @@ function Filter(props) {
     const [searchActive, setSearchActive] = useState(false)
 
     const categories = props.categories
-    console.log(categories)
+    // console.log(categories)
 
     const toggleSearch = () => {
         setSearchActive(!searchActive)
@@ -42,9 +71,9 @@ function Filter(props) {
         if (searchParams.size === 1 && searchParams.get('query')?.length >= 3 ) {
             dispatch(fetchSearchList(searchParams.get('query')?.toString()))
         } else if (searchParams.get('category')?.length >= 1 ) {
-            dispatch(fetchCategoriesList({categoryId: searchParams.get('id'), sortBy: selectedSort.value}))
+            dispatch(fetchCategoriesList({categoryId: searchParams.get('id'), sortBy: searchParams.get('sortBy')}));
+            setSelectedSort({name: searchParams.get('sortBy') === 'popular' ? 'Popular' : 'New', value:searchParams.get('sortBy')})
             setSelectedCategory(searchParams.get('category'))
-            setSelectedSort({name: searchParams.get('sortBy') === 'popular' ? 'Popular' : 'New' ,value:searchParams.get('sortBy')})
         } else {
             dispatch(fetchItemsList())
         }
@@ -54,10 +83,13 @@ function Filter(props) {
     
     const handleSearch = useDebouncedCallback((term) => {
         console.log(`Searching... ${term}`);
-        router.replace('/?', undefined, { shallow: true });
+        // router.replace('/?', undefined, { shallow: true });
         const params = new URLSearchParams(searchParams)
         
         if (term) {
+            params.delete('category')
+            params.delete('id')
+            params.delete('sortBy')
             if (term.length >= 3) {
                 dispatch(fetchSearchList(term))
             } else {
@@ -72,15 +104,19 @@ function Filter(props) {
     
     const handleCategories = ({id, sortBy, name}) => {
         console.log(id, sortBy, name)
-        const params = new URLSearchParams(searchParams)
         setSelectedCategory(name)
+        const params = new URLSearchParams(searchParams)
         if (id) {
             dispatch(fetchCategoriesList({categoryId: id, sortBy: sortBy}))
             params.set('category', name)
             params.set('id', id)
-            params.set('sortBy', sortBy)
+            if(sortBy) {
+                params.set('sortBy', sortBy)
+            }
         } else {
             params.delete('category')
+            params.delete('id')
+            dispatch(fetchItemsList())
         }
         replace(`${pathname}?${params.toString()}`)
     }
@@ -152,6 +188,10 @@ function Filter(props) {
                                             className='fill-dark_2 cursor-pointer'
                                         />
                                 }
+                                <Close
+                                    onClick={() => setSelectedCategory('Choose Category')}
+                                    className='fill-dark_2 cursor-pointer'
+                                />
                                 </span>
                                 <ListboxSelectedOption placeholder='Choose Category'>
 
@@ -180,6 +220,40 @@ function Filter(props) {
                                 </ListboxOptions>
                             </div>
                             </Listbox>
+                            {/* <CreatableSelect 
+                                defaultValue={(e) => categories[`${e?.id}`]}
+                                isClearable 
+                                isSearchable={false}
+                                options={categories} 
+                                getOptionValue={(option) => `${option['id']}`} 
+                                getOptionLabel={(option) => `${option['name']}`}
+                                styles={customStyles}
+                                onChange={(e) => handleCategories({id: e?.id, sortBy: selectedSort.value, name: e?.name})}
+                                theme={(theme) => ({
+                                    ...theme,
+                                    borderRadius: 0,
+                                    colors: {
+                                        ...theme.colors,
+                                        primary25: '#F2F2F2',
+                                        primary: '#DEDEE0',
+                                    },
+                                    })}
+                            /> */}
+                            {/* <Select
+                                className='w-full'
+                                value={selectedCategory}
+                                placeholder='CHECK'
+                                onChange={setSelectedCategory}
+                                // onChange={(e) => handleCategories({id: e?.id, sortBy: selectedSort.value, name: e?.name})}
+                            >
+                                {
+                                    categories.map((option) => (
+                                        <MenuItem key={option.id} 
+                                        onClick={() => handleCategories({id: option.id, sortBy: selectedSort.value, name: option.name})} 
+                                        value={option.name}>{option.name}</MenuItem>
+                                    ))
+                                }
+                            </Select> */}
                         </div>
                         <div className={styles.filter_sort}>
                             <Listbox value={selectedSort.name}>
