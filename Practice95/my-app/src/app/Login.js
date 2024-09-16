@@ -7,6 +7,7 @@ import Image from 'next/image'
 import IconInput from './IconInput'
 import { useDispatch, useSelector } from 'react-redux'
 import { login, setAccessToken, setIsLoggedIn } from './state/slice/AuthSlice'
+import { getFavorite } from './state/slice/UserSlice'
 
 function Login(props) {
   const authCheck = useSelector((state) => state.auth.accessToken)
@@ -52,10 +53,18 @@ function Login(props) {
               } 
               dispatch(setIsLoggedIn(true))
               dispatch(login())
+              dispatch(getFavorite())
               props.close()
               console.log(response.token)
             }
           )
+          const response =  apiUser.get('api/products/favorites?offset=0&limit=12')
+              .catch(error => {
+                console.error('Error in request:', error);
+              })
+              const data = response.data
+              console.log(data)
+              return data
         } catch (error) {
           setError("root", {
             message:"Email or password is wrong"

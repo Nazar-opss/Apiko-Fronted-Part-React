@@ -57,15 +57,13 @@ function Filter(props) {
     const [searchActive, setSearchActive] = useState(false)
 
     const categories = props.categories
-    // console.log(categories)
+    console.log(categories)
 
     const toggleSearch = () => {
         setSearchActive(!searchActive)
     }
 
-    //make re render after select sort, when selected only category, clear params when searching
-
-    console.log(searchParams.get('category'))
+    //make re render after select sort, find a way for clear category
 
     useEffect(() => {
         if (searchParams.size === 1 && searchParams.get('query')?.length >= 3 ) {
@@ -83,7 +81,6 @@ function Filter(props) {
     
     const handleSearch = useDebouncedCallback((term) => {
         console.log(`Searching... ${term}`);
-        // router.replace('/?', undefined, { shallow: true });
         const params = new URLSearchParams(searchParams)
         
         if (term) {
@@ -119,6 +116,20 @@ function Filter(props) {
             dispatch(fetchItemsList())
         }
         replace(`${pathname}?${params.toString()}`)
+    }
+
+    const handleClear = (e) => {
+        const params = new URLSearchParams(searchParams)
+        e.stopPropagation(); 
+        params.delete('category')
+        params.delete('id')
+        params.delete('sortBy')
+        dispatch(fetchItemsList())
+        setSelectedCategory('Choose Category')
+        replace(`${pathname}?${params.toString()}`)
+    }
+    const handleSort = () => {
+        const params = new URLSearchParams(searchParams)
     }
 
   return (
@@ -163,7 +174,6 @@ function Filter(props) {
                             // defaultValue={searchParams.get('category')?.toString()}
                             // onChange={(e) => handleCategories({value: selectedCategory,id: e.target, sortBy: selectedSort})}
                             >
-                            
                             <div className="relative">
                                 <ListboxButton className="relative w-full cursor-pointer rounded-md bg-white py-1.5 pl-3 pr-10 text-left shadow-sm ring-1 ring-select-border  open:rounded-t-md focus:outline-none sm:text-sm sm:leading-6 ">
                                 <span className="flex items-center">
@@ -183,21 +193,34 @@ function Filter(props) {
                                             height={8}
                                             className='fill-dark_2'
                                         />
-                                        : <Close
-                                            onClick={() => setSelectedCategory('Choose Category')}
-                                            className='fill-dark_2 cursor-pointer'
+                                        : <Image
+                                                onClick={(e) =>  {
+                                                        handleClear(e)
+                                                    }}
+                                            src="/close.svg"
+                                                alt="close Icon"
+                                                width={12}
+                                                height={12}
+                                                className='fill-dark_2 cursor-pointer pointer-events-auto'
                                         />
+                                        // <Close
+                                            // onClick={(e) =>  {
+                                                // e.stopPropagation(); 
+                                               // params.delete('category')
+                                               // params.delete('id')
+                                               // dispatch(fetchItemsList())
+                                             //   setSelectedCategory('Choose Category')
+                                           // }}
+                                          //  className='fill-dark_2 cursor-pointer pointer-events-auto'
+                                        ///> 
                                 }
-                                <Close
-                                    onClick={() => setSelectedCategory('Choose Category')}
-                                    className='fill-dark_2 cursor-pointer'
-                                />
+                                
                                 </span>
                                 <ListboxSelectedOption placeholder='Choose Category'>
 
                                 </ListboxSelectedOption>
                                 </ListboxButton>
-
+    
                                 <ListboxOptions
                                     transition
                                     className="absolute z-10 max-h-56 w-full rounded-b-md bg-white text-sm leading-[26px] shadow-lg outline outline-1 outline-select-border focus:outline-1 data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in"
@@ -218,6 +241,7 @@ function Filter(props) {
                                         </ListboxOption>
                                     ))}
                                 </ListboxOptions>
+                                
                             </div>
                             </Listbox>
                             {/* <CreatableSelect 

@@ -106,7 +106,7 @@ export const fetchSlice = createSlice({
 
 
         builder.addCase(fetchCategoriesList.pending, (state) => {
-            // state.isLoading = true
+            state.isLoading = true
             // state.fetches = []
         })
         builder.addCase(fetchCategoriesList.fulfilled, (state, action) => {

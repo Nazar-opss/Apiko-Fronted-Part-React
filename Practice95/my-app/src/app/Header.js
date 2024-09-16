@@ -32,7 +32,7 @@ export default function Header() {
 
   const avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
 
-  console.log(avatarInitials)
+  console.log(authCheck)
   return (
     <div className={styles.header}>
       <div className={styles.header_container}>
