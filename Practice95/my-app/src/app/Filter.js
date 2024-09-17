@@ -63,7 +63,7 @@ function Filter(props) {
         setSearchActive(!searchActive)
     }
 
-    //make re render after select sort, find a way for clear category
+    //Fix this, must be a away to make it easier
 
     useEffect(() => {
         if (searchParams.size === 1 && searchParams.get('query')?.length >= 3 ) {
@@ -118,18 +118,35 @@ function Filter(props) {
         replace(`${pathname}?${params.toString()}`)
     }
 
-    const handleClear = (e) => {
+    const handleClear = ({e, type}) => {
         const params = new URLSearchParams(searchParams)
         e.stopPropagation(); 
-        params.delete('category')
-        params.delete('id')
-        params.delete('sortBy')
-        dispatch(fetchItemsList())
-        setSelectedCategory('Choose Category')
+        if (type == 'category') {
+            params.delete('category')
+            params.delete('id')
+            dispatch(fetchItemsList())
+            setSelectedCategory('Choose Category')
+        } else {
+            params.delete('sortBy')
+            setSelectedSort({name: 'Sorting'})
+            dispatch(fetchCategoriesList({categoryId: searchParams.get('id'), sortBy: ''}))
+        }
         replace(`${pathname}?${params.toString()}`)
     }
-    const handleSort = () => {
+
+    const handleSort = ({text, value}) => {
         const params = new URLSearchParams(searchParams)
+        setSelectedSort({name: text, value: value})
+        console.log(text, value)
+        dispatch(fetchCategoriesList({categoryId: searchParams.get('id'), sortBy: value}))
+        if(searchParams.get('category')) {
+            params.set('category', searchParams.get('category'))
+        }
+        if(searchParams.get('id')) {
+            params.set('id', searchParams.get('id'))
+        }
+        params.set('sortBy', value)
+        replace(`${pathname}?${params.toString()}`)
     }
 
   return (
@@ -195,7 +212,7 @@ function Filter(props) {
                                         />
                                         : <Image
                                                 onClick={(e) =>  {
-                                                        handleClear(e)
+                                                        handleClear({e: e, type: 'category'})
                                                     }}
                                             src="/close.svg"
                                                 alt="close Icon"
@@ -203,16 +220,6 @@ function Filter(props) {
                                                 height={12}
                                                 className='fill-dark_2 cursor-pointer pointer-events-auto'
                                         />
-                                        // <Close
-                                            // onClick={(e) =>  {
-                                                // e.stopPropagation(); 
-                                               // params.delete('category')
-                                               // params.delete('id')
-                                               // dispatch(fetchItemsList())
-                                             //   setSelectedCategory('Choose Category')
-                                           // }}
-                                          //  className='fill-dark_2 cursor-pointer pointer-events-auto'
-                                        ///> 
                                 }
                                 
                                 </span>
@@ -293,11 +300,24 @@ function Filter(props) {
                                     <span className="ml-3 block truncate text-dark_2 open:text-black">{selectedSort.name}</span>
                                 </span>
                                 <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                    <ArrowDown
-                                        width={13}
-                                        height={8}
-                                        className='fill-dark_2'
-                                    />
+                                {
+                                    selectedSort.name == 'Sorting'
+                                        ? <ArrowDown
+                                            width={13}
+                                            height={8}
+                                            className='fill-dark_2'
+                                        />
+                                        : <Image
+                                                onClick={(e) =>  {
+                                                        handleClear({e: e, type: 'sort'})
+                                                    }}
+                                            src="/close.svg"
+                                                alt="close Icon"
+                                                width={12}
+                                                height={12}
+                                                className='fill-dark_2 cursor-pointer pointer-events-auto'
+                                        />
+                                }
                                 </span>
                                 </ListboxButton>
                                 
@@ -311,7 +331,7 @@ function Filter(props) {
                                         value={option.text}
                                         disabled={option.disabled}
                                         // defaultValue={searchParams.get('sortBy') === 'popular' ? 'Popular' : 'New'}
-                                        onClick={() => setSelectedSort({name: option.text, value: option.value})}
+                                        onClick={() => handleSort({value: option.value, text: option.text})}
                                         className="group relative cursor-pointer select-none bg-white pt-[8px] pb-[7px] pl-1 pr-3 text-gray-900 data-[focus]:bg-select-hover data-[focus]:text-black"
                                     >
                                     <div className="flex items-center">

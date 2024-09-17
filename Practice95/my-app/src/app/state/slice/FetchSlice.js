@@ -6,6 +6,7 @@ const initialState = {
     fetches: [],
     isLoading: false,
     error: null,
+    itemInfo: {},
 }
 
 // const fetchSlice = createSlice({
@@ -55,6 +56,22 @@ export const fetchCategoriesList = createAsyncThunk (
     async ({categoryId, sortBy}) => {
         console.log(categoryId, sortBy)
         const res = await axios(`https://demo-api.apiko.academy/api/categories/${categoryId}/products?offset=0&limit=12${sortBy ? `&sortBy=${sortBy}` : ''}`,  
+            { 
+                headers: {
+                    accept: "application/json"
+                }
+            },
+        )
+        const data = await res.data
+        console.log(data)
+        return data
+    }
+)
+export const fetchItemDetails = createAsyncThunk (
+    'fetch/fetchItemDetails',
+    async (id) => {
+        console.log(id)
+        const res = await axios(`https://demo-api.apiko.academy/api/products/${id}`,  
             { 
                 headers: {
                     accept: "application/json"
@@ -116,6 +133,22 @@ export const fetchSlice = createSlice({
             // console.log(state.fetches)
         })
         builder.addCase(fetchCategoriesList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.error.message
+        })
+
+
+        builder.addCase(fetchItemDetails.pending, (state) => {
+            state.isLoading = true
+            // state.fetches = []
+        })
+        builder.addCase(fetchItemDetails.fulfilled, (state, action) => {
+            console.log('is loading fetchItemDetails')
+            state.itemInfo = action.payload
+            state.isLoading = false
+            // console.log(state.fetches)
+        })
+        builder.addCase(fetchItemDetails.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.error.message
         })

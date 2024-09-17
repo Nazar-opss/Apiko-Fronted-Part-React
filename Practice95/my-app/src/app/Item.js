@@ -7,9 +7,12 @@ import { useEffect, useState } from "react"
 import { addFavorite, getFavorite } from "./state/slice/UserSlice"
 import apiUser from "./apiUser"
 import Like from "../../public/like.svg"
+import ModalItem from "./ModalItem"
+import { fetchItemDetails } from "./state/slice/FetchSlice"
 
 export const Item = (props) => { 
     const [isOpen, setIsOpen] = useState(false)
+    const [isOpenItem, setIsOpenItem] = useState(false)
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     const favorites = useSelector((state) => state.user.favorites)
 
@@ -19,28 +22,31 @@ export const Item = (props) => {
 
     const isLiked = favorites.some(product => product.id === id);;
 
-    console.log(isLiked)
-
     const closeModal = () => {
         setIsOpen(false)
     };
     
     const handleLike = (id) => {
-        console.log(isOpen)
-        console.log(favorites)
         if (isLoggedIn === false) {
             setIsOpen(true)
         } else {
             dispatch(addFavorite(id))
             dispatch(getFavorite())
-            console.log(favorites)
         }
+    }
+    const closeModalItem = () => {
+        setIsOpenItem(false)
+      };
+    const handleItem = (id) => {
+        setIsOpenItem(true)
+        dispatch(fetchItemDetails(id))
     }
 
     return(
         <div className="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow dark:bg-gray-800 dark:border-gray-700" >
-            <a href="#" className='flex justify-center'>
+            <a className='flex justify-center cursor-pointer'>
                 <Image
+                    onClick={() => handleItem(props.id)}
                     className='max-w-[201px] max-h-[147px] mt-1 rounded-[3px] mb-[6px] object-contain'
                     src={props.picture}
                     alt={props.title}
@@ -62,8 +68,9 @@ export const Item = (props) => {
             </div>
             <div className="px-3">
                 <a href="#">
-                    <h5 className="truncate text-[15px] tracking-tight text-gray-900 dark:text-dark_1">{props.title}</h5>
+                    <h5 className="truncate text-[15px] tracking-tight text-gray-900 dark:text-dark_1" onClick={() => setIsOpenItem(true)}>{props.title}</h5>
                 </a>
+                <ModalItem isOpen={isOpenItem} close={closeModalItem} id={id}/>
                 <div className="flex items-center justify-between align-text-bottom mb-[5px]">
                     <span className="text-lg font-bold text-gray-900 dark:text-dark_1">${props.price}</span>
                 </div>
