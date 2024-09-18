@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import StoreProvider from "./state/StoreProvider";
 import { store } from "./state/Store";
 import { injectStore } from "./apiUser";
+import { ToastContainer } from "react-toastify";
 const heebo = Heebo({ subsets: ["latin"] });
 
 // export const metadata = {
@@ -31,6 +32,8 @@ export default function RootLayout({ children }) {
               {auth}
               </div> */}
           </StoreProvider>
+          <ToastContainer style={{ width: "584px", height: "60px", marginTop: "82px"}}/>
+
         </body>
       </html>
   );

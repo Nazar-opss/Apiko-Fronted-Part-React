@@ -1,35 +1,94 @@
 'use client'
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { Button, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import axios from 'axios'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchItemDetails } from './state/slice/FetchSlice'
+import { openModal } from './state/slice/ModalSlice'
+import Favorite_CTA from './Favorite_CTA'
+import { addFavorite, getFavorite } from './state/slice/UserSlice'
+import Added from '../../public/added.svg'
+import Skeleton from 'react-loading-skeleton'
+import { Bounce, Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const ModalItem = (props) => {
     const itemInfo = useSelector((state) => state.fetch.itemInfo)
-    const {picture, title, price, description} = itemInfo
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+    const isLoading = useSelector((state) => state.fetch.isLoading)
+    const favorites = useSelector((state) => state.user.favorites)
+
+    const {picture, title, price, description, id} = itemInfo
+    
+    const isLiked = favorites.some(product => product.id === id);
+    
+    const [isOpen, setIsOpen] = useState(false)
     const [quantity, setQuantity] =useState(1)
-    const [totalPrice, setTotal] =useState(1)
+    let [totalPrice, setTotal] =useState(price)
+
+    const dispatch = useDispatch()
+
+    const closeModal = () => {
+        setIsOpen(false)
+    };
 
     useEffect(() => {
-        setTotal(price)
-        console.log(totalPrice)
-    }, [price])
-    // console.log(totalPrice)
+        setTotal(price * quantity);
+    }, [price, quantity]);
     
-    // fix total prices
     const increase = () => {
-        setQuantity(quantity + 1)
-        setTotal(price * quantity)
-        console.log(totalPrice)
+        setQuantity(prevQuantity => prevQuantity + 1);
+    };
+    
+    const decrease = () => {
+        if (quantity > 1) {
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    };
+
+    const handleLike = (id) => {
+        if (isLoggedIn === false) {
+            setIsOpen(true)
+        } else {
+            dispatch(addFavorite(id))
+            dispatch(getFavorite())
+        }
     }
 
-    const decrease = () => {
-        setQuantity(quantity - 1)
-        setTotal(totalPrice - price)
-        console.log(totalPrice)
-    }
+    const CloseButton = ({closeToast}) => (
+        <Image
+            onClick={closeToast}
+            src="/close.svg"
+            alt="close Icon"
+            width={20}
+            height={20}
+            className='fill-dark_2 cursor-pointer pointer-events-auto mr-[25px]'
+        />
+    );
+
+// make it more than one 
+
+    const customId = "custom-id-yes";
+    const notify = () => {  
+        toast.success(<p className='font-medium text-[#101010] text-lg leading-[26.44px]'>The <span className='text-lg font-bold leading-[35.25px]'>{title}</span> is successfully added to cart</p>, {
+          position: "top-right",
+          autoClose: true,
+          closeButton: true,
+          theme: 'colored',
+          transition: Slide,
+          hideProgressBar: true,
+          toastId: customId,
+          icon: false,
+          closeButton: CloseButton,
+          pauseOnFocusLoss: true,
+        });
+      };
+    
+      const handleAddToCart = () => {
+        props.close()
+        notify();
+      }
     return (
         <div>
             <Dialog
@@ -56,51 +115,101 @@ const ModalItem = (props) => {
                             height={18}
                             />
                         </DialogTitle>
-                        <div className='flex px-[87px] pt-[141px] pb-[127px]'>
-                            {picture ? (
-                            <div className='border border-[#E4E4E4] rounded-[3px] max-w-[411px] max-h-[300px] items-center justify-center flex '>
-                                <Image
-                                    className='max-w-[401px] max-h-[296px] m-1 rounded-[3px] object-contain'
-                                    src={picture}
-                                    alt={title || 'Image description'}
-                                    width={401}
-                                    height={296}
-                                />
-                            </div>
-                            ) : (
-                            <p>Loading image...</p>
-                            )}
-                            <div className='flex flex-col ml-[38.42px] max-w-[321px]'>
-                                <p className='text-dark_1 font-bold text-lg leading-[26.44px] tracking-[0.5px]'>
-                                    {title}
-                                </p>
-                                <span className='text-dark_2 text-[15px] leading-[22.03px] mt-[10px]'>
-                                    {description}
-                                </span>
-                                <span className='text-dark_1 text-sm font-medium leading-[26px]'>
-                                    PRICE <span className='ml-[154px] text-dark_1 font-bold text-lg leading-[26.44px] tracking-[0.5px]'>${price}</span>
-                                </span>
-                                <div className='flex max-w-[81px] justify-between'>
-                                    <button 
-                                        className='text-dark_2 w-full h-full max-w-[26px] max-h-[26px] rounded-[100%] bg-dark_3 flex justify-center items-center'
-                                        onClick={() => decrease()}
-                                        disabled={quantity <= 0}
-                                    >
-                                        -
-                                    </button>
-                                    <div className='text-[15px] leading-[22.03px]'>
-                                        {quantity}
+                        <div className='flex flex-col px-[87px] pt-[141px] pb-[127px]'>
+                            <div className='flex'>
+                                {
+                                    picture ? (
+                                    <div className='border border-[#E4E4E4] rounded-[3px] max-w-[411px] max-h-[300px] items-center justify-center flex '>
+                                        <Image
+                                            className='max-w-[401px] max-h-[296px] m-1 rounded-[3px] object-contain'
+                                            src={picture}
+                                            alt={title || 'Image description'}
+                                            width={401}
+                                            height={296}
+                                        />
                                     </div>
-                                    <button 
-                                        className='w-full h-full text-dark_2  max-w-[26px] max-h-[26px] rounded-[100%] bg-dark_3 flex justify-center items-center'
-                                        onClick={() => increase()}
-                                    >
-                                        +
-                                    </button>
+                                ) : (
+                                <p>Loading image...</p>
+                                )}
+                                {isLoading && (
+                                        <Skeleton
+                                            circle
+                                            height="100%"
+                                            containerClassName="avatar-skeleton"
+                                        />
+                                    )}
+                                <div className='flex flex-col ml-[38.42px] max-w-[321px] text-dark_2'>
+                                    <p className='text-dark_1 font-bold text-lg leading-[26.44px] tracking-[0.5px]'>
+                                        {title}
+                                    </p>
+                                    <p className=' text-[15px] leading-[22.03px] mt-[10px]'>
+                                        {description}
+                                    </p>
+                                    <p className='text-dark_1 text-sm font-medium leading-[26px] mt-[30px]'>
+                                        PRICE <span className='ml-[154px] text-dark_1 font-bold text-lg leading-[26.44px] tracking-[0.5px]'>${price}</span>
+                                    </p>
+                                    <div className='flex max-w-[81px] justify-between mt-[25px]'>
+                                        <button 
+                                            className='w-full h-full max-w-[26px] max-h-[26px] rounded-[100%] bg-dark_3 flex justify-center items-center'
+                                            onClick={() => decrease()}
+                                            disabled={quantity <= 0}
+                                        >
+                                            -
+                                        </button>
+                                        <div className='text-[15px] leading-[22.03px] text-black'>
+                                            {quantity}
+                                        </div>
+                                        <button 
+                                            className='w-full h-full max-w-[26px] max-h-[26px] rounded-[100%] bg-dark_3 flex justify-center items-center'
+                                            onClick={() => increase()}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <div className='mt-[50px]'>
+                                        <p>Items:    <span className='text-dark_1 ml-8 font-bold text-lg leading-[26.44px]'>{quantity}</span></p>
+                                        <p>Total:    <span className='text-dark_1 ml-[37px] mt-[5px] font-bold text-lg leading-[26.44px]'>${totalPrice}</span></p>
+                                    </div>
                                 </div>
-                                <p>Items:    {quantity}</p>
-                                <p>Total:    {totalPrice}</p>
+                            </div>
+                            <div className='flex flex-row mt-[71px]'>
+                                <Button
+                                    // onClick={notify}
+                                    onClick={() => handleAddToCart()}
+                                    className="text-orange_main bg-white py-[9px] px-[70px] mr-[35px] text-xs font-medium leading-[17.63px] tracking-[0.4px] border-[2px] border-orange_main rounded hover:opacity-80"
+                                >
+                                    ADD TO CART
+                                </Button>
+                                {
+                                    isLiked 
+                                    ?
+                                    <Button
+                                        className="text-white bg-orange_main py-[9px] flex items-center px-[29px] mr-[87px] text-xs font-medium leading-[17.63px] tracking-[0.4px] border-[2px] border-orange_main rounded hover:opacity-80"
+                                    >
+                                        ADDED TO FAVORITES
+                                        <Added width={19} height={13} className='ml-[14px]'/>
+                                        {/* {
+                                            isLoggedIn === false && isOpen && <Favorite_CTA close={closeModal} isOpen={isOpen}/>
+                                        } */}
+                                    </Button>
+                                    :
+                                    <Button
+                                        onClick={() => handleLike(id)}
+                                        className="text-orange_main bg-white py-[9px] px-[54px] mr-[87px] text-xs font-medium leading-[17.63px] tracking-[0.4px] border-[2px] border-orange_main rounded hover:opacity-80"
+                                    >
+                                        ADD TO FAVORITES
+                                        {/* {
+                                            isLoggedIn === false && isOpen && <Favorite_CTA close={closeModal} isOpen={isOpen}/>
+                                        } */}
+                                    </Button>
+                                    
 
+                                }
+                                <Button
+                                    className="text-white bg-orange_main py-[9px] px-[82px] text-xs leading-[17.63px] tracking-[0.4px] rounded hover:opacity-80"
+                                    >
+                                    BUY NOW
+                                </Button>
                             </div>
                         </div>
                     </div>

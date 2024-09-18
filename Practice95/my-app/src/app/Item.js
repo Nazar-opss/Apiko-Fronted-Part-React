@@ -20,7 +20,7 @@ export const Item = (props) => {
 
     const {id} = props
 
-    const isLiked = favorites.some(product => product.id === id);;
+    const isLiked = favorites.some(product => product.id === id);
 
     const closeModal = () => {
         setIsOpen(false)
@@ -70,7 +70,7 @@ export const Item = (props) => {
                 <a href="#">
                     <h5 className="truncate text-[15px] tracking-tight text-gray-900 dark:text-dark_1" onClick={() => setIsOpenItem(true)}>{props.title}</h5>
                 </a>
-                <ModalItem isOpen={isOpenItem} close={closeModalItem} id={id}/>
+                <ModalItem isOpen={isOpenItem} close={closeModalItem} id={id} isLiked={isLiked}/>
                 <div className="flex items-center justify-between align-text-bottom mb-[5px]">
                     <span className="text-lg font-bold text-gray-900 dark:text-dark_1">${props.price}</span>
                 </div>
