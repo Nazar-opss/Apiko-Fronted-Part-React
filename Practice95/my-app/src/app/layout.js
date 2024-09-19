@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
               {auth}
               </div> */}
           </StoreProvider>
-          <ToastContainer style={{ width: "584px", height: "60px", marginTop: "82px"}}/>
+          <ToastContainer style={{ width: "584px", height: "60px", marginTop: "82px"}} limit={5}/>
 
         </body>
       </html>

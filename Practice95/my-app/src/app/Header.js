@@ -7,6 +7,7 @@ import Login from './Login'
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuButton, MenuItem, MenuItems, MenuSeparator } from '@headlessui/react'
 import { logOut } from './state/slice/AuthSlice'
+import Link from 'next/link'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -37,7 +38,9 @@ export default function Header() {
     <div className={styles.header}>
       <div className={styles.header_container}>
         <div className={styles.header_buttons}>
-          <Image src="/logo.svg" alt="Apiko Logo" width={102} height={42} />
+          <Link href="/" className='flex items-center'> 
+            <Image src="/logo.svg" alt="Apiko Logo" width={102} height={42} />
+          </Link>
           <div className={styles.header_links}>
             <Image
               src="/like.svg"
@@ -46,7 +49,9 @@ export default function Header() {
               height={18}
               style={{ marginRight: "25px" }}
             />
-            <Image src="/basket.svg" alt="Basket Icon" width={18} height={18} />
+            <Link href="/cart" className='flex items-center'> 
+              <Image src="/basket.svg" alt="Basket Icon" width={18} height={18} />
+            </Link>
           </div>
         </div>
         {

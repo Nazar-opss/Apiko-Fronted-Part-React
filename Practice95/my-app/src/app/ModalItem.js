@@ -67,18 +67,14 @@ const ModalItem = (props) => {
         />
     );
 
-// make it more than one 
-
-    const customId = "custom-id-yes";
     const notify = () => {  
         toast.success(<p className='font-medium text-[#101010] text-lg leading-[26.44px]'>The <span className='text-lg font-bold leading-[35.25px]'>{title}</span> is successfully added to cart</p>, {
           position: "top-right",
-          autoClose: true,
+          autoClose: 3000,
           closeButton: true,
           theme: 'colored',
           transition: Slide,
           hideProgressBar: true,
-          toastId: customId,
           icon: false,
           closeButton: CloseButton,
           pauseOnFocusLoss: true,
@@ -86,6 +82,18 @@ const ModalItem = (props) => {
       };
     
       const handleAddToCart = () => {
+        const itemForCart = {...itemInfo}
+        itemForCart['quantity'] = quantity
+        itemForCart['totalPrice'] = totalPrice
+        let items = []
+        if(sessionStorage.items)
+            {
+                items= JSON.parse(sessionStorage.getItem('items'));
+            }else{
+                items=[];
+            }
+            items.push(itemForCart)
+        sessionStorage.setItem("items", JSON.stringify(items))
         props.close()
         notify();
       }

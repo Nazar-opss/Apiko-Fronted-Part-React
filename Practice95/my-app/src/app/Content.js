@@ -37,9 +37,7 @@ return (
         fetchSearch?.length 
         ? <>
             <div className="flex justify-between items-center flex-wrap w-full mt-5">
-                {
-                    //data.map((elem) => {
-                    
+                {   
                     // make another name 
                     fetchSearch.map((elem) => {
                         return(
