@@ -7,6 +7,7 @@ const initialState = {
     isLoading: false,
     error: null,
     itemInfo: {},
+    countries: []
 }
 
 // const fetchSlice = createSlice({
@@ -31,6 +32,20 @@ export const fetchItemsList = createAsyncThunk (
         )
         const data = await res.data
         console.log(data)
+        return data
+    }
+)
+export const fetchCountries = createAsyncThunk (
+    'fetch/fetchCountries',
+    async () => {
+        const res = await axios(`https://demo-api.apiko.academy/api/locations/countries`,  
+            { 
+                headers: {
+                    accept: "application/json"
+                }
+            },
+        )
+        const data = await res.data
         return data
     }
 )
@@ -151,6 +166,11 @@ export const fetchSlice = createSlice({
         builder.addCase(fetchItemDetails.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.error.message
+        })
+
+        builder.addCase(fetchCountries.fulfilled, (state, action) => {
+            console.log('is loading fetchCountries')
+            state.countries = action.payload
         })
     }
 })

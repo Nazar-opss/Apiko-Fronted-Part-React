@@ -3,9 +3,16 @@ import React from 'react'
 import TrashIcon from '../../public/trashIcon.svg'
 
 function CartItem(props) {
-    const {picture, title, price, quantity, totalPrice} = props
+    const {picture, title, price, id, quantity, totalPrice} = props
+
+    const handleDeleteFromCart = (id) => {
+        let newCart = JSON.parse(sessionStorage.getItem('items'))
+        newCart = newCart.filter(item => item.id !== id);
+        sessionStorage.setItem('items', JSON.stringify(newCart));
+    }
+
   return (
-    <div className='flex grow justify-stretch rounded border max-w-[559px] max-h-[160px] w-full h-full mb-[23px] border-[#ECEEF0]'>
+    <div className='flex rounded border max-w-[559px] max-h-[160px] w-full h-full mb-[23px] border-[#ECEEF0]'>
         <div className='flex items-center w-full max-w-[125px] h-[122px] mt-[18px] mb-[19.19px] ml-4'>
             <Image
                 src={picture}
@@ -18,7 +25,7 @@ function CartItem(props) {
             <div className='flex flex-col ml-5 mt-[25px]' >
                 <p className='text-sm leading-[26px] text-[#101010] max-w-[270px] truncate ...'>{title}</p>
                 <div className='flex mt-7 '>
-                    <TrashIcon className=' w-full h-full max-w-[26px] max-h-[26px]'/>
+                    <TrashIcon onClick={() => handleDeleteFromCart(id)} className=' w-full h-full max-w-[26px] max-h-[26px]'/>
                     <div className='flex w-full max-w-[81px] ml-5 justify-between items-center'>
                         <button 
                             className='w-full h-full max-w-[26px] max-h-[26px] rounded-[100%] bg-dark_3 flex justify-center items-center'
