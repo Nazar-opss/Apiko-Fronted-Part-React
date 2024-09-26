@@ -16,11 +16,11 @@ function Favorite_CTA(props) {
   console.log(isOpen, componentName )
   return (
     <Dialog
-    open={props.isOpen}
-    as="div"
-    className="relative z-10 focus:outline-none"
-    onClose={props.close}
-  >
+      open={props.isOpen}
+      as="div"
+      className="relative z-10 focus:outline-none"
+      onClose={props.close}
+    > 
     <DialogBackdrop className="fixed inset-0 bg-black/70" />
     <div className="fixed inset-0 z-10 w-screen overflow-y-auto ">
       <div className="flex flex-col min-h-full items-center justify-center p-4 ">

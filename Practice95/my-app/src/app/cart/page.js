@@ -9,14 +9,24 @@ import { Button, Field, Label, Listbox, ListboxButton, ListboxOption, ListboxOpt
 import { fetchCountries } from '../state/slice/FetchSlice'
 import CountrySelect from '../CountrySelect'
 import ArrowDown from "../../../public/arrow_down.svg"
+import Link from 'next/link'
+import apiUser from '../apiUser'
+import { closeModal, openModal } from '../state/slice/ModalSlice'
+import ThankModal from '../ThankModal'
 
 function CartComponent() {
     const [cartItems, setCartItems] = useState()
     const [country, setCountry] = useState('Select Country')
+    const [totalPrice, setTotalPrice] = useState()
+
+    const isOpen = useSelector((state) => state.modal.isOpen)
+    const componentName = useSelector((state) => state.modal.componentName)
+
     const dispatch = useDispatch()
 
     const countries = useSelector((state) => state.fetch.countries)
     const userData = useSelector((state) => state.auth.userData)
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     
     const {phone, fullName} = userData
 
@@ -28,8 +38,9 @@ function CartComponent() {
         handleSubmit,
         setValue,
         control,
-        formState: { errors },
+        formState: { errors, isDirty, isValid, isSubmitting },
     } = useForm({
+        mode: "onChange",
         values: {
             fullName: '',
             phoneNumber: '',
@@ -38,27 +49,74 @@ function CartComponent() {
             address: '',
         }
     })
+    
+    // make rerender after deleting cart item
+    
     let cartItemsCopy
     useEffect(() => {
-        cartItemsCopy = sessionStorage.getItem('items')
+        cartItemsCopy = isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')
+        
         cartItemsCopy = JSON.parse(cartItemsCopy)
         setCartItems(cartItemsCopy)
-        console.log(cartItemsCopy)
-
+        // console.log(cartItemsCopy)
+        
         setValue("fullName", fullName)
         setValue("phoneNumber", phone)
-
+        
         dispatch(fetchCountries())
-    }, [fullName, phone, cartItemsCopy])
+
+        
+        setTotalPrice(totalSum)
+        
+    }, [fullName, phone, totalPrice])
+    console.log( cartItems?.map((elem) => (
+        {
+            "productId": elem.id,
+            "quantity": elem.quantity,
+        }
     
-    console.log(cartItems)
+    )
+    ))
 
     const onSubmit = async (data) => {
         const {fullName, phoneNumber, country, city, address} = data
         console.log(fullName, phoneNumber, country, city, address)
-        
+        // console.log(cartItems)
+        try {
+            const response = await apiUser.post(`/api/orders`, {
+                "items": 
+                    cartItems?.map((elem) => (
+                            console.log(elem),
+                            {
+                                "productId": elem.id,
+                                "quantity": elem.quantity
+                            }
+                        )
+                    )
+                ,
+                "shipment": {
+                    "fullName": fullName,
+                    "phone": phoneNumber,
+                    "country": country,
+                    "city": city,
+                    "address": address
+                }
+            })
+            if (response && response.data) {
+                const res = await response.data;
+                console.log(res);
+                dispatch(openModal({componentName: 'ThankModal'}))
+            } else {
+                console.error('Response is undefined or missing data property.');
+            }
+        } catch (error) {
+            alert(error);
+        }
     }
     
+    const totalSum = cartItems?.reduce((accumulator, item) => accumulator + item.totalPrice, 0);
+    console.log(cartItems)
+
     return (
         <div className="w-full h-full max-w-[984px] min-h-full bg-white border border-[#E4E4E4] drop-shadow-md m-auto">
             <p className="mt-[70px] ml-[39px] text-[25px] leading-[36.72px] tracking-[0.4px]">
@@ -93,7 +151,7 @@ function CartComponent() {
                 <div className="flex border-l-[1px] border-[#ECEEF0] h-[526px] ml-[88px] mr-[46px] r-0"></div>
 
                 <form 
-                    className='mr-[34px]'
+                    className='mr-[34px] w-full max-w-[220px]'
                     onSubmit={handleSubmit(onSubmit)}
                 >
                     <Controller
@@ -157,35 +215,42 @@ function CartComponent() {
                     /> */}
                     <div className="relative z-0 mt-5 max-w-[220px]">
                         <select 
+                            value='Country'
                             name="country" 
                             className="block px-2.5 pb-2 pt-2.5 w-full max-h-[40px] text-base tracking-[0.25px] leading-[20px] text-dark_2 bg-transparent rounded border-dark_3 border-[1px] appearance-none dark:text-dark_1 dark:border-gray-600 focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
-                            {...register("country")}>
+                            {...register("country", { required: "Mandatory info missing" })}
+                        >
+                            {/* <option selected disabled hidden></option> */}
                         {
+                            
                             countries.map((elem) => (
                                 <option key={elem} className='' value={elem}>{elem}</option>
                             ))
 
                         }
                         </select>
-                        {/* <label for="select" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Select an option</label> */}
+                        {/* <label for="country" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Select an option</label> */}
                         <label
                             htmlFor="country"
                             className="absolute text-base leading-[19px] select-none text-dark_2 tracking-[0.25px] dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-2"
                             >
                             Country
                         </label>
+                        {errors && errors[country]?.type && (
+                            <span className="text-error text-xs leading-5 tracking-[0.4px]">{errors[country]?.message}</span>
+                        )}
                     </div>
                     <Controller
                         name="city"
                         control={control}
-                        // rules={{
-                        //     required: "Mandatory info missing",
-                        //     pattern: {
-                        //         value: /^[a-zA-Z\s]+$/,
-                        //         message:
-                        //             "Only letters. Cannot have special characters and numbers",
-                        //     },
-                        // }}
+                        rules={{
+                            required: "Mandatory info missing",
+                            pattern: {
+                                value: /^[a-zA-Z\s]+$/,
+                                message:
+                                    "Only letters. Cannot have special characters and numbers",
+                            },
+                        }}
                         render={({ field }) => (
                             <Input  
                                 errors={errors}
@@ -199,14 +264,9 @@ function CartComponent() {
                     <Controller
                         name="address"
                         control={control}
-                        // rules={{
-                        //     required: "Mandatory info missing",
-                        //     pattern: {
-                        //         value: /^[a-zA-Z\s]+$/,
-                        //         message:
-                        //             "Only letters. Cannot have special characters and numbers",
-                        //     },
-                        // }}
+                        rules={{
+                            required: "Mandatory info missing",
+                        }}
                         render={({ field }) => (
                             <Input  
                                 errors={errors}
@@ -218,20 +278,45 @@ function CartComponent() {
                         )}
                     />
                     
-
+                    <p className='text-lg mt-[33px] text-dark_2 leading-[26.44px] tracking-[0.4px]'>Items 
+                        <span className=' text-dark_1 ml-[88px]'>
+                            {
+                                cartItems?.length
+                            }
+                        </span>
+                    </p>
+                    <p className='text-lg mt-2 text-dark_2 leading-[26.44px] tracking-[0.4px] '>
+                        Total 
+                        <span className=' text-dark_1 ml-[95px]'>
+                            $ {totalSum}
+                        </span>
+                    </p>
                     <div className="">
                         <Button
                             type="submit"
-                            className="text-white bg-orange_main w-full max-w-[362px] tracking-wide mt-[50px] font-medium rounded text-sm  leading-6 py-1.5 hover:opacity-80"
+                            disabled={!isDirty || !isValid}
+                            className={`text-white bg-orange_main w-full max-w-[220px] tracking-[0.4px] ${!isValid ? "cursor-not-allowed" : "cursor-pointer"} mt-[47px] {} font-medium rounded-[5px] text-sm  leading-6 py-1.5 hover:opacity-80`}
                             // onClick={props.close}
                         >
                             Confirms the purchase
                         </Button>
+                        {
+                            isOpen === true && componentName === 'ThankModal' && <ThankModal isOpen={isOpen} close={() => dispatch(closeModal())}></ThankModal>
+                        }
+                        <Link href='/'>
+                            <Button
+                                type="submit"
+                                className="text-orange_main mb-[259px] bg-white w-full max-w-[220px] tracking-[0.4px] mt-[18px] font-medium rounded-[5px] text-sm  border border-orange_main leading-6 py-1.5 hover:opacity-80"
+                                // onClick={props.close}
+                            >
+                                Continue shopping
+                            </Button>
+                        </Link>
                     </div>
                 </form>
             </div>
         </div>
     );
 }
-// make form select and style it
+// make total price dynamical
 export default CartComponent

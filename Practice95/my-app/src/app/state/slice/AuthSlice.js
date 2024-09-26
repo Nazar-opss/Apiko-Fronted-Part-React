@@ -38,11 +38,13 @@ export const authSlice =  createSlice({
         logOut: (state) => {
             state.accessToken = ''
             state.isLoggedIn = false
+            sessionStorage.removeItem("itemsLogged")
             console.log(state.isLoggedIn, state.accessToken)
         } 
     },
 
     // delete dispatch from Login modal and move here
+    
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
             console.log(state)

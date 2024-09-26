@@ -85,15 +85,30 @@ const ModalItem = (props) => {
         const itemForCart = {...itemInfo}
         itemForCart['quantity'] = quantity
         itemForCart['totalPrice'] = totalPrice
+        
+        const storageKey = isLoggedIn ? 'itemsLogged' : 'itemsAny';
         let items = []
-        if(sessionStorage.items)
-            {
-                items= JSON.parse(sessionStorage.getItem('items'));
-            }else{
-                items=[];
+        const storedItems = sessionStorage.getItem(storageKey);
+        // if(sessionStorage.itemsLogged || sessionStorage.itemsAny)
+        //     {
+        //         items = JSON.parse(isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')) 
+        //         console.log(items)
+        //     }else{
+        //         items = [];
+        //         console.log(items)
+        //     }
+        //     items.push(itemForCart)
+        //     console.log(items)
+        if (storedItems) {
+            try {
+                items = JSON.parse(storedItems);
+            } catch (error) {
+                console.error(error);
             }
-            items.push(itemForCart)
-        sessionStorage.setItem("items", JSON.stringify(items))
+        }
+        items.push(itemForCart);
+        sessionStorage.setItem(storageKey, JSON.stringify(items));
+
         props.close()
         notify();
       }
