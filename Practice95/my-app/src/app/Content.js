@@ -3,6 +3,7 @@ import React, { Suspense, useEffect } from 'react'
 import { Item } from './Item'
 import { useSelector } from 'react-redux'
 import LoaderLine from './Loader';
+import { unstable_noStore } from 'next/cache';
 
     // make fetch better https://www.youtube.com/watch?v=MBlZ8Wzkbi4
     
@@ -23,6 +24,7 @@ function Skeleton({ className }) {
 }
 
 export default function Content() {
+    // unstable_noStore() find a way to use it with suspense
     const fetchSearch = useSelector((state) => state.fetch.fetches)
     const isLoading = useSelector((state) => state.fetch.isLoading)
     // style no results and fix for first render

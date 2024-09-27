@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal } from './state/slice/ModalSlice'
+import Link from 'next/link'
 
 function ThankModal(props) {
     const isOpen = useSelector((state) => state.modal.isOpen)
@@ -44,11 +45,13 @@ function ThankModal(props) {
                         We will send you a notification when your order arrives to you
                     </p>
                     <div className='font-medium text-sm leading-6 h-[90px] flex flex-col justify-between mt-[38px]' >
-                        <Button
-                          className="text-white bg-orange_main w-full py-1.5 px-[47.5px] rounded hover:opacity-80"
-                        >
-                          Continue shopping
-                        </Button>                        
+                      <Link href='/'>
+                          <Button
+                            className="text-white bg-orange_main w-full py-1.5 px-[47.5px] rounded hover:opacity-80"
+                          >
+                            Continue shopping
+                          </Button>                        
+                      </Link>
                         <Button
                           className="text-orange_main bg-white w-full py-1.5 px-[47.5px] border-[1px] border-orange_main rounded hover:opacity-80"
                         >

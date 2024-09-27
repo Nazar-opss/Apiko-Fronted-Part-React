@@ -43,7 +43,7 @@ export const Item = (props) => {
     }
 
     return(
-        <div className="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow dark:bg-gray-800 dark:border-gray-700" >
+        <div className="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow " >
             <a className='flex justify-center cursor-pointer'>
                 <Image
                     onClick={() => handleItem(props.id)}

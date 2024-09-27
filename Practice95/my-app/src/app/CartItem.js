@@ -2,16 +2,19 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import TrashIcon from '../../public/trashIcon.svg'
+import { useSelector } from 'react-redux'
 
 function CartItem(props) {
     const {picture, title, price, id, quantity, totalPrice} = props
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     const [quantityIn, setQuantity] =useState(quantity)
     let [totalPriceIn, setTotal] =useState(totalPrice)
 
     const handleDeleteFromCart = (id) => {
-        let newCart = JSON.parse(sessionStorage.getItem('items'))
+        const storageKey = isLoggedIn ? 'itemsLogged' : 'itemsAny';
+        let newCart = JSON.parse(sessionStorage.getItem(storageKey))
         newCart = newCart.filter(item => item.id !== id);
-        sessionStorage.setItem('items', JSON.stringify(newCart));
+        sessionStorage.setItem(storageKey, JSON.stringify(newCart));
     }
 
     useEffect(() => {
@@ -42,7 +45,7 @@ function CartItem(props) {
         </div>
         <div className='flex justify-between w-full'>
             <div className='flex flex-col ml-5 mt-[25px]' >
-                <p className='text-sm leading-[26px] text-[#101010] max-w-[270px] truncate ...'>{title}</p>
+                <p className='text-sm leading-[26px] text-[#101010] w-[270px] max-w-[270px] truncate ...'>{title}</p>
                 <div className='flex mt-7 '>
                     <TrashIcon onClick={() => handleDeleteFromCart(id)} className='cursor-pointer w-full h-full max-w-[26px] max-h-[26px]'/>
                     <div className='flex w-full max-w-[81px] ml-5 justify-between items-center'>

@@ -85,9 +85,11 @@ export default function Header() {
                   </div>
                   <MenuSeparator className="h-px bg-[#E4E4E4]" />
                   <div className='flex flex-col text-sm leading-[26px] py-[10px] px-4 gap-[14px]'>
+                  <Link href='/settings'>
                     <MenuItem as='button' className='text-dark_1 text-start ' onClick={() => console.log('setting')}>
                       Settings
                     </MenuItem>
+                  </Link>
                     <MenuItem as='button' className='text-error text-start ' onClick={() => dispatch(logOut())}>
                       Log Out
                     </MenuItem>

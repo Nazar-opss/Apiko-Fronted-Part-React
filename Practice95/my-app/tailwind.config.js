@@ -6,7 +6,16 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
+    boxShadow: {
+        'item-shadow': '0px 4px 14px 0px rgba(121, 121, 121, 0.05)',
+    },
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      colors: {
       'white': '#ffffff',
       'black' : '#000000',
       'select-hover' : '#F2F2F2',
@@ -18,15 +27,6 @@ module.exports = {
       'orange_main': '#FD7114',
       'error': '#F44336'
     },
-    boxShadow: {
-        'item-shadow': '0px 4px 14px 0px rgba(121, 121, 121, 0.05)',
-    },
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
     },
   },
   plugins: [],

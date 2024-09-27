@@ -58,7 +58,6 @@ function CartComponent() {
         
         cartItemsCopy = JSON.parse(cartItemsCopy)
         setCartItems(cartItemsCopy)
-        // console.log(cartItemsCopy)
         
         setValue("fullName", fullName)
         setValue("phoneNumber", phone)
@@ -69,14 +68,6 @@ function CartComponent() {
         setTotalPrice(totalSum)
         
     }, [fullName, phone, totalPrice])
-    console.log( cartItems?.map((elem) => (
-        {
-            "productId": elem.id,
-            "quantity": elem.quantity,
-        }
-    
-    )
-    ))
 
     const onSubmit = async (data) => {
         const {fullName, phoneNumber, country, city, address} = data
@@ -215,9 +206,8 @@ function CartComponent() {
                     /> */}
                     <div className="relative z-0 mt-5 max-w-[220px]">
                         <select 
-                            value='Country'
                             name="country" 
-                            className="block px-2.5 pb-2 pt-2.5 w-full max-h-[40px] text-base tracking-[0.25px] leading-[20px] text-dark_2 bg-transparent rounded border-dark_3 border-[1px] appearance-none dark:text-dark_1 dark:border-gray-600 focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                            className="block px-2.5 pb-2 pt-2.5 w-full max-h-[40px] text-base tracking-[0.25px] leading-[20px] text-dark_2 bg-transparent rounded border-dark_3 border-[1px] appearance-none focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0 peer" 
                             {...register("country", { required: "Mandatory info missing" })}
                         >
                             {/* <option selected disabled hidden></option> */}
@@ -232,7 +222,7 @@ function CartComponent() {
                         {/* <label for="country" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Select an option</label> */}
                         <label
                             htmlFor="country"
-                            className="absolute text-base leading-[19px] select-none text-dark_2 tracking-[0.25px] dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-2"
+                            className="absolute text-base leading-[19px] select-none text-dark_2 tracking-[0.25px] duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2  peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-2"
                             >
                             Country
                         </label>

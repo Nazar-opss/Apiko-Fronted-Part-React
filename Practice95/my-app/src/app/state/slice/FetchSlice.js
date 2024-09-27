@@ -68,7 +68,9 @@ export const fetchSearchList = createAsyncThunk (
 
 export const fetchCategoriesList = createAsyncThunk (
     'fetch/fetchCategoriesList',
+    
     async ({categoryId, sortBy}) => {
+        
         console.log(categoryId, sortBy)
         const res = await axios(`https://demo-api.apiko.academy/api/categories/${categoryId}/products?offset=0&limit=12${sortBy ? `&sortBy=${sortBy}` : ''}`,  
             { 
