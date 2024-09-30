@@ -42,6 +42,7 @@ export default function Header() {
             <Image src="/logo.svg" alt="Apiko Logo" width={102} height={42} />
           </Link>
           <div className={styles.header_links}>
+          <Link href='/settings/favourites' className='flex items-center'>
             <Image
               src="/like.svg"
               alt="Like Icon"
@@ -49,6 +50,7 @@ export default function Header() {
               height={18}
               style={{ marginRight: "25px" }}
             />
+          </Link>
             <Link href="/cart" className='flex items-center'> 
               <Image src="/basket.svg" alt="Basket Icon" width={18} height={18} />
             </Link>
@@ -86,7 +88,7 @@ export default function Header() {
                   <MenuSeparator className="h-px bg-[#E4E4E4]" />
                   <div className='flex flex-col text-sm leading-[26px] py-[10px] px-4 gap-[14px]'>
                   <Link href='/settings'>
-                    <MenuItem as='button' className='text-dark_1 text-start ' onClick={() => console.log('setting')}>
+                    <MenuItem as='button' className='text-dark_1 text-start w-full'>
                       Settings
                     </MenuItem>
                   </Link>

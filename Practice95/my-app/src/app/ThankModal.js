@@ -52,11 +52,13 @@ function ThankModal(props) {
                             Continue shopping
                           </Button>                        
                       </Link>
+                      <Link href='/settings/orders'>
                         <Button
                           className="text-orange_main bg-white w-full py-1.5 px-[47.5px] border-[1px] border-orange_main rounded hover:opacity-80"
                         >
                           View order history
                         </Button>
+                      </Link>
                     </div>
                 </div>
             </div>

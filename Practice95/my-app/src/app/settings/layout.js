@@ -1,15 +1,25 @@
 'use client'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { usePathname, useSearchParams } from 'next/navigation'
 
 function layout({children}) {
-    const userData = useSelector((state) => state.auth.userData)
+  const userData = useSelector((state) => state.auth.userData)
+
+  // when after order click on "View orders", in setting page is orders but button in edit, same for reload page, maybe make setting dynamical route
+    // const pathname = usePathname()
+    // const searchParams = useSearchParams()
+    // console.log(pathname, searchParams)
+    // useEffect(() => {
+      
+    // }, [pathname, searchParams])
 
     const [isActive, setActive] = useState('edit')
-    
+
     let {fullName} = userData
-    const avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
+    
+    let avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
     const activeStyle = 'bg-orange_main text-white after:"" after:w-0 after:h-0 after:border-[10px] after:border-t-orange_main after:border-r-transparent after:border-l-transparent after:border-b-transparent after:bottom-[0px] after:absolute after:left-1/2 after:transform after:-translate-x-1/2 after:translate-y-full'
   return (
     <div className='className="w-full h-full max-w-[904px] min-h-full bg-white border border-[#E4E4E4] drop-shadow-md m-auto flex flex-col justify-center items-center'>

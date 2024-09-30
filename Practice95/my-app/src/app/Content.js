@@ -1,9 +1,10 @@
 'use client'
 import React, { Suspense, useEffect } from 'react'
 import { Item } from './Item'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LoaderLine from './Loader';
 import { unstable_noStore } from 'next/cache';
+import { fetchCountries } from './state/slice/FetchSlice';
 
     // make fetch better https://www.youtube.com/watch?v=MBlZ8Wzkbi4
     

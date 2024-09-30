@@ -4,7 +4,7 @@ import Item_like from "../../public/item_like.svg"
 import { useDispatch, useSelector } from "react-redux"
 import Favorite_CTA from "./Favorite_CTA"
 import { useEffect, useState } from "react"
-import { addFavorite, getFavorite } from "./state/slice/UserSlice"
+import { addFavorite, deleteFavorite, getFavorite } from "./state/slice/UserSlice"
 import apiUser from "./apiUser"
 import Like from "../../public/like.svg"
 import ModalItem from "./ModalItem"
@@ -17,10 +17,15 @@ export const Item = (props) => {
     const favorites = useSelector((state) => state.user.favorites)
 
     const dispatch = useDispatch()
-
     const {id} = props
-
+    
     const isLiked = favorites.some(product => product.id === id);
+    
+    useEffect(() => {
+        if (isLoggedIn) {
+            dispatch(getFavorite())
+        } 
+    },[])
 
     const closeModal = () => {
         setIsOpen(false)
@@ -29,7 +34,11 @@ export const Item = (props) => {
     const handleLike = (id) => {
         if (isLoggedIn === false) {
             setIsOpen(true)
+        } else if(isLiked) {
+            dispatch(deleteFavorite(id))
+            dispatch(getFavorite())
         } else {
+            console.log(props)
             dispatch(addFavorite(id))
             dispatch(getFavorite())
         }
@@ -43,7 +52,7 @@ export const Item = (props) => {
     }
 
     return(
-        <div className="w-full max-w-[209px] max-h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow " >
+        <div className="w-full max-w-[209px] h-[212px] mb-2.5 flex flex-col relative justify-between bg-white border border-dark_3 rounded-sm shadow item-shadow " >
             <a className='flex justify-center cursor-pointer'>
                 <Image
                     onClick={() => handleItem(props.id)}
@@ -58,12 +67,12 @@ export const Item = (props) => {
             {
                 isLoggedIn === false && isOpen && <Favorite_CTA close={closeModal} isOpen={isOpen}/>
             }
-            <div className='w-full h-full max-w-[38px] max-h-[30px] right-[8px] drop-shadow-md absolute rounded-[100%] bottom-[46px] bg-white flex justify-center items-center'>
+            <div className='w-full h-full max-w-[30px] max-h-[30px] right-[8px] drop-shadow-md absolute rounded-[100%] bottom-[46px] bg-white flex justify-center items-center'>
                 <Like
                     width='18' 
                     onClick={() => handleLike(id)} 
                     height='17' 
-                    className={isLiked ? `fill-orange_main stroke stroke-orange_main overflow-visible hover:cursor-pointer` : ` stroke-dark_2 hover:fill-dark_2 overflow-visible hover:cursor-pointer` }
+                    className={isLiked ? `fill-orange_main stroke stroke-orange_main overflow-visible hover:cursor-pointer hover:fill-dark_2` : ` stroke-dark_2 hover:fill-dark_2 overflow-visible hover:cursor-pointer` }
                 />
             </div>
             <div className="px-3">

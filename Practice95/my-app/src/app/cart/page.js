@@ -16,7 +16,7 @@ import ThankModal from '../ThankModal'
 
 function CartComponent() {
     const [cartItems, setCartItems] = useState()
-    const [country, setCountry] = useState('Select Country')
+    const [countryForm, setCountry] = useState('Select Country')
     const [totalPrice, setTotalPrice] = useState()
 
     const isOpen = useSelector((state) => state.modal.isOpen)
@@ -28,7 +28,7 @@ function CartComponent() {
     const userData = useSelector((state) => state.auth.userData)
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     
-    const {phone, fullName} = userData
+    const {phone, fullName, city, country, address} = userData
 
     const {
         reset,
@@ -43,7 +43,7 @@ function CartComponent() {
         mode: "onChange",
         values: {
             fullName: '',
-            phoneNumber: '',
+            phone: '',
             city: '',
             country: '',
             address: '',
@@ -54,24 +54,25 @@ function CartComponent() {
     
     let cartItemsCopy
     useEffect(() => {
+        dispatch(fetchCountries())
         cartItemsCopy = isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')
         
         cartItemsCopy = JSON.parse(cartItemsCopy)
         setCartItems(cartItemsCopy)
         
-        setValue("fullName", fullName)
-        setValue("phoneNumber", phone)
-        
-        dispatch(fetchCountries())
-
+        setValue("fullName", fullName);
+        setValue("phone", phone);
+        setValue("city", city);
+        setValue("country", country);
+        setValue("address", address);
         
         setTotalPrice(totalSum)
         
     }, [fullName, phone, totalPrice])
 
     const onSubmit = async (data) => {
-        const {fullName, phoneNumber, country, city, address} = data
-        console.log(fullName, phoneNumber, country, city, address)
+        const {fullName, phone, country, city, address} = data
+        console.log(fullName, phone, country, city, address)
         // console.log(cartItems)
         try {
             const response = await apiUser.post(`/api/orders`, {
@@ -87,7 +88,7 @@ function CartComponent() {
                 ,
                 "shipment": {
                     "fullName": fullName,
-                    "phone": phoneNumber,
+                    "phone": phone,
                     "country": country,
                     "city": city,
                     "address": address
@@ -168,7 +169,7 @@ function CartComponent() {
                     />
 
                     <Controller
-                        name="phoneNumber"
+                        name="phone"
                         control={control}
                         rules={{
                             required: "Mandatory info missing",
@@ -183,7 +184,7 @@ function CartComponent() {
                                 errors={errors}
                                 placeholder="Phone number"
                                 type="tel"
-                                name="phoneNumber"
+                                name="phone"
                                 fieldRef={field}
                             />
                         )}
@@ -212,7 +213,6 @@ function CartComponent() {
                         >
                             {/* <option selected disabled hidden></option> */}
                         {
-                            
                             countries.map((elem) => (
                                 <option key={elem} className='' value={elem}>{elem}</option>
                             ))

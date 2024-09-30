@@ -12,6 +12,16 @@ import Skeleton from 'react-loading-skeleton'
 import { Bounce, Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+export const CloseButton = ({closeToast}) => (
+    <Image
+        onClick={closeToast}
+        src="/close.svg"
+        alt="close Icon"
+        width={20}
+        height={20}
+        className='fill-dark_2 cursor-pointer pointer-events-auto mr-[25px]'
+    />
+);
 
 const ModalItem = (props) => {
     const itemInfo = useSelector((state) => state.fetch.itemInfo)
@@ -55,17 +65,6 @@ const ModalItem = (props) => {
             dispatch(getFavorite())
         }
     }
-
-    const CloseButton = ({closeToast}) => (
-        <Image
-            onClick={closeToast}
-            src="/close.svg"
-            alt="close Icon"
-            width={20}
-            height={20}
-            className='fill-dark_2 cursor-pointer pointer-events-auto mr-[25px]'
-        />
-    );
 
     const notify = () => {  
         toast.success(<p className='font-medium text-[#101010] text-lg leading-[26.44px]'>The <span className='text-lg font-bold leading-[35.25px]'>{title}</span> is successfully added to cart</p>, {
