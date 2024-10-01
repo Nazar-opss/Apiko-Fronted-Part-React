@@ -2,19 +2,19 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import TrashIcon from '../../public/trashIcon.svg'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeItemFromCart } from './state/slice/CartSlice'
 
 function CartItem(props) {
+    const dispatch = useDispatch()
+
     const {picture, title, price, id, quantity, totalPrice} = props
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     const [quantityIn, setQuantity] =useState(quantity)
     let [totalPriceIn, setTotal] =useState(totalPrice)
 
     const handleDeleteFromCart = (id) => {
-        const storageKey = isLoggedIn ? 'itemsLogged' : 'itemsAny';
-        let newCart = JSON.parse(sessionStorage.getItem(storageKey))
-        newCart = newCart.filter(item => item.id !== id);
-        sessionStorage.setItem(storageKey, JSON.stringify(newCart));
+        dispatch(removeItemFromCart({ id, isLoggedIn }));
     }
 
     useEffect(() => {

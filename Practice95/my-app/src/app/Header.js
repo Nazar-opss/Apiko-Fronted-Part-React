@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './Header.module.css'
 import Image from 'next/image'
 import Register from './Register'
@@ -12,11 +12,13 @@ import Link from 'next/link'
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [modalContent, setModalContent] = useState(null);
+  // const [cartItems, setCartItems] = useState()
   
   const authCheck = useSelector((state) => state.auth.accessToken)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const userData = useSelector((state) => state.auth.userData)
-  
+  const cartItems = useSelector((state) => state.cart);
+
   let {fullName, email, phoneNumber, phone, id} = userData
 
   const dispatch = useDispatch()
@@ -30,6 +32,18 @@ export default function Header() {
     setIsOpen(false)
     setModalContent(null)
   };
+  
+//   useEffect(() => {
+//     let cartItemsCopy = isLoggedIn
+//     ? sessionStorage.getItem('itemsLogged')
+//     : sessionStorage.getItem('itemsAny');
+    
+//   if (cartItemsCopy) {
+//     cartItemsCopy = JSON.parse(cartItemsCopy);
+//     setCartItems(cartItemsCopy);
+//     console.log(cartItemsCopy);
+//   }
+// }, [isLoggedIn]);  
 
   const avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
 
@@ -51,8 +65,13 @@ export default function Header() {
               style={{ marginRight: "25px" }}
             />
           </Link>
-            <Link href="/cart" className='flex items-center'> 
+            <Link href="/cart" className='flex items-center relative'> 
               <Image src="/basket.svg" alt="Basket Icon" width={18} height={18} />
+              {
+                cartItems?.length > 0 
+                ? <p className='absolute right-[-6px] top-[6px] flex justify-center items-center text-center w-[13px] h-[13px] bg-orange_main border-[1.5px] border-[#110F21] rounded-[100%]'><span className='text-[9px] font-semibold leading-[13.22px] tracking-[0.4px]'>{cartItems?.length}</span></p>
+                : ""
+              }
             </Link>
           </div>
         </div>

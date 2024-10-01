@@ -6,11 +6,12 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { openModal } from './state/slice/ModalSlice'
 import Favorite_CTA from './Favorite_CTA'
-import { addFavorite, getFavorite } from './state/slice/UserSlice'
+import { addFavorite, deleteFavorite, getFavorite } from './state/slice/UserSlice'
 import Added from '../../public/added.svg'
 import Skeleton from 'react-loading-skeleton'
 import { Bounce, Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { addItemToCart } from './state/slice/CartSlice'
 
 export const CloseButton = ({closeToast}) => (
     <Image
@@ -43,6 +44,7 @@ const ModalItem = (props) => {
         setIsOpen(false)
     };
 
+    
     useEffect(() => {
         setTotal(price * quantity);
     }, [price, quantity]);
@@ -56,13 +58,26 @@ const ModalItem = (props) => {
             setQuantity(prevQuantity => prevQuantity - 1);
         }
     };
+    const [liked, setLiked] = useState(isLiked);
+
+    useEffect(() => {
+        setLiked(isLiked); // оновлюємо локальний стан після зміни стану з Redux
+    }, [isLiked]);
 
     const handleLike = (id) => {
-        if (isLoggedIn === false) {
-            setIsOpen(true)
+        if (!isLoggedIn) {
+            setIsOpen(true);
         } else {
-            dispatch(addFavorite(id))
-            dispatch(getFavorite())
+            if (liked) {
+                dispatch(deleteFavorite(id));
+                setLiked(false);  // локальне оновлення
+                dispatch(getFavorite());
+            } else {
+                dispatch(addFavorite(id));
+                setLiked(true);  // локальне оновлення
+                dispatch(getFavorite());
+            }
+            // dispatch(getFavorite());
         }
     }
 
@@ -79,34 +94,40 @@ const ModalItem = (props) => {
           pauseOnFocusLoss: true,
         });
       };
-    
-      const handleAddToCart = () => {
+    // remake this for redux slice
+      const handleAddToCart = (isLoggedIn) => {
         const itemForCart = {...itemInfo}
         itemForCart['quantity'] = quantity
         itemForCart['totalPrice'] = totalPrice
         
-        const storageKey = isLoggedIn ? 'itemsLogged' : 'itemsAny';
-        let items = []
-        const storedItems = sessionStorage.getItem(storageKey);
-        // if(sessionStorage.itemsLogged || sessionStorage.itemsAny)
-        //     {
-        //         items = JSON.parse(isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')) 
-        //         console.log(items)
-        //     }else{
-        //         items = [];
-        //         console.log(items)
+        // const storageKey = isLoggedIn ? 'itemsLogged' : 'itemsAny';
+        // let items = []
+        // const storedItems = sessionStorage.getItem(storageKey);
+        // // if(sessionStorage.itemsLogged || sessionStorage.itemsAny)
+        // //     {
+        // //         items = JSON.parse(isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')) 
+        // //         console.log(items)
+        // //     }else{
+        // //         items = [];
+        // //         console.log(items)
+        // //     }
+        // //     items.push(itemForCart)
+        // //     console.log(items)
+        // if (storedItems) {
+        //     try {
+        //         items = JSON.parse(storedItems);
+        //     } catch (error) {
+        //         console.error(error);
         //     }
-        //     items.push(itemForCart)
-        //     console.log(items)
-        if (storedItems) {
-            try {
-                items = JSON.parse(storedItems);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        items.push(itemForCart);
-        sessionStorage.setItem(storageKey, JSON.stringify(items));
+        // }
+        // items.push(itemForCart);
+        // sessionStorage.setItem(storageKey, JSON.stringify(items));
+
+     
+
+
+        // Додаємо товар до глобального стейту і sessionStorage
+        dispatch(addItemToCart({ item: itemForCart, isLoggedIn }));
 
         props.close()
         notify();
@@ -197,13 +218,13 @@ const ModalItem = (props) => {
                             <div className='flex flex-row mt-[71px]'>
                                 <Button
                                     // onClick={notify}
-                                    onClick={() => handleAddToCart()}
+                                    onClick={() => handleAddToCart(isLoggedIn)}
                                     className="text-orange_main bg-white py-[9px] px-[70px] mr-[35px] text-xs font-medium leading-[17.63px] tracking-[0.4px] border-[2px] border-orange_main rounded hover:opacity-80"
                                 >
                                     ADD TO CART
                                 </Button>
                                 {
-                                    isLiked 
+                                    liked 
                                     ?
                                     <Button
                                         className="text-white bg-orange_main py-[9px] flex items-center px-[29px] mr-[87px] text-xs font-medium leading-[17.63px] tracking-[0.4px] border-[2px] border-orange_main rounded hover:opacity-80"

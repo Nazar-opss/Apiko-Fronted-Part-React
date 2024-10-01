@@ -4,7 +4,7 @@ import { Item } from './Item'
 import { useDispatch, useSelector } from 'react-redux'
 import LoaderLine from './Loader';
 import { unstable_noStore } from 'next/cache';
-import { fetchCountries } from './state/slice/FetchSlice';
+import { fetchCountries, loadMore } from './state/slice/FetchSlice';
 
     // make fetch better https://www.youtube.com/watch?v=MBlZ8Wzkbi4
     
@@ -28,7 +28,13 @@ export default function Content() {
     // unstable_noStore() find a way to use it with suspense
     const fetchSearch = useSelector((state) => state.fetch.fetches)
     const isLoading = useSelector((state) => state.fetch.isLoading)
+    const limit = useSelector((state) => state.fetch.limit)
     // style no results and fix for first render
+
+    const dispatch = useDispatch()
+
+    console.log(limit)
+    console.log(fetchSearch)
 
 return (
     <>
@@ -56,6 +62,7 @@ return (
                 }
             </div>
             <button 
+                onClick={() => dispatch(loadMore())}
                 type="button" 
                 className="text-white bg-blue_btn w-full max-w-[150px] mt-10 font-medium rounded text-sm  leading-6 px-4 py-1.5 mb-[85px] hover:opacity-80">
                 Load More...

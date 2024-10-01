@@ -8,14 +8,20 @@ function layout({children}) {
   const userData = useSelector((state) => state.auth.userData)
 
   // when after order click on "View orders", in setting page is orders but button in edit, same for reload page, maybe make setting dynamical route
-    // const pathname = usePathname()
-    // const searchParams = useSearchParams()
-    // console.log(pathname, searchParams)
-    // useEffect(() => {
-      
-    // }, [pathname, searchParams])
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+    console.log(pathname, searchParams)
+    useEffect(() => {
+      if (pathname === '/settings/orders'){
+        setActive('orders')
+      } else if(pathname === '/settings/favourites') {
+        setActive('favourites')
+      } else {
+        setActive('edit')
+      }
+    }, [pathname, searchParams])
 
-    const [isActive, setActive] = useState('edit')
+    const [isActive, setActive] = useState('')
 
     let {fullName} = userData
     

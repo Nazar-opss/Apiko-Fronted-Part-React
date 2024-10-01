@@ -7,7 +7,8 @@ const initialState = {
     isLoading: false,
     error: null,
     itemInfo: {},
-    countries: []
+    countries: [],
+    limit: 12,
 }
 
 // const fetchSlice = createSlice({
@@ -23,7 +24,8 @@ const initialState = {
 export const fetchItemsList = createAsyncThunk (
     'fetch/fetchItemsList',
     async () => {
-        const res = await axios(`https://demo-api.apiko.academy/api/products?offset=0&limit=12&sortBy=latest`,  
+        console.log(initialState.limit)
+        const res = await axios(`https://demo-api.apiko.academy/api/products?offset=0&limit=${initialState.limit}&sortBy=latest`,  
             { 
                 headers: {
                     accept: "application/json"
@@ -104,6 +106,10 @@ export const fetchSlice = createSlice({
     name:'fetch',
     initialState,
     reducers: {
+        loadMore: (state) => {
+            state.limit += 12 
+            fetchItemsList()
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchSearchList.pending, (state) => {
@@ -177,6 +183,6 @@ export const fetchSlice = createSlice({
 })
 
 
-export const { setLoading } = fetchSlice.actions
+export const { setLoading, loadMore } = fetchSlice.actions
 
 export default fetchSlice.reducer

@@ -15,32 +15,45 @@ export const Item = (props) => {
     const [isOpenItem, setIsOpenItem] = useState(false)
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
     const favorites = useSelector((state) => state.user.favorites)
-
+    
     const dispatch = useDispatch()
     const {id} = props
     
-    const isLiked = favorites.some(product => product.id === id);
+    let isLiked = favorites.some(product => product.id === id);
     
     useEffect(() => {
-        if (isLoggedIn) {
-            dispatch(getFavorite())
-        } 
-    },[])
+        setLiked(isLiked); // оновлюємо локальний стан після зміни стану з Redux
+    }, [isLiked]);
 
     const closeModal = () => {
         setIsOpen(false)
     };
     
+    const [liked, setLiked] = useState(isLiked);
     const handleLike = (id) => {
+        // if (isLoggedIn === false) {
+        //     setIsOpen(true)
+        // } else if(isLiked) {
+        //     dispatch(deleteFavorite(id))
+        //     console.log(`Deleting ${id}`)
+        //     dispatch(getFavorite())
+        // } else {
+        //     dispatch(addFavorite(id))
+        //     console.log(`Adding ${id}`)
+        //     dispatch(getFavorite())
+        // }
         if (isLoggedIn === false) {
-            setIsOpen(true)
-        } else if(isLiked) {
-            dispatch(deleteFavorite(id))
-            dispatch(getFavorite())
+            setIsOpen(true);
+        } else if (liked) {
+            dispatch(deleteFavorite(id));
+            console.log(`Deleting ${id}`);
+            setLiked(false);  // локальне оновлення
+            dispatch(getFavorite());
         } else {
-            console.log(props)
-            dispatch(addFavorite(id))
-            dispatch(getFavorite())
+            dispatch(addFavorite(id));
+            console.log(`Adding ${id}`);
+            setLiked(true);  // локальне оновлення
+            dispatch(getFavorite());
         }
     }
     const closeModalItem = () => {
@@ -72,14 +85,14 @@ export const Item = (props) => {
                     width='18' 
                     onClick={() => handleLike(id)} 
                     height='17' 
-                    className={isLiked ? `fill-orange_main stroke stroke-orange_main overflow-visible hover:cursor-pointer hover:fill-dark_2` : ` stroke-dark_2 hover:fill-dark_2 overflow-visible hover:cursor-pointer` }
+                    className={liked ? `fill-orange_main stroke stroke-orange_main overflow-visible hover:cursor-pointer hover:fill-dark_2` : ` stroke-dark_2 hover:fill-dark_2 overflow-visible hover:cursor-pointer` }
                 />
             </div>
             <div className="px-3">
                 <a href="#">
                     <h5 className="truncate text-[15px] tracking-tight text-gray-900 dark:text-dark_1" onClick={() => setIsOpenItem(true)}>{props.title}</h5>
                 </a>
-                <ModalItem isOpen={isOpenItem} close={closeModalItem} id={id} isLiked={isLiked}/>
+                <ModalItem isOpen={isOpenItem} close={closeModalItem} id={id}/>
                 <div className="flex items-center justify-between align-text-bottom mb-[5px]">
                     <span className="text-lg font-bold text-gray-900 dark:text-dark_1">${props.price}</span>
                 </div>

@@ -13,11 +13,12 @@ import Link from 'next/link'
 import apiUser from '../apiUser'
 import { closeModal, openModal } from '../state/slice/ModalSlice'
 import ThankModal from '../ThankModal'
+import { loadCartFromSession, setCartFromStorage } from '../state/slice/CartSlice'
 
 function CartComponent() {
-    const [cartItems, setCartItems] = useState()
+    // const [cartItems, setCartItems] = useState()
     const [countryForm, setCountry] = useState('Select Country')
-    const [totalPrice, setTotalPrice] = useState()
+    const [totalPrice, setTotalPrice] = useState(0)
 
     const isOpen = useSelector((state) => state.modal.isOpen)
     const componentName = useSelector((state) => state.modal.componentName)
@@ -27,6 +28,7 @@ function CartComponent() {
     const countries = useSelector((state) => state.fetch.countries)
     const userData = useSelector((state) => state.auth.userData)
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+    const cartItems = useSelector((state) => state.cart);
     
     const {phone, fullName, city, country, address} = userData
 
@@ -52,23 +54,38 @@ function CartComponent() {
     
     // make rerender after deleting cart item
     
-    let cartItemsCopy
+    
     useEffect(() => {
         dispatch(fetchCountries())
-        cartItemsCopy = isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')
+        // cartItemsCopy = isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')
         
-        cartItemsCopy = JSON.parse(cartItemsCopy)
-        setCartItems(cartItemsCopy)
+        // cartItemsCopy = JSON.parse(cartItemsCopy)
+        // setCartItems(cartItemsCopy)
+
+        // const savedCart = loadCartFromSession(isLoggedIn); // Використовуємо функцію для завантаження з sessionStorage
+        // dispatch(setCartFromStorage(savedCart));
         
         setValue("fullName", fullName);
         setValue("phone", phone);
         setValue("city", city);
         setValue("country", country);
         setValue("address", address);
+
+
+        const totalSum = cartItems?.reduce((accumulator, item) => accumulator + (item.price * item.quantity), 0);
+        setTotalPrice(totalSum || 0)
         
-        setTotalPrice(totalSum)
-        
-    }, [fullName, phone, totalPrice])
+    }, [fullName, phone, city, country, address, isLoggedIn, dispatch, cartItems])
+    
+    useEffect(() => {
+        const savedCart = loadCartFromSession(isLoggedIn);
+    
+        // Only dispatch if there's something to load
+        if (savedCart) {
+            dispatch(setCartFromStorage(savedCart));
+        }
+    
+    }, [isLoggedIn, dispatch]); // Runs only when isLoggedIn changes
 
     const onSubmit = async (data) => {
         const {fullName, phone, country, city, address} = data
@@ -106,7 +123,7 @@ function CartComponent() {
         }
     }
     
-    const totalSum = cartItems?.reduce((accumulator, item) => accumulator + item.totalPrice, 0);
+    
     console.log(cartItems)
 
     return (
@@ -117,7 +134,7 @@ function CartComponent() {
             <div className="mt-8 ml-[37px] flex">
                 <div className="flex flex-col ">
                     {
-                        cartItems ? (
+                        cartItems.length > 0 ? (
                         cartItems?.map((elem) => {
                             return (
                                 <CartItem
@@ -129,6 +146,7 @@ function CartComponent() {
                                     price={elem.price}
                                     totalPrice={elem.totalPrice}
                                     quantity={elem.quantity}
+                                    getNewCar={loadCartFromSession(isLoggedIn)}
                                 />
                             );
                         })
@@ -278,7 +296,7 @@ function CartComponent() {
                     <p className='text-lg mt-2 text-dark_2 leading-[26.44px] tracking-[0.4px] '>
                         Total 
                         <span className=' text-dark_1 ml-[95px]'>
-                            $ {totalSum}
+                            $ {totalPrice?.toFixed(2)}
                         </span>
                     </p>
                     <div className="">

@@ -32,7 +32,7 @@ function Favourites() {
             })
           }
         </div>
-          : <p>
+          : <p className='mt-[54px]'>
               Currently you have no favorites
           </p>
       }
