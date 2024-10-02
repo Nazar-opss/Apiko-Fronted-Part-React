@@ -23,9 +23,9 @@ const initialState = {
 
 export const fetchItemsList = createAsyncThunk (
     'fetch/fetchItemsList',
-    async () => {
-        console.log(initialState.limit)
-        const res = await axios(`https://demo-api.apiko.academy/api/products?offset=0&limit=${initialState.limit}&sortBy=latest`,  
+    async (limit) => {
+        console.log(limit)
+        const res = await axios(`https://demo-api.apiko.academy/api/products?offset=0&limit=${limit || 12}&sortBy=latest`,  
             { 
                 headers: {
                     accept: "application/json"
@@ -102,13 +102,30 @@ export const fetchItemDetails = createAsyncThunk (
     }
 )
 
+export const fetchUniversal = createAsyncThunk (
+    'fetch/fetchUniversal',
+    async ({categoryId, sortBy, id, limit}) => {
+        console.log(categoryId, sortBy, id, limit)
+        console.log(`https://demo-api.apiko.academy/api/${categoryId ? 'categories/'+ categoryId + '/' : ''}products?offset=0&limit=${limit || 12}${sortBy ? `&sortBy=${sortBy}` : ''}`)
+        const res = await axios(`https://demo-api.apiko.academy/api/${categoryId ? 'categories/'+ categoryId + '/' : ''}products?offset=0&limit=${limit || 12}${sortBy ? `&sortBy=${sortBy}` : ''}`,  
+            { 
+                headers: {
+                    accept: "application/json"
+                }
+            },
+        )
+        const data = await res.data
+        console.log(data)
+        return data
+    }
+)
+
 export const fetchSlice = createSlice({
     name:'fetch',
     initialState,
     reducers: {
         loadMore: (state) => {
             state.limit += 12 
-            fetchItemsList()
         }
     },
     extraReducers: (builder) => {
@@ -139,6 +156,21 @@ export const fetchSlice = createSlice({
             // console.log(state.fetches)
         })
         builder.addCase(fetchItemsList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.error.message
+        })
+
+        builder.addCase(fetchUniversal.pending, (state) => {
+            // state.isLoading = true
+            // state.fetches = []
+        })
+        builder.addCase(fetchUniversal.fulfilled, (state, action) => {
+            console.log('is loading fetchUniversal')
+            state.fetches = action.payload
+            state.isLoading = false
+            // console.log(state.fetches)
+        })
+        builder.addCase(fetchUniversal.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.error.message
         })

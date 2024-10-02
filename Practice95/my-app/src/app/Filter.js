@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { Description, Field, Label, Listbox, ListboxButton, ListboxOption, ListboxOptions, ListboxSelectedOption, Select } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { fetchCategoriesList, fetchItemsList, fetchSearchList } from './state/slice/FetchSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategoriesList, fetchItemsList, fetchSearchList, fetchUniversal } from './state/slice/FetchSlice';
 import { useDebouncedCallback } from 'use-debounce';
 import CreatableSelect from 'react-select/creatable';
 import ArrowDown from "../../public/arrow_down.svg"
@@ -56,6 +56,8 @@ function Filter(props) {
 
     const [searchActive, setSearchActive] = useState(false)
 
+    const limit = useSelector((state) => state.fetch.limit)
+    
     const categories = props.categories
     console.log(categories)
 
@@ -104,7 +106,8 @@ function Filter(props) {
         setSelectedCategory(name)
         const params = new URLSearchParams(searchParams)
         if (id) {
-            dispatch(fetchCategoriesList({categoryId: id, sortBy: sortBy}))
+            dispatch(fetchUniversal({limit, categoryId: id, sortBy: sortBy}))
+            // dispatch(fetchCategoriesList({categoryId: id, sortBy: sortBy}))
             params.set('category', name)
             params.set('id', id)
             if(sortBy) {
