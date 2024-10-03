@@ -47,7 +47,7 @@ export default function Header() {
 
   const avatarInitials = fullName?.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')
 
-  console.log(authCheck)
+  // console.log(authCheck)
   return (
     <div className={styles.header}>
       <div className={styles.header_container}>
@@ -56,13 +56,12 @@ export default function Header() {
             <Image src="/logo.svg" alt="Apiko Logo" width={102} height={42} />
           </Link>
           <div className={styles.header_links}>
-          <Link href='/settings/favourites' className='flex items-center'>
+          <Link href='/settings/favourites' className='flex items-center mr-[25px]'>
             <Image
               src="/like.svg"
               alt="Like Icon"
               width={18}
               height={18}
-              style={{ marginRight: "25px" }}
             />
           </Link>
             <Link href="/cart" className='flex items-center relative'> 

@@ -226,7 +226,7 @@ function CartComponent() {
                     <div className="relative z-0 mt-5 max-w-[220px]">
                         <select 
                             name="country" 
-                            className="block px-2.5 pb-2 pt-2.5 w-full max-h-[40px] text-base tracking-[0.25px] leading-[20px] text-dark_2 bg-transparent rounded border-dark_3 border-[1px] appearance-none focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0 peer" 
+                            className="block px-2.5 pb-2 pt-2.5 w-full max-h-[40px] text-base tracking-[0.25px] leading-[20px] text-dark_1 bg-transparent rounded border-dark_3 border-[1px] appearance-none focus:border-2 focus:outline-none focus:ring-0 peer" 
                             {...register("country", { required: "Mandatory info missing" })}
                         >
                             {/* <option selected disabled hidden></option> */}

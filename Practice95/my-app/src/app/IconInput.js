@@ -9,7 +9,7 @@ function IconInput({type, name, errors, isVisible, handleIcon, placeholder, fiel
         name={name}
         type={type}
         id={name}
-        className="block px-2.5 pb-2.5 pt-4 w-full max-h-[40px] text-base tracking-[0.25px] leading-[19px] text-dark_1 bg-transparent rounded border-dark_3 border-[1px] appearance-none focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0  peer"
+        className={`block px-2.5 pb-2.5 pt-4 w-full max-h-[40px] text-base tracking-[0.25px] leading-[19px] text-dark_1 bg-transparent rounded border-${errors ? 'red' : 'black'} border-[1px] appearance-none focus:border-dark_2 focus:border-2 focus:outline-none focus:ring-0  peer`}
         placeholder=" "
         {...fieldRef}
       />        
@@ -30,7 +30,6 @@ function IconInput({type, name, errors, isVisible, handleIcon, placeholder, fiel
     </div>
     
     {errors && errors[name]?.type || fieldRef.value === ''
-    //TODO: dont work like need 
         ? (
             fieldRef.value === '' 
             ? 

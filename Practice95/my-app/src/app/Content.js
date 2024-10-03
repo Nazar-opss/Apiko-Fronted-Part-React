@@ -4,7 +4,7 @@ import { Item } from './Item'
 import { useDispatch, useSelector } from 'react-redux'
 import LoaderLine from './Loader';
 import { unstable_noStore } from 'next/cache';
-import { fetchCountries, fetchItemsList, fetchUniversal, loadMore } from './state/slice/FetchSlice';
+import { fetchCountries, fetchItemsList, fetchUniversal, setLimit } from './state/slice/FetchSlice';
 import { usePathname, useSearchParams } from 'next/navigation';
 
     // make fetch better https://www.youtube.com/watch?v=MBlZ8Wzkbi4
@@ -27,10 +27,11 @@ function Skeleton({ className }) {
 
 export default function Content() {
     // unstable_noStore() find a way to use it with suspense
-    const [limit, setLimit] = useState(0)
+    // const [limit, setLimit] = useState(12)
     const fetchSearch = useSelector((state) => state.fetch.fetches)
     const isLoading = useSelector((state) => state.fetch.isLoading)
-    // const limit = useSelector((state) => state.fetch.limit)
+    const limit = useSelector((state) => state.fetch.limit)
+    const status = useSelector((state) => state.fetch.status)
     // style no results and fix for first render
 
     const searchParams = useSearchParams()
@@ -40,13 +41,17 @@ export default function Content() {
 
     const dispatch = useDispatch()
 
+    // useEffect(() => {
+    //     dispatch(fetchUniversal({limit, categoryId: searchParams.get('id'), sortBy: searchParams.get('sortBy')}));
+    //   }, [limit, dispatch]);
+
+
     console.log(limit)
     console.log(fetchSearch)
-    const handleMore = (limit) => {
-        const params = new URLSearchParams(searchParams)
-        setLimit(limit + 12)
-        dispatch(loadMore())
-        dispatch(fetchUniversal({limit, categoryId: searchParams.get('id'), sortBy: searchParams.get('sortBy')}))
+    const handleMore = () => {
+        console.log("rn", searchParams.get('category'))
+        dispatch(setLimit())
+        dispatch(fetchUniversal({limit: limit + 12, categoryId: searchParams.get('id'), sortBy: searchParams.get('sortBy')}))
     }
 return (
     <>
@@ -74,8 +79,9 @@ return (
                 }
             </div>
             <button 
-                onClick={() => handleMore(limit)}
+                onClick={() => handleMore()}
                 type="button" 
+                disabled={status === 'loading'}
                 className="text-white bg-blue_btn w-full max-w-[150px] mt-10 font-medium rounded text-sm  leading-6 px-4 py-1.5 mb-[85px] hover:opacity-80">
                 Load More...
             </button>

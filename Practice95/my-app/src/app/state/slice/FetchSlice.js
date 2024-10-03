@@ -25,6 +25,7 @@ export const fetchItemsList = createAsyncThunk (
     'fetch/fetchItemsList',
     async (limit) => {
         console.log(limit)
+        limit = 12
         const res = await axios(`https://demo-api.apiko.academy/api/products?offset=0&limit=${limit || 12}&sortBy=latest`,  
             { 
                 headers: {
@@ -70,7 +71,6 @@ export const fetchSearchList = createAsyncThunk (
 
 export const fetchCategoriesList = createAsyncThunk (
     'fetch/fetchCategoriesList',
-    
     async ({categoryId, sortBy}) => {
         console.log(categoryId, sortBy)
         const res = await axios(`https://demo-api.apiko.academy/api/categories/${categoryId}/products?offset=0&limit=12${sortBy ? `&sortBy=${sortBy}` : ''}`,  
@@ -104,8 +104,9 @@ export const fetchItemDetails = createAsyncThunk (
 
 export const fetchUniversal = createAsyncThunk (
     'fetch/fetchUniversal',
-    async ({categoryId, sortBy, id, limit}) => {
-        console.log(categoryId, sortBy, id, limit)
+    async ({categoryId, sortBy, limit}) => {
+        resetLimit()
+        console.log(categoryId, sortBy, limit)
         console.log(`https://demo-api.apiko.academy/api/${categoryId ? 'categories/'+ categoryId + '/' : ''}products?offset=0&limit=${limit || 12}${sortBy ? `&sortBy=${sortBy}` : ''}`)
         const res = await axios(`https://demo-api.apiko.academy/api/${categoryId ? 'categories/'+ categoryId + '/' : ''}products?offset=0&limit=${limit || 12}${sortBy ? `&sortBy=${sortBy}` : ''}`,  
             { 
@@ -124,8 +125,11 @@ export const fetchSlice = createSlice({
     name:'fetch',
     initialState,
     reducers: {
-        loadMore: (state) => {
+        setLimit: (state, action) => {
             state.limit += 12 
+        },
+        resetLimit: (state) => {
+            state.limit = 12;  // Скидаємо ліміт до початкового значення
         }
     },
     extraReducers: (builder) => {
@@ -215,6 +219,6 @@ export const fetchSlice = createSlice({
 })
 
 
-export const { setLoading, loadMore } = fetchSlice.actions
+export const { setLoading, setLimit, resetLimit } = fetchSlice.actions
 
 export default fetchSlice.reducer

@@ -12,6 +12,8 @@ import Skeleton from 'react-loading-skeleton'
 import { Bounce, Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addItemToCart } from './state/slice/CartSlice'
+import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export const CloseButton = ({closeToast}) => (
     <Image
@@ -30,6 +32,8 @@ const ModalItem = (props) => {
     const isLoading = useSelector((state) => state.fetch.isLoading)
     const favorites = useSelector((state) => state.user.favorites)
 
+    const router = useRouter()
+
     const {picture, title, price, description, id} = itemInfo
     
     const isLiked = favorites.some(product => product.id === id);
@@ -44,7 +48,6 @@ const ModalItem = (props) => {
         setIsOpen(false)
     };
 
-    
     useEffect(() => {
         setTotal(price * quantity);
     }, [price, quantity]);
@@ -94,43 +97,25 @@ const ModalItem = (props) => {
           pauseOnFocusLoss: true,
         });
       };
-    // remake this for redux slice
+
       const handleAddToCart = (isLoggedIn) => {
         const itemForCart = {...itemInfo}
         itemForCart['quantity'] = quantity
         itemForCart['totalPrice'] = totalPrice
         
-        // const storageKey = isLoggedIn ? 'itemsLogged' : 'itemsAny';
-        // let items = []
-        // const storedItems = sessionStorage.getItem(storageKey);
-        // // if(sessionStorage.itemsLogged || sessionStorage.itemsAny)
-        // //     {
-        // //         items = JSON.parse(isLoggedIn == true ? sessionStorage.getItem('itemsLogged') : sessionStorage.getItem('itemsAny')) 
-        // //         console.log(items)
-        // //     }else{
-        // //         items = [];
-        // //         console.log(items)
-        // //     }
-        // //     items.push(itemForCart)
-        // //     console.log(items)
-        // if (storedItems) {
-        //     try {
-        //         items = JSON.parse(storedItems);
-        //     } catch (error) {
-        //         console.error(error);
-        //     }
-        // }
-        // items.push(itemForCart);
-        // sessionStorage.setItem(storageKey, JSON.stringify(items));
-
-     
-
-
-        // Додаємо товар до глобального стейту і sessionStorage
         dispatch(addItemToCart({ item: itemForCart, isLoggedIn }));
 
         props.close()
         notify();
+      }
+
+      const handleBuyNow = () => {
+        if (isLoggedIn) {
+            handleAddToCart(isLoggedIn)
+            router.push('/cart')
+        } else {
+            setIsOpen(true)
+        }
       }
     return (
         <div>
@@ -249,10 +234,14 @@ const ModalItem = (props) => {
 
                                 }
                                 <Button
+                                    onClick={() => handleBuyNow()}
                                     className="text-white bg-orange_main py-[9px] px-[82px] text-xs leading-[17.63px] tracking-[0.4px] rounded hover:opacity-80"
                                     >
                                     BUY NOW
                                 </Button>
+                                {
+                                    isLoggedIn === false && isOpen && <Favorite_CTA close={closeModal} isOpen={isOpen}/>
+                                }
                             </div>
                         </div>
                     </div>

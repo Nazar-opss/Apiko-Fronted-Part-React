@@ -85,17 +85,21 @@ function Edit() {
   };
   const onSubmitPassword = async (data) => {
     const { currentPassword, confirmPassword, newPassword } = data;
-
-    newPassword === confirmPassword ? dispatch(updatePassword({currentPassword, newPassword})) : setError2('confirmPassword', {
-      message: "One of the passwords is wrong"
-    })
-    if (isLoggedIn) {
-      dispatch(login()) // temp method
+    const successPassword = () => {
+      dispatch(updatePassword({currentPassword, newPassword}))
+      if (isLoggedIn) {
+        dispatch(login()) // temp method
+      }
+      notifyPassword()
+      resetField2('confirmPassword')
+      resetField2('newPassword')
+      resetField2('currentPassword')
     }
-    notifyPassword()
-    resetField2('confirmPassword')
-    resetField2('newPassword')
-    resetField2('currentPassword')
+
+    newPassword === confirmPassword ? successPassword() : setError2('confirmPassword', {
+      message: "Passwords don’t match"
+    })
+    
     console.log(currentPassword, confirmPassword, newPassword);
   };
 
@@ -279,7 +283,7 @@ function Edit() {
               type="submit"
               // disabled={!isDirty || !isValid}
               className={`text-white bg-orange_main w-full tracking-[0.4px] 
-              ${!isValid ? "cursor-not-allowed" : "cursor-pointer"} mt-[40px] {} font-medium rounded-[5px] text-sm  leading-6 py-1.5 hover:opacity-80`}
+              cursor-pointer mt-[40px] font-medium rounded-[5px] text-sm  leading-6 py-1.5 hover:opacity-80`}
               // onClick={props.close}
             >
               Save
@@ -332,9 +336,9 @@ function Edit() {
               />
             )}
           />
-          {errors2.root && (
+          {errors2.newPassword && (
             <div className="text-error text-xs leading-5 tracking-[0.4px]">
-              {errors2.root.message}
+              {errors2.newPassword.message}
             </div>
           )}
 
@@ -354,19 +358,17 @@ function Edit() {
               />
             )}
           />
-          {errors2.root && (
+          {/* {errors2.confirmPassword && (
             <div className="text-error text-xs leading-5 tracking-[0.4px]">
-              {errors2.root.message}
+              {errors2.confirmPassword.message}
             </div>
-          )}
+          )} */}
 
           <div className="">
             <Button
               type="submit"
               // disabled={!isDirty || !isValid}
-              className={`text-white bg-orange_main w-full tracking-[0.4px] mb-[42px] ${
-                !isValid ? "cursor-not-allowed" : "cursor-pointer"
-              } mt-[40px] {} font-medium rounded-[5px] text-sm  leading-6 py-1.5 hover:opacity-80`}
+              className={`text-white bg-orange_main w-full tracking-[0.4px] mb-[42px] cursor-pointer mt-[40px] font-medium rounded-[5px] text-sm  leading-6 py-1.5 hover:opacity-80`}
               // onClick={props.close}
             >
               Change password

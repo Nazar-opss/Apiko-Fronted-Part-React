@@ -196,7 +196,6 @@ required
                     />
                   )}
                 />
-                {errors.root ? <p className='text-error text-xs leading-5 tracking-[0.4px]'>{errors.root.message}</p> : <p></p>}
 
                 <Controller
                   name='phoneNumber'
@@ -226,18 +225,14 @@ required
                 <Controller
                   name='password'
                   control={control}
-                  rules={{required: 'Mandatory info missing', 
+                  rules={{
+                    required: 'Mandatory info missing', 
                     pattern: {
                       value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/,
                       message: "Should contain at least 1 letter, 1 special symbol, 1 number"
                     }, 
-                    min: 1,
+                    min: 8,
                     max: 35,
-                    validate:() => {
-                      if (watchPassword.length == '') {
-                        return <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p>;
-                      }
-                    }
                   }}
                   render={({field}) =>(
                       <IconInput 
@@ -250,6 +245,7 @@ required
                         fieldRef={field}
                       /> 
                   )}
+                  
                   // {...watchPassword.length <= 0 ? <p id="floating_helper_text" class="mt-[3px] text-xs leading-5 tracking-wide text-dark_2 ">The password has to be at least at least 1 letter, 1 special symbol, 1 number</p> : <p>HEAdl</p>}
                 />
                 {/* <IconInput 

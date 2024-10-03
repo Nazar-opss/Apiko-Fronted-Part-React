@@ -6,39 +6,39 @@ import { Description, Field, Label, Listbox, ListboxButton, ListboxOption, Listb
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategoriesList, fetchItemsList, fetchSearchList, fetchUniversal } from './state/slice/FetchSlice';
+import { fetchCategoriesList, fetchItemsList, fetchSearchList, fetchUniversal, resetLimit, setLimit } from './state/slice/FetchSlice';
 import { useDebouncedCallback } from 'use-debounce';
 import CreatableSelect from 'react-select/creatable';
 import ArrowDown from "../../public/arrow_down.svg"
 import Close from "../../public/close.svg"
 
 
-const customStyles = {
-    control: (provided) => ({ // class attribute : class=" css-13cymwt-control"
-      ...provided,
-      background: 'white',
-      display: 'flex',
-      flexWrap: 'nowrap',
-      borderRadius: 6 
-    }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
-          ...styles,
-          color: '#373738',
-          backgroundColor: isSelected ? '#F2F2F2' : 'white',
-          cursor: isDisabled ? 'not-allowed' : 'default',
-        //   borderTopRightRadius: 6,
-        //   borderTopLeftRadius: 6,
-          "&:hover"  : {
-            background : "#F2F2F2",
-            color      : "#373738",
-            cursor: "pointer"
-          },
-    }),
-    menu: (provided) => ({
-        ...provided,
-        marginTop: 2,
-    }),
-  };
+// const customStyles = {
+//     control: (provided) => ({ // class attribute : class=" css-13cymwt-control"
+//       ...provided,
+//       background: 'white',
+//       display: 'flex',
+//       flexWrap: 'nowrap',
+//       borderRadius: 6 
+//     }),
+//     option: (styles, { data, isDisabled, isFocused, isSelected }) => ({
+//           ...styles,
+//           color: '#373738',
+//           backgroundColor: isSelected ? '#F2F2F2' : 'white',
+//           cursor: isDisabled ? 'not-allowed' : 'default',
+//         //   borderTopRightRadius: 6,
+//         //   borderTopLeftRadius: 6,
+//           "&:hover"  : {
+//             background : "#F2F2F2",
+//             color      : "#373738",
+//             cursor: "pointer"
+//           },
+//     }),
+//     menu: (provided) => ({
+//         ...provided,
+//         marginTop: 2,
+//     }),
+//   };
 
 const optionsSort = [
     {value: 'popular', text: "Popular" },
@@ -59,7 +59,7 @@ function Filter(props) {
     const limit = useSelector((state) => state.fetch.limit)
     
     const categories = props.categories
-    console.log(categories)
+    // console.log(categories)
 
     const toggleSearch = () => {
         setSearchActive(!searchActive)
@@ -102,11 +102,12 @@ function Filter(props) {
     }, 300)
     
     const handleCategories = ({id, sortBy, name}) => {
-        console.log(id, sortBy, name)
+        dispatch(resetLimit())
+        console.log(id, sortBy, name, limit)
         setSelectedCategory(name)
         const params = new URLSearchParams(searchParams)
         if (id) {
-            dispatch(fetchUniversal({limit, categoryId: id, sortBy: sortBy}))
+            dispatch(fetchUniversal({limit: 12, categoryId: id, sortBy: sortBy}))
             // dispatch(fetchCategoriesList({categoryId: id, sortBy: sortBy}))
             params.set('category', name)
             params.set('id', id)
@@ -138,10 +139,11 @@ function Filter(props) {
     }
 
     const handleSort = ({text, value}) => {
+        // dispatch(resetLimit())
         const params = new URLSearchParams(searchParams)
         setSelectedSort({name: text, value: value})
         console.log(text, value)
-        dispatch(fetchCategoriesList({categoryId: searchParams.get('id'), sortBy: value}))
+        dispatch(fetchUniversal({limit: limit, categoryId: searchParams.get('id'), sortBy: value}))
         if(searchParams.get('category')) {
             params.set('category', searchParams.get('category'))
         }

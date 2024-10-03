@@ -18,15 +18,9 @@ const Input = ({type, name, placeholder, errors, fieldRef}) => (
           {placeholder}
         </label>
     </div>
-    {/* {errors && errors[name]?.type === "required" && (
-      <span className="text-error text-xs leading-5 tracking-[0.4px]">{errors[name]?.message}</span>
-    )} */}
     {errors && errors[name]?.type && (
       <span className="text-error text-xs leading-5 tracking-[0.4px]">{errors[name]?.message}</span>
     )}
-    {/* {errors && errors[name]?.type === "pattern" && (
-      <span className="text-error text-xs leading-5 tracking-[0.4px]">{errors[name]?.message}</span>
-    )} */}
   </>
   )
   
