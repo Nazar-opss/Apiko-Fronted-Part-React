@@ -1,9 +1,11 @@
-import apiUser from "@/app/apiUser";
+import apiUser from "@/app/utils/apiUser";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     favorites: [],
     orders: [],
+    orderDetails: [],
+    isLoading: false,
 }
 
 export const addFavorite = createAsyncThunk(
@@ -84,6 +86,18 @@ export const getOrders = createAsyncThunk(
         return data
     }
 )
+export const getOrderDetails = createAsyncThunk(
+    'user/getOrderDetails',
+    async (id) => {
+        const response = await apiUser.get(`/api/orders/${id}`)
+        .catch(error => {
+            alert(error)
+        })
+        const data = await response.data
+        console.log(data)
+        return data
+    }
+)
 
 export const userSlice = createSlice({
     name: 'user',
@@ -137,6 +151,18 @@ export const userSlice = createSlice({
             state.orders = action.payload
         })
         builder.addCase(getOrders.rejected, (state, action) => {
+            console.log(state, action)
+        })
+        builder.addCase(getOrderDetails.pending, (state, action) => {
+            console.log(state, action)
+            state.isLoading = true
+        })
+        builder.addCase(getOrderDetails.fulfilled, (state, action) => {
+            console.log(state, action)
+            state.isLoading = false
+            state.orderDetails = action.payload
+        })
+        builder.addCase(getOrderDetails.rejected, (state, action) => {
             console.log(state, action)
         })
         builder.addCase(deleteFavorite.pending, (state, action) => {

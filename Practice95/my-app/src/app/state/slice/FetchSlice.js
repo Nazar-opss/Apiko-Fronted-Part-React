@@ -9,6 +9,7 @@ const initialState = {
     itemInfo: {},
     countries: [],
     limit: 12,
+    categories: [],
 }
 
 // const fetchSlice = createSlice({
@@ -106,7 +107,7 @@ export const fetchUniversal = createAsyncThunk (
     'fetch/fetchUniversal',
     async ({categoryId, sortBy, limit}) => {
         resetLimit()
-        console.log(categoryId, sortBy, limit)
+        // console.log(categoryId, sortBy, limit)
         console.log(`https://demo-api.apiko.academy/api/${categoryId ? 'categories/'+ categoryId + '/' : ''}products?offset=0&limit=${limit || 12}${sortBy ? `&sortBy=${sortBy}` : ''}`)
         const res = await axios(`https://demo-api.apiko.academy/api/${categoryId ? 'categories/'+ categoryId + '/' : ''}products?offset=0&limit=${limit || 12}${sortBy ? `&sortBy=${sortBy}` : ''}`,  
             { 
@@ -117,6 +118,15 @@ export const fetchUniversal = createAsyncThunk (
         )
         const data = await res.data
         console.log(data)
+        return data
+    }
+)
+
+export const getCategories = createAsyncThunk (
+    'fetch/getCategories',
+    async () => {
+        const res = await axios('https://demo-api.apiko.academy/api/categories')
+        const data = await res.data
         return data
     }
 )
@@ -214,6 +224,10 @@ export const fetchSlice = createSlice({
         builder.addCase(fetchCountries.fulfilled, (state, action) => {
             console.log('is loading fetchCountries')
             state.countries = action.payload
+        })
+        builder.addCase(getCategories.fulfilled, (state, action) => {
+            console.log('is loading getCategories')
+            state.categories = action.payload
         })
     }
 })

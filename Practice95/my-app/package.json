@@ -27,9 +27,11 @@
     "react-select": "^5.8.0",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.5",
+    "redux-persist": "^6.0.0",
     "use-debounce": "^10.0.3"
   },
   "devDependencies": {
+    "@types/node": "22.7.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",

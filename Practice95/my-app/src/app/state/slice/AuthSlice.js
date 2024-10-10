@@ -1,4 +1,4 @@
-import apiUser from '@/app/apiUser';
+import apiUser from '@/app/utils/apiUser'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
@@ -38,7 +38,9 @@ export const authSlice =  createSlice({
         logOut: (state) => {
             state.accessToken = ''
             state.isLoggedIn = false
+            state.userData = {}
             sessionStorage.removeItem("itemsLogged")
+            localStorage.removeItem('persist:root');
             console.log(state.isLoggedIn, state.accessToken)
         } 
     },

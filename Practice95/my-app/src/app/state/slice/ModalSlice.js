@@ -3,7 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 const initialState = {
     isOpen: false,
     componentName: null,
-    componentProps: {},
+    // componentProps: {},
+    orderId: null,
 }
 
 export const modalSlice = createSlice({
@@ -13,12 +14,14 @@ export const modalSlice = createSlice({
         openModal: (state, action) => {
             state.isOpen = true
             state.componentName = action.payload.componentName
-            state.componentProps = action.payload.componentProps || {}
+            // state.componentProps = action.payload.componentProps || {}
+            state.orderId = action.payload.orderId
         },
         closeModal: (state, action) => {
             state.isOpen = false
             state.componentName = null
-            state.componentProps = {}
+            // state.componentProps = {}
+            state.orderId = null
         }
     },
 })
